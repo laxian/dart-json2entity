@@ -1,5 +1,7 @@
 # Convert json to entity class like GsonFormat for Java
 
+[中文](https://github.com/laxian/flutter-gsonformat/blob/master/README.md)
+
 As a freshman for Flutter, I need a json-to-entity converter for Dart, So I write this poor tool。
 It's simple BUT HELPFUL.
 
@@ -11,8 +13,11 @@ It's simple BUT HELPFUL.
 
 ## How to use
 
-dart json2bean.dart
+* `dart json2bean.dart`
+* `dart cli.dart -j '{"age":18, "name": "zhouweixian"}' -o
+Age`
 
 ## Coming later
 
--   command line parameter support
+-   Command line parameter support
+-   Customize

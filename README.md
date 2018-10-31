@@ -1,5 +1,7 @@
 # 给Dart和flutter的GsonFormat
 
+[English](https://github.com/laxian/flutter-gsonformat/blob/master/README-en.md)
+
 本周入坑flutter，发现竟然Dart语言竟没有json转实体类的工具，就手动写了个简陋的。能用，慢慢改善。
 
 ## 功能
@@ -11,8 +13,11 @@
 
 ## 用法：
 
-dart json2bean.dart
+* `dart json2bean.dart`
+* `dart cli.dart -j '{"age":18, "name": "zhouweixian"}' -o
+Age`
 
 ## 后期
 
 -   将支持命令行参数
+-   可定制

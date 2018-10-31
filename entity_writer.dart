@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:aixue4/code-generate/flutter-gsonformat/utils.dart';
+import 'utils.dart';
+
 
 
 
@@ -10,7 +11,7 @@ import 'package:aixue4/code-generate/flutter-gsonformat/utils.dart';
 /// 添加 json_serializable 支持
 /// 未整理
 /// by zhouweixian
-class poWriter {
+class EntityWriter {
 
   // default output dir
   var outpath = getDir(Platform.script.path) + 'bean/';

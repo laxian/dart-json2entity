@@ -2,9 +2,10 @@ import 'dart:async' show Future;
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:aixue4/code-generate/flutter-gsonformat/constant.dart';
-import 'package:aixue4/code-generate/flutter-gsonformat/po_writer.dart';
-import 'package:aixue4/code-generate/flutter-gsonformat/utils.dart';
+import 'constant.dart';
+import 'entity_writer.dart';
+import 'utils.dart';
+
 
 
 
@@ -15,7 +16,7 @@ Future<void> main() async {
   var jstr = file.readAsStringSync();
   Map<String, dynamic> jobj = jsonDecode(jstr);
   jobj.forEach((k,v){
-    var pw = poWriter();
+    var pw = EntityWriter();
     pw.setName(k);
     pw.setJson(jsonDecode(v));
     pw.addHeaderStrs(ConstStr.json_serializable_insert_file_header_strs);
