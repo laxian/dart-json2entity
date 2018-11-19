@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'utils.dart';
-
+import 'package:aixue4/code-generate/flutter-gsonformat/utils.dart';
 
 
 
@@ -30,8 +29,8 @@ class EntityWriter {
   String beforeClassStr;
 
   // 插入类内部的模板
-  String intertStr
-  ;
+  String intertStr;
+
   Map<String, Map<String, String>> intertStrs = {};
 
   addClassInsert(String template, Map<String, String> replace) {
@@ -43,7 +42,14 @@ class EntityWriter {
   }
 
   setJson(Map<String, dynamic> j) {
-    json =j;
+    if(j is List) {
+      assert(j.length > 0);
+      json = j[0];
+    } else if (j is Map) {
+      json = j;
+    } else {
+      throw 'setJson can only be map or list';
+    }
   }
 
   setBeforeClassStr(String str) {
