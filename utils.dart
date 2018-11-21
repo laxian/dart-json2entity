@@ -21,7 +21,7 @@ getType(dynamic v) {
   } else if (v is List) {
     return 'List';
   } else if (v == null) {
-    return 'null';
+    return 'String';
   } else {
     return 'Object';
   }

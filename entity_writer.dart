@@ -88,17 +88,22 @@ class EntityWriter {
       // 添加构造函数
       s += getConstructor(m, name);
 
+      // fields: eg. String name;...num age;
       m.forEach((k,v){
         var K = capitalize(k);
         var childName = '${K}Model';
+
         if(v is Map) {
           pending[childName]=v;
           s += '  ${childName} $k;\n';
         } else if (v is List) {
-          var K = capitalize(k);
           var childName = '${K}Entity';
           if(v.length > 0) {
-            pending[childName]=v[0];
+            var value0 = v[0];
+            if(value0 is Map)
+              pending[childName]=v[0];
+            else
+              childName = getType(v[0]);
           } else {
             pending[childName]={};
           }
@@ -140,8 +145,7 @@ class EntityWriter {
     var begin = '$Name({';
     var mid = '';
     m.forEach((k, v) {
-      var typev = getType(v);
-      mid += 'tihs.$k,';
+      mid += 'this.$k,';
     });
 
     var end = '});\n';
