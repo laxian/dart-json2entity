@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:aixue4/code-generate/flutter-gsonformat/utils.dart';
+import 'utils.dart';
 
 
 
@@ -41,7 +41,7 @@ class EntityWriter {
     this.name = name;
   }
 
-  setJson(Map<String, dynamic> j) {
+  setJson(dynamic j) {
     if(j is List) {
       assert(j.length > 0);
       json = j[0];
@@ -141,7 +141,7 @@ class EntityWriter {
     var mid = '';
     m.forEach((k, v) {
       var typev = getType(v);
-      mid += '$typev $k,';
+      mid += 'tihs.$k,';
     });
 
     var end = '});\n';
