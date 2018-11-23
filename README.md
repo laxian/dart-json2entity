@@ -14,7 +14,7 @@
 ## 用法：
 
 * `dart json2bean.dart`
-* `dart cli.dart -j '{"age":18, "name": "zhouweixian"}' -o
+* `dart cli.dart -j '{"age":18, "name": "zhouweixian"}' -o ../lib/Age -v
 Age`
 
 ## Sample
