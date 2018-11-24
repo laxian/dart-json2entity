@@ -59,3 +59,9 @@ String camel2dash(String k) {
 bool isUpperAZ(int c) {
   return c >= 64 && c <= 90;
 }
+
+printWhen(info, b) {
+  if (b) {
+    print(info);
+  }
+}

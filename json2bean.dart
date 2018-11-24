@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'constant.dart';
 import 'entity_writer.dart';
+import 'entity_writer_builder.dart';
 import 'utils.dart';
 
 
@@ -17,13 +18,12 @@ Future < void > main() async {
   Map < String, dynamic > jobj = jsonDecode(jstr);
 
   jobj.forEach((k, v) {
-    var pw = EntityWriter();
-    pw.setName(k);
-    pw.setJson(jsonDecode(v));
-    pw.addHeaders(ConstStr.INSERT_HEADER);
-    pw.setDecorators(ConstStr.INSERT_DECORATOR);
-    pw.setInserts(ConstStr.INSERT_IN_CLASS);
-    pw.setOutputDir('${pwd}/output/');
-    pw.convert();
+    EntityWriterBuilder()
+    .supportJsonSerializable(false)
+    .name(k)
+    .jsonStr(v)
+    .outpath('${pwd}/output/')
+    .build()
+    .convert();
   });
 }

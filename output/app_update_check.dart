@@ -1,29 +1,39 @@
-import 'package:json_annotation/json_annotation.dart';
-
-part 'app_update_check.g.dart';
-
 /**
  * auto generate by json2bean
  * Author zhuoweixian
  */
-@JsonSerializable()
 class AppUpdateCheck {
 AppUpdateCheck({this.result,this.msg,this.data,});
   num result;
   String msg;
   DataModel data;
-  factory AppUpdateCheck.fromJson(Map<String, dynamic> json) => _$AppUpdateCheckFromJson(json);
-  Map<String, dynamic> toJson() => _$AppUpdateCheckToJson(this);
+AppUpdateCheck.fromJson(Map<String, dynamic> json): 
+result = json['result'],
+msg = json['msg'],
+data = json['data'];Map<String, dynamic> toJson() =>
+{
+'result': result,
+'msg': msg,
+'data': data
+};
 }
 
-@JsonSerializable()
 class DataModel {
 DataModel({this.forceType,this.title,this.message,this.url,});
   num forceType;
   String title;
   String message;
   String url;
-  factory DataModel.fromJson(Map<String, dynamic> json) => _$DataModelFromJson(json);
-  Map<String, dynamic> toJson() => _$DataModelToJson(this);
+DataModel.fromJson(Map<String, dynamic> json): 
+forceType = json['forceType'],
+title = json['title'],
+message = json['message'],
+url = json['url'];Map<String, dynamic> toJson() =>
+{
+'forceType': forceType,
+'title': title,
+'message': message,
+'url': url
+};
 }
 
