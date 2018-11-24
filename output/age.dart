@@ -18,8 +18,8 @@ Age({this.result,this.msg,this.data,});
 
 @JsonSerializable()
 class DataModel {
-DataModel({this.status,});
-  num status;
+DataModel({this.age,});
+  num age;
   factory DataModel.fromJson(Map<String, dynamic> json) => _$DataModelFromJson(json);
   Map<String, dynamic> toJson() => _$DataModelToJson(this);
 }

@@ -6,17 +6,21 @@ import 'entity_writer.dart';
 import 'path_parser.dart';
 import 'utils.dart';
 
-/// dart cli.dart -j '''{"age":18,"name":"zhouweixian"}''' -o Age
 
 const String err = '''
-error parameters
+
+ERROR PARAMETERS!!!
 
   Sample:
-    dart cli.dart -o Age -j \'{"age":18,"name":"zhouweixian"}\' -v
-    
-    -o or --output: output path
-    -j or --json: json string
-    -v or --verbose: print verbose info
+    dart cli.dart -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/Age -v
+
+  SYNOPSIS
+    -o, --output
+          output path
+    -j, --json: 
+          input json string
+    -v, --verbose: 
+          print verbose info
 
 ''';
 
@@ -42,7 +46,8 @@ void main(List<String> arguments) {
 
         var exits = new Directory(outPath).existsSync();
         if (!exits) {
-          error('Then path $outPath does not exists');
+          printWhen('The path $outPath does not exists. AUTO CREATED', isVerbose(arguments));
+          new Directory(outPath).createSync(recursive: true); 
         }
       }
     }

@@ -14,7 +14,7 @@ It's simple BUT HELPFUL.
 ## How to use
 
 * `dart json2bean.dart`
-* `dart cli.dart -j '{"age":18, "name": "zhouweixian"}' -o
+* `dart cli.dart -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/Age -v
 Age`
 
 
