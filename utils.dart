@@ -1,5 +1,4 @@
 
-
 /// 文件全路径，计算目录
 String getDir(String fullPath) {
   var lastIndexOf = fullPath.lastIndexOf('/');
@@ -8,7 +7,6 @@ String getDir(String fullPath) {
   }
   return fullPath;
 }
-
 
 /// 获取类型v的类型，对应于json的六种类型
 getType(dynamic v) {
@@ -29,8 +27,8 @@ getType(dynamic v) {
 
 /// 将首字母大写
 String capitalize(String k) {
-  if(k != null && k.length>0) {
-    return k[0].toUpperCase()+k.substring(1);
+  if (k != null && k.length > 0) {
+    return k[0].toUpperCase() + k.substring(1);
   }
   return k;
 }
@@ -45,9 +43,9 @@ String camel2dash(String k) {
 
   for (int i = 0; i < codeUnits.length; i++) {
     var c = codeUnits[i];
-    if(isUpperAZ(c)) {
+    if (isUpperAZ(c)) {
       upper.add(i);
-      if(i>0) {
+      if (i > 0) {
         ret += k.substring(start, i);
         ret += '_';
         start = i;

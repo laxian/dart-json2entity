@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'utils.dart';
 
-
-
 /// convert json to dart PO
 /// 思路：
 /// 树形遍历json map。将所有Object类型输出class。
@@ -11,38 +9,33 @@ import 'utils.dart';
 /// 未整理
 /// by zhouweixian
 class EntityWriter {
-
   // default output dir
   var outpath = getDir(Platform.script.path) + 'bean/';
+
   // input json object
   Map<String, dynamic> json;
+
   // 输出model（最外层）的类名和文件名
   String name;
 
   // 导包信息，作者信息，等文件头部内容，在所有类之前
-  List<String> headerStrs = [];
-
-  // json中Object对象对应的class string
-  List<String> classStrs = [];
+  List<String> headers = [];
 
   // 类前的注释或者注解、装饰器
-  String beforeClassStr;
+  String decorators;
 
   // 插入类内部的模板
-  String intertStr;
+  String inserts;
 
-  Map<String, Map<String, String>> intertStrs = {};
+  // json中Object对象对应的class string
+  List<String> classes = [];
 
-  addClassInsert(String template, Map<String, String> replace) {
-    intertStrs[template] = replace;
-  }
-
-  setName(String name){
+  setName(String name) {
     this.name = name;
   }
 
   setJson(dynamic j) {
-    if(j is List) {
+    if (j is List) {
       assert(j.length > 0);
       json = j[0];
     } else if (j is Map) {
@@ -52,17 +45,18 @@ class EntityWriter {
     }
   }
 
-  setBeforeClassStr(String str) {
-    this.beforeClassStr = str;
+  setDecorators(String str) {
+    this.decorators = str;
   }
 
-  setInsertStr(String str) {
-    this.intertStr = str;
+  setInserts(String str) {
+    this.inserts = str;
   }
 
-  addHeaderStrs(List<String> strs) {
-    var list = strs.map((e)=>e.replaceAll('{Name}', camel2dash(name))).toList();
-    headerStrs.addAll(list);
+  addHeaders(List<String> strs) {
+    var list =
+        strs.map((e) => e.replaceAll('{Name}', camel2dash(name))).toList();
+    headers.addAll(list);
   }
 
   setOutputDir(String dir) {
@@ -73,7 +67,7 @@ class EntityWriter {
     Map<String, Map<String, dynamic>> pending = {};
     pending[name] = json;
 
-    while(pending.entries.length > 0) {
+    while (pending.entries.length > 0) {
       var name = pending.entries.elementAt(0).key;
       var Name = capitalize(name);
       var m = pending.remove(name);
@@ -81,31 +75,31 @@ class EntityWriter {
       String s = 'class $Name {\n';
 
       // 类前一行的装饰，比如注解，装饰器
-      if(beforeClassStr != null && beforeClassStr.length > 0) {
-        s = beforeClassStr + s;
+      if (decorators != null && decorators.length > 0) {
+        s = decorators + s;
       }
 
       // 添加构造函数
       s += getConstructor(m, name);
 
       // fields: eg. String name;...num age;
-      m.forEach((k,v){
+      m.forEach((k, v) {
         var K = capitalize(k);
         var childName = '${K}Model';
 
-        if(v is Map) {
-          pending[childName]=v;
+        if (v is Map) {
+          pending[childName] = v;
           s += '  ${childName} $k;\n';
         } else if (v is List) {
           var childName = '${K}Entity';
-          if(v.length > 0) {
+          if (v.length > 0) {
             var value0 = v[0];
-            if(value0 is Map)
-              pending[childName]=v[0];
+            if (value0 is Map)
+              pending[childName] = v[0];
             else
               childName = getType(v[0]);
           } else {
-            pending[childName]={};
+            pending[childName] = {};
           }
           s += '  List<${childName}> $k;\n';
         } else {
@@ -118,7 +112,7 @@ class EntityWriter {
       s += replacePlaceHolder('{Name}', Name);
 
       s += '}\n\n';
-      classStrs.add(s);
+      classes.add(s);
     }
 
     // 确保路径存在
@@ -128,11 +122,11 @@ class EntityWriter {
     var fullPath = new File(outpath + camel2dash(name) + '.dart');
     var sink = fullPath.openWrite();
 
-    for (var value in headerStrs) {
+    for (var value in headers) {
       sink.write(value);
     }
 
-    for (var value in classStrs) {
+    for (var value in classes) {
       sink.write(value);
     }
     sink.close();
@@ -150,34 +144,12 @@ class EntityWriter {
 
     var end = '});\n';
 
-    if(mid.length > 0)
-      return begin + mid + end;
+    if (mid.length > 0) return begin + mid + end;
 
     return '$Name();\n';
   }
 
   String replacePlaceHolder(String parten, String name) {
-    return intertStr.replaceAll(parten, name);
-  }
-
-  String replaceAllInMap(String template, Map<String, String> kv) {
-    var ret = '';
-    if(kv.isNotEmpty) {
-      kv.forEach((k,v){
-        ret = template.replaceAll(k, v);
-      });
-    }
-    return ret;
-  }
-
-  String computeInsert() {
-    var ret = '';
-    if(intertStrs.isNotEmpty) {
-      intertStrs.forEach((k,v){
-        ret += replaceAllInMap(k, v);
-      });
-    } else {
-      return ret;
-    }
+    return inserts.replaceAll(parten, name);
   }
 }
