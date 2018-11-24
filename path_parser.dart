@@ -1,7 +1,7 @@
 
 import 'dart:io';
 
-import 'package:aixue4/code-generate/utils.dart';
+import 'utils.dart';
 
 class Path {
 
@@ -17,10 +17,15 @@ class Path {
 
     if (path.startsWith('~')) {
       path = path.replaceFirst('~', home);
-    } else if (path.startsWith('..')) {
-      path = path.replaceFirst('..', pwd);
-    } else if (path.startsWith('.')) {
-      path = path.replaceFirst('.', parent);
+    } else if (path.startsWith('../')) {
+      path = path.replaceFirst('..', parent);
+    } else if (path.startsWith('./')) {
+      path = path.replaceFirst('.', pwd);
+    } else if (path.startsWith('/')) {
+      // noop
+    } else {  // only file name.
+      path = '${pwd}${Platform.pathSeparator}${path}';
+      print(path);
     }
     _path = path;
   }

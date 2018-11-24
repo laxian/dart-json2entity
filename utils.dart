@@ -1,4 +1,3 @@
-import 'dart:io';
 
 /// 文件全路径，计算目录
 String getDir(String fullPath) {
