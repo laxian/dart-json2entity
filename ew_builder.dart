@@ -43,19 +43,20 @@ class EntityWriterBuilder {
   }
 
   EntityWriter build() {
-    var pw = EntityWriter();
-    pw.setName(_name);
-    pw.setJson(_json);
-    pw.addHeaders([ConstStr.AUTHOR]);
-    pw.setSupportJsonSerialization(json_serializable_support);
+    var ew = EntityWriter();
+    ew.setName(_name);
+    ew.setJson(_json);
+    ew.addHeaders([ConstStr.AUTHOR]);
+    ew.setSupportJsonSerialization(json_serializable_support);
+    ew.setShowVerbose(_show_verbose);
 
     if (json_serializable_support) {
-      pw.addHeaders(ConstStr.INSERT_HEADER);
-      pw.setDecorators(ConstStr.INSERT_DECORATOR);
-      pw.setInserts(ConstStr.INSERT_IN_CLASS);
+      ew.addHeaders(ConstStr.INSERT_HEADER);
+      ew.setDecorators(ConstStr.INSERT_DECORATOR);
+      ew.setInserts(ConstStr.INSERT_IN_CLASS);
     }
-    pw.setOutputDir(_path);
-    //pw.convert();
-    return pw;
+    ew.setOutputDir(_path);
+    //ew.convert();
+    return ew;
   }
 }

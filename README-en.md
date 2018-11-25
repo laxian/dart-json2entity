@@ -1,22 +1,49 @@
-# Convert json to entity class like GsonFormat for Java
+# A tool that convert json to Entitiy class file
 
 [中文](https://github.com/laxian/flutter-gsonformat/blob/master/README.md)
 
 As a freshman for Flutter, I need a json-to-entity converter for Dart, So I write this poor tool。
 It's simple BUT HELPFUL.
 
-See [flutter docs](https://flutter.io/docs/development/data-and-backend/json). If you know little about json serialization with flutter
 
-Convert json to entity class file. supporting[json_serializable](https://pub.dartlang.org/packages/json_serializable)(optional)
+## Feature
 
-## How to use
+-   input *json* string，output *entity class file*。Like the plugin *GsonFormat* of Android Studio
 
-* `dart json2bean.dart`
-* `dart cli.dart -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel`
-* `dart cli.dart -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel -v --support-json-serializable`
+- Write in dart lang
+
+- support cli
+
+- support read jsons from file and convert
+
+- support [json_serializable](https://pub.dartlang.org/packages/json_serializable)(optional)
+
+- not support inherit now
+
+See [flutter-doc#json](https://flutter.io/docs/development/data-and-backend/json) first if you know little about json serialization in flutter
+
+## HOW-TO
+
+See: [test_cli.sh](https://github.com/laxian/flutter-gsonformat/blob/master/test_cli.sh)
+
+- shell
+  * ./json2entity -j <json_string> -o <output_path> [-v] [--support-json-serializable]
+  `./json2entity -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel -v`
+  * ./json2entity -f <input_file_of_jsons> -o <output_path> [-v] [--support-json-serializable]
+  `./json2entity -f ./input/input.json -o output/ --support-json-serializable`
+
+- dart
+  * dart ./cli.dart -j <json_string> -o <output_path> [-v] [--support-json-serializable]
+  `dart ./cli.dart -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel -v`
+  * dart ./cli.dart -f <input_file_of_jsons> -o <output_path> [-v] [--support-json-serializable]
+  `dart ./cli.dart -f ./input/input.json -o output/ --support-json-serializable`
 
 ## Advanced
+
+Invoke in your dart source code. Like in
 [sample.dart](https://github.com/laxian/flutter-gsonformat/blob/master/sample.dart)
+[sample2.dart](https://github.com/laxian/flutter-gsonformat/blob/master/sample2.dart)
+
 ```
 /// test_convert.dart
 import 'entity_writer_builder.dart';
@@ -84,7 +111,7 @@ class DataModel {
 }
 ```
 
-if support json_serializable, you will get below:
+If you enabled json_serializable, you'll get the following file
 ```
 /**
  * auto generate by json2bean
@@ -113,8 +140,10 @@ DataModel({this.age,});
 }
 ```
 
-Ensure you output file above in flutter project. and you have run command:
-`flutter packages pub run build_runner build`. Then you will get:
+Make sure you have json_seriablizable package installed.
+Then run in terminal:
+`flutter packages pub run build_runner build`
+And then got:
 ```
 // GENERATED CODE - DO NOT MODIFY BY HAND
 

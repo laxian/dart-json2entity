@@ -1,6 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 
-import 'entity_writer_builder.dart';
+import 'ew_builder.dart';
 import 'path_parser.dart';
 import 'utils.dart';
 
@@ -18,6 +19,8 @@ ERROR PARAMETERS!!!
           output path
     -j, --json: 
           input json string
+    -f, --file: 
+          input json list from file. See \$PROJECT_ROOT/input/input.json
     -v, --verbose: 
           print verbose info
     --json-serializable-support
@@ -26,10 +29,12 @@ ERROR PARAMETERS!!!
 ''';
 
 void main(List<String> arguments) {
+  checkArgs(arguments);
   var outName;
   var pwd = getDir(Platform.script.path);
   var outPath = pwd + 'output/';  // default path
   var jstr;
+  var inputFile;
   var json_serializable_support = false;
   for (var i = 0; i < arguments.length; i++) {
     var option = arguments[i];
@@ -37,6 +42,10 @@ void main(List<String> arguments) {
     if (['-j', '--json'].contains(option)) {
       if (i < arguments.length - 1) {
         jstr = arguments[i + 1];
+      }
+    } else if (['-f', '--file'].contains(option)) {
+      if (i < arguments.length - 1) {
+        inputFile = new Path(arguments[i + 1]).path;
       }
     } else if (['-o', '--output'].contains(option)) {
       if (i < arguments.length - 1) {
@@ -57,30 +66,30 @@ void main(List<String> arguments) {
     }
   }
 
-  if (outName == null || jstr == null) {
+  if (outName == null || (jstr == null && inputFile == null)) {
     error();
   } else {
-    // var pw = EntityWriter();
-    // pw.setName(outName);
-    // pw.setJson(jsonDecode(jstr));
-    // pw.addHeaders(ConstStr.INSERT_HEADER);
-    // pw.setDecorators(ConstStr.INSERT_DECORATOR);
-    // pw.setInserts(ConstStr.INSERT_IN_CLASS);
-    // pw.setOutputDir(outPath);
-    // pw.convert();
-
-    new EntityWriterBuilder()
-    .supportJsonSerializable(json_serializable_support)
-    .name(outName)
-    .jsonStr(jstr)
-    .outpath(outPath)
-    .build()
-    .convert();
+    if (jstr != null) {
+      printWhen('input from stdin mode', isVerbose(arguments));
+      new EntityWriterBuilder()
+        .supportJsonSerializable(json_serializable_support)
+        .name(outName)
+        .jsonStr(jstr)
+        .outpath(outPath)
+        .verbose(isVerbose(arguments))
+        .build()
+        .convert();
+    } else if (inputFile != null) {
+      printWhen('input from file mode', isVerbose(arguments));
+      converFromFile(inputFile, outPath, show_verbose: isVerbose(arguments), support_json_serializable: json_serializable_support);
+    }
   }
 }
 
 error([String s]) {
-  stderr.write(s);
+  if (s != null) {
+    stderr.write(s);
+  }
   stderr.write('\n\n');
   stderr.write(err);
   exit(-1);
@@ -88,4 +97,35 @@ error([String s]) {
 
 bool isVerbose(arguments) {
   return arguments.contains('-v') || arguments.contains('--verbose');
+}
+
+bool checkArgs(List args) {
+  if (!(args.contains('-j') || args.contains('--json')||
+    args.contains('-f') || args.contains('--file'))) {
+    error('\nERROR: NO INPUT FOUND!!!');
+  }
+  if (!(args.contains('-o') || args.contains('--output'))) {
+    error('\nERROR: -O or --output NOT FOUND!');
+  }
+}
+
+void converFromFile(String input, String outPath, {bool show_verbose: false, bool support_json_serializable: false}) {
+  
+  var file = new File(input);
+  var jstr = file.readAsStringSync();
+  Map < String, dynamic > jobj = jsonDecode(jstr);
+
+  printWhen('input: $input', show_verbose);
+  printWhen('output: $outPath', show_verbose);
+  
+  jobj.forEach((k, v) {
+    EntityWriterBuilder()
+    .supportJsonSerializable(support_json_serializable)
+    .name(k)
+    .jsonStr(v)
+    .outpath(outPath)
+    .verbose(show_verbose)
+    .build()
+    .convert();
+  });
 }
