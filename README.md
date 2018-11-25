@@ -1,28 +1,48 @@
-# 给Dart和flutter的GsonFormat
+# Flutter 框架下的json转实体类工具
 
 [English](https://github.com/laxian/flutter-gsonformat/blob/master/README-en.md)
 
-本周入坑flutter，发现竟然Dart语言竟没有json转实体类的工具，就手动写了个简陋的。能用，慢慢改善。
+> 本周入坑flutter，发现竟然Dart语言竟没有json转实体类的工具，就手动写了个简陋的。能用，慢慢改善。
+
+
+## 功能
+
+-   输入json 字符串，输出实体类。类似Android Studio的GsonFormat工具
+
+- 使用dart语言开发
+
+- 支持命令行工具
+
+- 支持从文件批量读入json并转换
+
+- 可以生成支持[json_serializable](https://pub.dartlang.org/packages/json_serializable)的实体类(可选)
+
+- 暂不支持继承
 
 对flutter的json 序列化不了解的，建议先阅读[官方文档](https://flutter.io/docs/development/data-and-backend/json)
 
-可以生成支持[json_serializable](https://pub.dartlang.org/packages/json_serializable)的实体类(可选)
-
-## 功能
-
--   输入json 字符串，Model名和json定义在input.json，输出实体类。类似Java的GsonFormat
--   支持json_serializable
-    执行成功后，执行:
-    `flutter packages pub run build_runner build --delete-conflicting-outputs`
-
 ## 用法：
 
-* `dart json2bean.dart`
-* `dart cli.dart -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel`
-* `dart cli.dart -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel -v --support-json-serializable`
+参考：[test_cli.sh](https://github.com/laxian/flutter-gsonformat/blob/master/test_cli.sh)
+
+- shell
+  * ./json2entity -j <json_string> -o <output_path> [-v] [--support-json-serializable]
+  `./json2entity -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel -v`
+  * ./json2entity -f <input_file_of_jsons> -o <output_path> [-v] [--support-json-serializable]
+  `./json2entity -f ./input/input.json -o output/ --support-json-serializable`
+
+- dart
+  * dart ./cli.dart -j <json_string> -o <output_path> [-v] [--support-json-serializable]
+  `dart ./cli.dart -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel -v`
+  * dart ./cli.dart -f <input_file_of_jsons> -o <output_path> [-v] [--support-json-serializable]
+  `dart ./cli.dart -f ./input/input.json -o output/ --support-json-serializable`
 
 ## 高级用法
+
+使用dart代码调用，参考
 [sample.dart](https://github.com/laxian/flutter-gsonformat/blob/master/sample.dart)
+[sample2.dart](https://github.com/laxian/flutter-gsonformat/blob/master/sample2.dart)
+
 ```
 /// test_convert.dart
 import 'entity_writer_builder.dart';
@@ -90,7 +110,7 @@ class DataModel {
 }
 ```
 
-如果开启了json_serializable支持，结果使这样滴：
+如果开启了json_serializable支持，结果是这样滴：
 ```
 /**
  * auto generate by json2bean
@@ -120,7 +140,9 @@ DataModel({this.age,});
 ```
 
 保证上面的输出文件在flutter项目，且正确配置了json_seriablizable，并且手动运行
-`flutter packages pub run build_runner build`，自动生成下面的文件：
+
+`flutter packages pub run build_runner build`
+，自动生成下面的文件：
 ```
 // GENERATED CODE - DO NOT MODIFY BY HAND
 

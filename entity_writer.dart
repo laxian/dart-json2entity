@@ -9,6 +9,8 @@ import 'utils.dart';
 /// 未整理
 /// by zhouweixian
 class EntityWriter {
+
+  bool show_verbose = false;
   // default output dir
   var outpath = getDir(Platform.script.path) + 'bean/';
 
@@ -31,6 +33,10 @@ class EntityWriter {
   List < String > classes = [];
 
   bool supportJsonSerialization = false;
+
+  setShowVerbose(bool enable) {
+    show_verbose = enable;
+  }
 
   setSupportJsonSerialization(bool support) {
     supportJsonSerialization = support;
@@ -70,6 +76,9 @@ class EntityWriter {
   }
 
   convert() {
+
+    printWhen('Begin convert: $name', show_verbose);
+
     Map < String, Map < String, dynamic >> pending = {};
     pending[name] = json;
 
@@ -116,75 +125,77 @@ class EntityWriter {
       });
 
       s += getInsertBody(name, curr);
-      
-            s += '}\n\n';
-            classes.add(s);
-          }
-      
-          // 确保路径存在
-          var directory = new Directory(outpath);
-          directory.createSync(recursive: true);
-      
-          var fullPath = new File(outpath + camel2dash(name) + '.dart');
-          var sink = fullPath.openWrite();
-      
-          for (var value in headers) {
-            sink.write(value);
-          }
-      
-          for (var value in classes) {
-            sink.write(value);
-          }
-          sink.close();
-        }
-      
-        /// 生成构造函数
-        String getConstructor(Map < String, dynamic > m, String name) {
-          // LoginModel({});
-          var Name = capitalize(name);
-          var begin = '$Name({';
-          var mid = '';
-          m.forEach((k, v) {
-            mid += 'this.$k,';
-          });
-      
-          var end = '});\n';
-      
-          if (mid.length > 0) return begin + mid + end;
-      
-          return '$Name();\n';
-        }
-      
-        String getFromJsonPart(String name, Map<String, dynamic> m) {
-          var ret = '$name.fromJson(Map<String, dynamic> json): ';
-          List<String> fieldList = [];
-          m.forEach((k, v){
-            fieldList.add("$k = json['$k']");
-          });
-          var joined = fieldList.join(',\n');
-      
-          return '${ret}\n$joined;';
-        }
-      
-        String getToJsonPart(String name, Map<String, dynamic> m) {
-          var pre = 'Map<String, dynamic> toJson() =>';
-          List<String> fieldList = [];
-          m.forEach((k, v){
-            fieldList.add("'$k': $k");
-          });
-          var joined = fieldList.join(',\n');
-      
-          return "$pre\n{\n$joined\n};\n";
-        }
-      
-        String getInsertBody(String name, curr) {
-          var Name = capitalize(name);
-          if (supportJsonSerialization) {
-            return inserts.replaceAll('{Name}', name);
-          }
-          String result = '';   
-          result += getFromJsonPart(Name, curr);
-          result += getToJsonPart(Name, curr);
-          return result;
-        }
+
+      s += '}\n\n';
+      classes.add(s);
+    }
+
+    // 确保路径存在
+    var directory = new Directory(outpath);
+    directory.createSync(recursive: true);
+
+    var fullPath = new File(outpath + camel2dash(name) + '.dart');
+    var sink = fullPath.openWrite();
+
+    for (var value in headers) {
+      sink.write(value);
+    }
+
+    for (var value in classes) {
+      sink.write(value);
+    }
+    sink.close();
+
+    printWhen('Convert: $name successful!', show_verbose);
+  }
+
+  /// 生成构造函数
+  String getConstructor(Map < String, dynamic > m, String name) {
+    // LoginModel({});
+    var Name = capitalize(name);
+    var begin = '$Name({';
+    var mid = '';
+    m.forEach((k, v) {
+      mid += 'this.$k,';
+    });
+
+    var end = '});\n';
+
+    if (mid.length > 0) return begin + mid + end;
+
+    return '$Name();\n';
+  }
+
+  String getFromJsonPart(String name, Map < String, dynamic > m) {
+    var ret = '\n\t$name.fromJson(Map<String, dynamic> json): ';
+    List < String > fieldList = [];
+    m.forEach((k, v) {
+      fieldList.add("\t\t$k = json['$k']");
+    });
+    var joined = fieldList.join(',\n');
+
+    return '${ret}\n$joined;';
+  }
+
+  String getToJsonPart(String name, Map < String, dynamic > m) {
+    var pre = '\n\tMap<String, dynamic> toJson() => {';
+    List < String > fieldList = [];
+    m.forEach((k, v) {
+      fieldList.add("\t\t'$k': $k");
+    });
+    var joined = fieldList.join(',\n');
+
+    return "$pre\n$joined\n\t};\n";
+  }
+
+  String getInsertBody(String name, curr) {
+    var Name = capitalize(name);
+    if (supportJsonSerialization) {
+      return inserts.replaceAll('{Name}', name);
+    }
+    String result = '';
+    result += getFromJsonPart(Name, curr);
+    result += getToJsonPart(Name, curr);
+    return result;
+  }
 }

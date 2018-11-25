@@ -25,13 +25,14 @@ class Path {
       // noop
     } else {  // only file name.
       path = '${pwd}${Platform.pathSeparator}${path}';
-      print(path);
+      // print(path);
     }
     _path = path;
   }
 
   get dir => getDir(_path);
   get name => _path.replaceFirst(dir, '');
+  get path => _path;
 }
 
 
