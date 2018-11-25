@@ -8,7 +8,7 @@ It's simple BUT HELPFUL.
 
 ## Feature
 
--   input *json* string，output *entity class file*。Like the plugin *GsonFormat* of Android Studio
+- input *json* string，output *entity class file*。Like the plugin *GsonFormat* of Android Studio
 
 - Write in dart lang
 
@@ -28,15 +28,15 @@ See: [test_cli.sh](https://github.com/laxian/flutter-gsonformat/blob/master/test
 
 - shell
   * ./json2entity -j <json_string> -o <output_path> [-v] [--support-json-serializable]
-  `./json2entity -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel -v`
+  >> `./json2entity -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel -v`
   * ./json2entity -f <input_file_of_jsons> -o <output_path> [-v] [--support-json-serializable]
-  `./json2entity -f ./input/input.json -o output/ --support-json-serializable`
+  >> `./json2entity -f ./input/input.json -o output/ --support-json-serializable`
 
 - dart
   * dart ./cli.dart -j <json_string> -o <output_path> [-v] [--support-json-serializable]
-  `dart ./cli.dart -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel -v`
+  >> `dart ./cli.dart -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel -v`
   * dart ./cli.dart -f <input_file_of_jsons> -o <output_path> [-v] [--support-json-serializable]
-  `dart ./cli.dart -f ./input/input.json -o output/ --support-json-serializable`
+  >> `dart ./cli.dart -f ./input/input.json -o output/ --support-json-serializable`
 
 ## Advanced
 

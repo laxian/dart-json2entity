@@ -7,7 +7,7 @@
 
 ## 功能
 
--   输入json 字符串，输出实体类。类似Android Studio的GsonFormat工具
+- 输入json 字符串，输出实体类。类似Android Studio的GsonFormat工具
 
 - 使用dart语言开发
 
@@ -27,15 +27,21 @@
 
 - shell
   * ./json2entity -j <json_string> -o <output_path> [-v] [--support-json-serializable]
-  `./json2entity -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel -v`
+  
+  >> `./json2entity -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel -v`
+
   * ./json2entity -f <input_file_of_jsons> -o <output_path> [-v] [--support-json-serializable]
-  `./json2entity -f ./input/input.json -o output/ --support-json-serializable`
+  
+  >> `./json2entity -f ./input/input.json -o output/ --support-json-serializable`
 
 - dart
   * dart ./cli.dart -j <json_string> -o <output_path> [-v] [--support-json-serializable]
-  `dart ./cli.dart -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel -v`
+
+  >> `dart ./cli.dart -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel -v`
+
   * dart ./cli.dart -f <input_file_of_jsons> -o <output_path> [-v] [--support-json-serializable]
-  `dart ./cli.dart -f ./input/input.json -o output/ --support-json-serializable`
+
+  >> `dart ./cli.dart -f ./input/input.json -o output/ --support-json-serializable`
 
 ## 高级用法
 
@@ -44,7 +50,6 @@
 [sample2.dart](https://github.com/laxian/flutter-gsonformat/blob/master/sample2.dart)
 
 ```dart
-/// test_convert.dart
 import 'entity_writer_builder.dart';
 
 main(List < String > args) {
