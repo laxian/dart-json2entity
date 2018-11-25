@@ -44,7 +44,7 @@ Invoke in your dart source code. Like in
 [sample.dart](https://github.com/laxian/flutter-gsonformat/blob/master/sample.dart)
 [sample2.dart](https://github.com/laxian/flutter-gsonformat/blob/master/sample2.dart)
 
-```
+```dart
 /// test_convert.dart
 import 'entity_writer_builder.dart';
 
@@ -63,7 +63,7 @@ main(List < String > args) {
 
 ## Sample
 input:
-```
+```dart
 {
   "result": 1,
   "msg": "ok",
@@ -73,7 +73,7 @@ input:
 }
 ```
 output:
-```
+```dart
 /**
  * auto generate by json2bean
  * Author zhuoweixian
@@ -112,7 +112,7 @@ class DataModel {
 ```
 
 If you enabled json_serializable, you'll get the following file
-```
+```dart
 /**
  * auto generate by json2bean
  * Author zhuoweixian
@@ -142,9 +142,10 @@ DataModel({this.age,});
 
 Make sure you have json_seriablizable package installed.
 Then run in terminal:
+
 `flutter packages pub run build_runner build`
 And then got:
-```
+```dart
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 part of 'age_model.dart';

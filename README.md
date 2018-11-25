@@ -5,15 +5,15 @@
 > 本周入坑flutter，发现竟然Dart语言竟没有json转实体类的工具，就手动写了个简陋的。能用，慢慢改善。
 
 
-## 功能
+## 功能
 
 -   输入json 字符串，输出实体类。类似Android Studio的GsonFormat工具
 
 - 使用dart语言开发
 
-- 支持命令行工具
+- 支持命令行工具
 
-- 支持从文件批量读入json并转换
+- 支持从文件批量读入json并转换
 
 - 可以生成支持[json_serializable](https://pub.dartlang.org/packages/json_serializable)的实体类(可选)
 
@@ -39,11 +39,11 @@
 
 ## 高级用法
 
-使用dart代码调用，参考
+使用dart代码调用，参考
 [sample.dart](https://github.com/laxian/flutter-gsonformat/blob/master/sample.dart)
 [sample2.dart](https://github.com/laxian/flutter-gsonformat/blob/master/sample2.dart)
 
-```
+```dart
 /// test_convert.dart
 import 'entity_writer_builder.dart';
 
@@ -62,7 +62,7 @@ main(List < String > args) {
 
 ## Sample
 input:
-```
+```json
 {
   "result": 1,
   "msg": "ok",
@@ -72,7 +72,7 @@ input:
 }
 ```
 output:
-```
+```dart
 /**
  * auto generate by json2bean
  * Author zhuoweixian
@@ -110,8 +110,8 @@ class DataModel {
 }
 ```
 
-如果开启了json_serializable支持，结果是这样滴：
-```
+如果开启了json_serializable支持，生成类如下：
+```dart
 /**
  * auto generate by json2bean
  * Author zhuoweixian
@@ -143,7 +143,8 @@ DataModel({this.age,});
 
 `flutter packages pub run build_runner build`
 ，自动生成下面的文件：
-```
+
+```dart
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 part of 'age_model.dart';
