@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Copyright 2018. All rights reserved.
+# Use of this source code is governed by a Apache-style license that can be
+# found in the LICENSE file.
+
+
+set -e
+
+unset CDPATH
+
+function follow_links() {
+  cd -P "${1%/*}"
+  local file="$PWD/${1##*/}"
+  while [[ -h "$file" ]]; do
+    # On Mac OS, readlink -f doesn't work.
+    cd -P "${file%/*}"
+    file="$(readlink "$file")"
+    cd -P "${file%/*}"
+    file="$PWD/${file##*/}"
+  done
+  echo "$PWD/${file##*/}"
+}
+
+# Convert a filesystem path to a format usable by Dart's URI parser.
+function path_uri() {
+  # Reduce multiple leading slashes to a single slash.
+  echo "$1" | sed -E -e "s,^/+,/,"
+}
+
+PROG_NAME="$(path_uri "$(follow_links "$BASH_SOURCE")")"
+BIN_DIR="$(cd "${PROG_NAME%/*}" ; pwd -P)"
+# export FLUTTER_ROOT="$(cd "${BIN_DIR}/.." ; pwd -P)"
+FLUTTER="$(follow_links $(which flutter))"
+export FLUTTER_ROOT="${FLUTTER%bin*}"
+DART_SDK_PATH="$FLUTTER_ROOT/bin/cache/dart-sdk"
+SNAPSHOT_PATH=$BIN_DIR/json2bean.dart
+CLI_PATH=$BIN_DIR/cli.dart
+
+DART="$DART_SDK_PATH/bin/dart"
+PUB="$DART_SDK_PATH/bin/pub"
+
+"$DART" "$CLI_PATH" "$@"
