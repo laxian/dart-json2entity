@@ -32,14 +32,14 @@ class EntityWriter {
   // json中Object对象对应的class string
   List < String > classes = [];
 
-  bool supportJsonSerialization = false;
+  bool supportJsonSerializable = false;
 
   setShowVerbose(bool enable) {
     show_verbose = enable;
   }
 
   setSupportJsonSerialization(bool support) {
-    supportJsonSerialization = support;
+    supportJsonSerializable = support;
   }
 
   setName(String name) {
@@ -167,14 +167,17 @@ class EntityWriter {
   }
 
   String getFromJsonPart(String name, Map < String, dynamic > m) {
-    var ret = '\n\t$name.fromJson(Map<String, dynamic> json): ';
+    var ret = '\n\t$name.fromJson(Map<String, dynamic> json)';
+    if(m==null || m.length == 0) {
+      return '$ret;';
+    }
     List < String > fieldList = [];
     m.forEach((k, v) {
       fieldList.add("\t\t$k = json['$k']");
     });
     var joined = fieldList.join(',\n');
 
-    return '${ret}\n$joined;';
+    return '${ret}:\n$joined;';
   }
 
   String getToJsonPart(String name, Map < String, dynamic > m) {
@@ -190,7 +193,7 @@ class EntityWriter {
 
   String getInsertBody(String name, curr) {
     var Name = capitalize(name);
-    if (supportJsonSerialization) {
+    if (supportJsonSerializable) {
       return inserts.replaceAll('{Name}', name);
     }
     String result = '';

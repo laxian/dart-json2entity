@@ -14,7 +14,7 @@ ERROR PARAMETERS!!!
     dart cli.dart -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/Age -v --json-serializable-support
 
   SYNOPSIS
-    dart cli.dart -j <json_string> -o <output_path> [-v]
+    dart cli.dart -j <json_string> -o <output_path> [-v] [-s]
     -o, --output
           output path
     -j, --json: 
@@ -23,7 +23,7 @@ ERROR PARAMETERS!!!
           input json list from file. See \$PROJECT_ROOT/input/input.json
     -v, --verbose: 
           print verbose info
-    --json-serializable-support
+    -s, --json-serializable-support
           support json_serializable or not. default disable
 
 ''';
@@ -61,7 +61,7 @@ void main(List<String> arguments) {
           new Directory(outPath).createSync(recursive: true); 
         }
       }
-    } else if ('--support-json-serializable' == option) {
+    } else if (['-s', '--support-json-serializable'].contains(option)) {
       json_serializable_support = true;
     }
   }

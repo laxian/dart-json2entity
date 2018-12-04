@@ -2,7 +2,7 @@
 
 [English](https://github.com/laxian/flutter-gsonformat/blob/master/README-en.md)
 
-> 本周入坑flutter，发现竟然Dart语言竟没有json转实体类的工具，就手动写了个简陋的。能用，慢慢改善。
+> 新入坑flutter，没有找到json转实体类的工具，就手动写了个简陋的。能用，慢慢改善。
 
 
 ## 功能
@@ -26,22 +26,36 @@
 参考：[test_cli.sh](https://github.com/laxian/flutter-gsonformat/blob/master/test_cli.sh)
 
 - shell
-  * ./json2entity -j <json_string> -o <output_path> [-v] [--support-json-serializable]
+  * ./json2entity -j <json_string> -o <output_path> [-v] [-s]
   
-  >> `./json2entity -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel -v`
+  > `./json2entity -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel -v`
 
   * ./json2entity -f <input_file_of_jsons> -o <output_path> [-v] [--support-json-serializable]
   
-  >> `./json2entity -f ./input/input.json -o output/ --support-json-serializable`
+  > `./json2entity -f ./input/input.json -o output/ --support-json-serializable`
 
 - dart
   * dart ./cli.dart -j <json_string> -o <output_path> [-v] [--support-json-serializable]
 
-  >> `dart ./cli.dart -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel -v`
+  > `dart ./cli.dart -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel -v`
 
   * dart ./cli.dart -f <input_file_of_jsons> -o <output_path> [-v] [--support-json-serializable]
 
-  >> `dart ./cli.dart -f ./input/input.json -o output/ --support-json-serializable`
+  > `dart ./cli.dart -f ./input/input.json -o output/ --support-json-serializable`
+
+  ### 命令行参数说明
+  ```dart
+    -o, --output
+          output path
+    -j, --json: 
+          input json string
+    -f, --file: 
+          input json list from file. 参考$PROJECT_ROOT/input/input.json
+    -v, --verbose: 
+          echo verbose info
+    -s, --support-json-serializable
+          support [json_serializable](https://pub.dartlang.org/packages/json_serializable) or not. 
+  ```
 
 ## 高级用法
 

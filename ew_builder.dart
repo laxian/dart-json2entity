@@ -5,7 +5,7 @@ import 'constant.dart';
 import 'entity_writer.dart';
 
 class EntityWriterBuilder {
-  bool json_serializable_support = false;
+  bool support_json_serializable = false;
   bool filename_camel_to_underline = true;
   bool _show_verbose = false;
   String _name;
@@ -28,7 +28,7 @@ class EntityWriterBuilder {
   }
   
   EntityWriterBuilder supportJsonSerializable(bool a) {
-    json_serializable_support = a;
+    support_json_serializable = a;
     return this;
   }
 
@@ -47,16 +47,15 @@ class EntityWriterBuilder {
     ew.setName(_name);
     ew.setJson(_json);
     ew.addHeaders([ConstStr.AUTHOR]);
-    ew.setSupportJsonSerialization(json_serializable_support);
+    ew.setSupportJsonSerialization(support_json_serializable);
     ew.setShowVerbose(_show_verbose);
 
-    if (json_serializable_support) {
+    if (support_json_serializable) {
       ew.addHeaders(ConstStr.INSERT_HEADER);
       ew.setDecorators(ConstStr.INSERT_DECORATOR);
       ew.setInserts(ConstStr.INSERT_IN_CLASS);
     }
     ew.setOutputDir(_path);
-    //ew.convert();
     return ew;
   }
 }

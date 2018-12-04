@@ -27,16 +27,30 @@ See [flutter-doc#json](https://flutter.io/docs/development/data-and-backend/json
 See: [test_cli.sh](https://github.com/laxian/flutter-gsonformat/blob/master/test_cli.sh)
 
 - shell
-  * ./json2entity -j <json_string> -o <output_path> [-v] [--support-json-serializable]
-  >> `./json2entity -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel -v`
+  * ./json2entity -j <json_string> -o <output_path> [-v] [-s]
+  > `./json2entity -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel -v`
   * ./json2entity -f <input_file_of_jsons> -o <output_path> [-v] [--support-json-serializable]
-  >> `./json2entity -f ./input/input.json -o output/ --support-json-serializable`
+  > `./json2entity -f ./input/input.json -o output/ --support-json-serializable`
 
 - dart
-  * dart ./cli.dart -j <json_string> -o <output_path> [-v] [--support-json-serializable]
-  >> `dart ./cli.dart -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel -v`
+  * dart ./cli.dart -j <json_string> -o <output_path> [-v] [-s]
+  > `dart ./cli.dart -j '{"result":1,"msg":"success","data":{"age":18}}' -o ./output/AgeModel -v`
   * dart ./cli.dart -f <input_file_of_jsons> -o <output_path> [-v] [--support-json-serializable]
-  >> `dart ./cli.dart -f ./input/input.json -o output/ --support-json-serializable`
+  > `dart ./cli.dart -f ./input/input.json -o output/ --support-json-serializable`
+
+  ### CLI Parameters
+  ```dart
+    -o, --output
+          output path
+    -j, --json: 
+          input json string
+    -f, --file: 
+          input json list from file. See \$PROJECT_ROOT/input/input.json
+    -v, --verbose: 
+          print verbose info
+    -s, --support-json-serializable
+          support [json_serializable](https://pub.dartlang.org/packages/json_serializable) or not. 
+  ```
 
 ## Advanced
 
