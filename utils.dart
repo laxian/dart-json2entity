@@ -65,3 +65,7 @@ printWhen(info, b) {
     print(info);
   }
 }
+
+hasValue(dynamic value) {
+  return value?.isNotEmpty ?? false;
+}

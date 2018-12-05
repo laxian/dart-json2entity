@@ -60,7 +60,6 @@
 
 使用dart代码调用，参考
 [sample.dart](https://github.com/laxian/flutter-gsonformat/blob/master/v1/sample.dart)
-[sample2.dart](https://github.com/laxian/flutter-gsonformat/blob/master/v1/sample2.dart)
 
 ```dart
 import 'entity_writer_builder.dart';
@@ -107,11 +106,11 @@ class AgeModel {
   AgeModel.fromJson(Map < String, dynamic > json):
     result = json['result'],
     msg = json['msg'],
-    data = json['data'];
+    data = DataModel.fromJson(json['data']);
   Map < String, dynamic > toJson() => {
     'result': result,
     'msg': msg,
-    'data': data
+    'data': data.toJson()
   };
 }
 

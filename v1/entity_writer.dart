@@ -106,7 +106,7 @@ class EntityWriter {
           pending[childName] = v;
           s += '  ${childName} $k;\n';
         } else if (v is List) {
-          var childName = '${K}Entity';
+          var childName = '${K}Model';
           if (v.length > 0) {
             var value0 = v[0];
             if (value0 is Map)
@@ -173,7 +173,12 @@ class EntityWriter {
     }
     List < String > fieldList = [];
     m.forEach((k, v) {
-      fieldList.add("\t\t$k = json['$k']");
+      var type = getType(v);
+      if (['bool','String','num'].contains(type)) {
+        fieldList.add("\t\t$k = json['$k']");
+      } else {
+        fieldList.add('\t\t$k = ${capitalize(k)}Model.fromJson(json[\'$k\'])');
+      }
     });
     var joined = fieldList.join(',\n');
 
@@ -184,7 +189,12 @@ class EntityWriter {
     var pre = '\n\tMap<String, dynamic> toJson() => {';
     List < String > fieldList = [];
     m.forEach((k, v) {
-      fieldList.add("\t\t'$k': $k");
+      var type = getType(v);
+      if (['bool','String','num'].contains(type)) {
+        fieldList.add("\t\t'$k': $k");
+      } else {
+        fieldList.add("\t\t'$k': $k.toJson()");
+      }
     });
     var joined = fieldList.join(',\n');
 

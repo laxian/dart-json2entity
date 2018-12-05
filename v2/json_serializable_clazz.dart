@@ -46,7 +46,7 @@ class JsonSerializableClazz extends Clazz {
 
   @override
   String toString() {
-    for (Clazz item in childs) {
+    for (Clazz item in children) {
       item.addDecorator(JS_DECOR);
     }
     return super.toString();

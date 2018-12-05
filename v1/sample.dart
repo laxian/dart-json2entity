@@ -42,8 +42,8 @@ void testFromString() {
 void testFromFile() {
   
   var pwd = getDir(Platform.script.path);
-  var input = '${pwd}input/input.json';
-  var outPath = '${pwd}/output/';
+  var input = '${pwd}../input/input.json';
+  var outPath = '${pwd}../output/';
   
   converFromFile(input, outPath);
 }

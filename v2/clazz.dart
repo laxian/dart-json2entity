@@ -1,11 +1,10 @@
 import 'dart:convert';
 
 import '../utils.dart';
-import 'utils.dart';
 
 class Clazz {
   var defaultName = 'AutoModel';
-  List childs = [];
+  List children = [];
 
   List<String> headers;
   List<String> decorators;
@@ -75,16 +74,16 @@ class Clazz {
 
       if (curr is Map) {
         var child = buildChildClazz(curr, key: currKey);
-        childs.add(child);
+        children.add(child);
         fields[currName] = currKey;
       } else if (curr is List) {
         // 对于json里的list，我们认为每一项都一样的类型
-        var currList = curr as List;
+        var currList = curr;
         if (currList.length > 0) {
           var curr = currList.elementAt(0);
           if (curr is Map) {
             var child = buildChildClazz(curr, key: currKey);
-            childs.add(child);
+            children.add(child);
             fields[currName] = 'List<$currKey>';
           } else if (curr is List) {
             // [[],[]]
@@ -140,12 +139,41 @@ class Clazz {
   }
 
   String buildFromJson() {
+
     var pre = '\t$_name.fromJson(Map < String, dynamic > json)';
     var pairs = '';
     if (hasValue(fields)) {
-      pairs = fields.entries.toList().map((kv) {
-        return '\t\t${kv.key}=json[\'${kv.key}\']';
-      }).join(',\n');
+      // 基础类型
+      Iterable<String> simpleField = fields.entries
+      .where((f) => isSimple(f.value))
+      .map((kv) => '\t\t${kv.key}=json[\'${kv.key}\']');
+
+      // 对象类型需要调用自己类的fromJson，完成自身的序列化
+      Iterable<String> objectField = fields.entries
+      .where((f) => isObject(f.value))
+      .map((kv){
+        return '\t\t${kv.key}=${kv.value}.fromJson(json[\'${kv.key}\'])';
+      });
+
+      // 简单列表类型需要调用自己类的fromJson，完成自身的序列化
+      Iterable<String> simpleListField = fields.entries
+      .where((f) => isSimpleList(f.value))
+      .map((kv){
+        return '\t\t${kv.key}=${kv.value}.from(json[\'${kv.key}\'])';
+      });
+
+      // 对象列表类型需要调用自己类的fromJson，完成自身的序列化
+      Iterable<String> objectListField = fields.entries
+      .where((f) => isObjectList(f.value))
+      .map((kv){
+        return "\t\t${kv.key}=(json['${kv.key}'] as List).map((l)=>${getItemType(kv.value)}.fromJson(l)).toList()";
+      });
+
+      pairs = simpleField
+      .followedBy(objectField)
+      .followedBy(simpleListField)
+      .followedBy(objectListField)
+      .join(',\n');
       return '$pre:\n$pairs;';
     }
     return '$pre;';
@@ -169,9 +197,28 @@ class Clazz {
     var post = '};';
     var pairs = '';
     if (hasValue(fields)) {
-      pairs = fields.entries.toList().map((kv) {
-        return '\t\t\'${kv.key}\':${kv.key}';
-      }).join(',\n');
+
+      Iterable<String> simpleField = fields.entries
+      .where((f) => isSimple(f.value))
+      .map((kv) => '\t\t\'${kv.key}\':${kv.key}');
+
+      Iterable<String> objectField = fields.entries
+      .where((f) => isObject(f.value))
+      .map((kv) => '\t\t\'${kv.key}\':${kv.key}.toJson()');
+
+      Iterable<String> simpleListField = fields.entries
+      .where((f) => isSimpleList(f.value))
+      .map((kv) => '\t\t\'${kv.key}\':${kv.key}');
+
+      Iterable<String> objectListField = fields.entries
+      .where((f) => isObjectList(f.value))
+      .map((kv) => "\t\t\'${kv.key}':${kv.key}.map((it)=>it.toJson())");
+
+      var pairs = simpleField
+      .followedBy(objectField)
+      .followedBy(simpleListField)
+      .followedBy(objectListField)
+      .join(',\n');
       return '$pre\n$pairs\n$post';
     }
     return '$pre$post';
@@ -220,7 +267,7 @@ class Clazz {
     classes.add(self);
 
     // 8. build child classes
-    for (var child in childs) {
+    for (var child in children) {
       classes.add(child.toString());
     }
 
@@ -228,3 +275,43 @@ class Clazz {
     return classes.join('\n\n');
   }
 }
+
+
+
+    isSimple(String key) {
+      return ['bool','String','num'].contains(key);
+    }
+
+    isList(String key) {
+      return key.startsWith('List<');
+    }
+
+    getItemType(String key) {
+      if (!isList(key)) {
+        return key;
+      }
+      key = key.replaceAll('List<', '');
+      var lastIndex = key.lastIndexOf('>');
+      var type = key.substring(0, lastIndex);
+      return type;
+    }
+
+    isSimpleList(String key) {
+      if (!isList(key)) {
+        return false;
+      }
+      var second = key.endsWith('>');
+      key = key.replaceAll('List<', '');
+      var lastIndex = key.lastIndexOf('>');
+      var type = key.substring(0, lastIndex);
+      var third = ['bool','String','num'].contains(type);
+      return second && third;
+    }
+
+    isObjectList(String key) {
+      return isList(key) && !isSimpleList(key);
+    }
+
+    isObject(String key) {
+      return !isSimple(key) && !isList(key);
+    }

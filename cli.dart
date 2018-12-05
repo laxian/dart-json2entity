@@ -26,7 +26,7 @@ ERROR PARAMETERS!!!
           print verbose info
     -s, --json-serializable-support
           support json_serializable or not. default disable
-    -V, --v2
+    -V, --v1
           use new version convertor
 
 ''';
@@ -74,16 +74,16 @@ void main(List<String> arguments) {
   } else {
     if (jstr != null) {
       printWhen('input from stdin mode', isVerbose(arguments));
-      doConvert(support_json_serializable, outName, jstr, outPath, isVerbose(arguments), v2: useV2(arguments));
+      doConvert(support_json_serializable, outName, jstr, outPath, isVerbose(arguments), v1: useV1(arguments));
           } else if (inputFile != null) {
             printWhen('input from file mode', isVerbose(arguments));
-            converFromFile(inputFile, outPath, show_verbose: isVerbose(arguments), support_json_serializable: support_json_serializable, v2: useV2(arguments));
+            converFromFile(inputFile, outPath, show_verbose: isVerbose(arguments), support_json_serializable: support_json_serializable, v1: useV1(arguments));
           }
         }
       }
       
-useV2(List<String> arguments) {
-  return arguments.contains('-V') || arguments.contains('--v2');
+useV1(List<String> arguments) {
+  return arguments.contains('-V') || arguments.contains('--v1');
 }
 
 error([String s]) {
@@ -109,7 +109,7 @@ bool checkArgs(List args) {
   }
 }
 
-void converFromFile(String input, String outPath, {bool show_verbose: false, bool support_json_serializable: false, bool v2: false}) {
+void converFromFile(String input, String outPath, {bool show_verbose: false, bool support_json_serializable: false, bool v1: false}) {
   
   var file = new File(input);
   var jstr = file.readAsStringSync();
@@ -119,16 +119,12 @@ void converFromFile(String input, String outPath, {bool show_verbose: false, boo
   printWhen('output: $outPath', show_verbose);
   
   jobj.forEach((k, v) {
-    doConvert(support_json_serializable, k, v, outPath, show_verbose, v2: v2);
+    doConvert(support_json_serializable, k, v, outPath, show_verbose, v1: v1);
   });
 }
 
-void doConvert(bool support_json_serializable, String name, json, String outPath, bool show_verbose, {v2: bool}) {
-  
-  if(v2) {
-    var director = Director(name, json, outPath, support_json_serializable, show_verbose);
-    director.action();
-  } else {
+void doConvert(bool support_json_serializable, String name, json, String outPath, bool show_verbose, {v1: bool}) {
+  if(v1) {
     EntityWriterBuilder()
     .supportJsonSerializable(support_json_serializable)
     .name(name)
@@ -137,5 +133,8 @@ void doConvert(bool support_json_serializable, String name, json, String outPath
     .verbose(show_verbose)
     .build()
     .convert();
+  } else {
+    var director = Director(name, json, outPath, support_json_serializable, show_verbose);
+    director.action();
   }
 }
