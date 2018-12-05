@@ -2,7 +2,7 @@
 
 > 新入坑flutter，没有找到json转实体类的工具，就手动写了个简陋的。能用，慢慢改善。
 
-[另一种实现：v2](https://github.com/laxian/flutter-gsonformat/v2/blob/master/README-v2.md)
+[另一种实现：v2](https://github.com/laxian/flutter-gsonformat/blob/master/v2/README-v2.md)
 
 ## 功能
 
@@ -59,8 +59,8 @@
 ## 高级用法
 
 使用dart代码调用，参考
-[sample.dart](https://github.com/laxian/flutter-gsonformat/v1/blob/master/sample.dart)
-[sample2.dart](https://github.com/laxian/flutter-gsonformat/v1/blob/master/sample2.dart)
+[sample.dart](https://github.com/laxian/flutter-gsonformat/blob/master/v1/sample.dart)
+[sample2.dart](https://github.com/laxian/flutter-gsonformat/blob/master/v1/sample2.dart)
 
 ```dart
 import 'entity_writer_builder.dart';

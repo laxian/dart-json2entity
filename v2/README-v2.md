@@ -4,7 +4,7 @@
 
 但是，需求总是不断的变化，v1代码没有层次，改起来比较费劲，所以我决定换一种思路是实现，才有了v2.
 
-## [v1](https://github.com/laxian/flutter-gsonformat/v1/blob/master/README.md)
+## [v1](https://github.com/laxian/flutter-gsonformat/blob/master/v1/README.md)
 
 ## Clazz
 class 能完成原始的json string -> entity source file

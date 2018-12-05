@@ -3,7 +3,7 @@
 ## v1
 最初版本，功能比较全。但是代码比较难修改
 
-[README-v1](https://github.com/laxian/flutter-gsonformat/v1/blob/master/README.md)
+[README-v1](https://github.com/laxian/flutter-gsonformat/blob/master/v1/README.md)
 
 ## v2
 新版本，基本功能实现，边缘功能未完善
@@ -12,7 +12,7 @@
 - -v，并没有详细信息输出
 - 输出代码没有缩进
 
-[README-v2](https://github.com/laxian/flutter-gsonformat/v1/blob/master/README-v2.md)
+[README-v2](https://github.com/laxian/flutter-gsonformat/blob/master/v1/README-v2.md)
 
 ## CLI
 两个版本公用一套cli，通过--v2参数控制是否使用v2
