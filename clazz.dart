@@ -1,25 +1,69 @@
-
 import 'dart:convert';
 
 import 'utils.dart';
 
-class Clazz {
+main(List<String> args) {
+  // test_hasValue();
 
+  // test ClassMaker
+  // var base = Clazz('Base',{'result':'int'} ,['@JsonSerializable()']);
+  // print(base.toString());
+  // var cm = Clazz('MyModel',{'age':'String'} ,['@JsonSerializable()'], base);
+  // print(cm.toString());
+
+  // var cz = Clazz.fromJson('{"result":1,"msg":"ok","data":{"age":18,"friends":[1,2]}}');
+  var cz = JsonSerializableClazz.fromJson(
+      '{"result":1,"msg":"ok","data":{"forceType":1,"title":"update found","message":"please update","url":"www.baidu.com","inner":{"sth":"good"}}}');
+  print(cz.toString());
+}
+
+hasValue(dynamic value) {
+  return value?.isNotEmpty ?? false;
+}
+
+void test_hasValue() {
+  print(hasValue(null));
+  print(hasValue(''));
+  print(hasValue('abc'));
+  print(hasValue([]));
+  print(hasValue([1]));
+  print(hasValue({}));
+  print(hasValue({"result": 1}));
+}
+
+class Clazz {
   var defaultName = 'AutoModel';
   List childs = [];
 
-  Clazz(this._name, this.fields, this.decorators, [this.parent]);
+  List<String> decorators;
 
-  factory Clazz.fromJson(String jsonStr, {String key}) => Clazz.fromMap(jsonDecode(jsonStr), key: key);
+  String _name;
 
-  factory Clazz.fromMap(Map<String, dynamic> jsonMap, {String key}){
-    assert(jsonMap != null);
-    var entry = new MapEntry<String, Map<String, dynamic>>(key??'AutoModel', jsonMap);
-    return Clazz.fromMapEntry(entry);
+  Clazz parent;
+
+  Map<String, String> fields = {};
+
+  addDecorator(String decor) {
+    if (decorators == null) {
+      decorators = [];
+      decorators.add(decor);
+    }
   }
 
-  Clazz.fromMapEntry(MapEntry<String, Map<String, dynamic>> entry): _name = entry.key {
-    String currName = entry.key;
+  Clazz(this._name, this.fields, this.decorators, [this.parent]);
+
+  Clazz.fromClass(String path, String name);
+  factory Clazz.fromJson(String jsonStr, {String key}) =>
+      Clazz.fromMap(jsonDecode(jsonStr), key: key);
+
+  factory Clazz.fromMap(Map<String, dynamic> jsonMap, {String key}) {
+    assert(jsonMap != null);
+    var entry =
+        new MapEntry<String, Map<String, dynamic>>(key ?? 'AutoModel', jsonMap);
+    return Clazz.fromMapEntry(entry);
+  }
+  Clazz.fromMapEntry(MapEntry<String, Map<String, dynamic>> entry)
+      : _name = entry.key {
     var pending = entry.value;
     if (pending.entries.length == 0) {
       return;
@@ -31,7 +75,7 @@ class Clazz {
       var curr = pending.remove(currName);
 
       if (curr is Map) {
-        var child = Clazz.fromMap(curr, key: currKey);
+        var child = buildChildClazz(curr, key: currKey);
         childs.add(child);
         fields[currName] = currKey;
       } else if (curr is List) {
@@ -40,7 +84,7 @@ class Clazz {
         if (currList.length > 0) {
           var curr = currList.elementAt(0);
           if (curr is Map) {
-            var child = Clazz.fromMap(currList.elementAt(0), key: currName);
+            var child = buildChildClazz(Map(), key: currName);
             childs.add(child);
             fields[currName] = 'List<$currKey>';
           } else if (curr is List) {
@@ -58,61 +102,15 @@ class Clazz {
         // int/float/bool/String
         fields[currName] = getType(curr);
       }
-
     }
   }
 
-  Clazz.fromClass(String path, String name);
-
-  List <String> decorators;
-  String _name;
-  String get parentName => parent?.name;
-  Clazz parent;
+  Clazz buildChildClazz(Map curr, {String key}) => Clazz.fromMap(curr, key: key);
 
   get name => _name;
 
   // type: value. eg. int age.
-  Map <String, String> fields = {};
-
-  @override
-  String toString() {
-    // 类组成元素
-    List<String> classFrags = <String>[];
-    String decor = '';
-    // 1. decorators
-    if (hasValue(decorators)) {
-      decor = decorators.join('\n');
-      classFrags.add(decor);
-    }
-    // 2. class declare
-    String classDeclare = buildClassDeclare();
-    classFrags.add(classDeclare);
-    // 3. fields declare
-    if(hasValue(fields)) {
-      var fieldPairs = fields.entries.toList().map((kv){return '${kv.value} ${kv.key}';}).join(';\n');
-      classFrags.add('$fieldPairs;');
-    }
-    // 4. constructor
-    String constructor = buildConstructor();
-    classFrags.add(constructor);
-    // 5. fromJson
-    String fromJson = buildFromJson();
-    classFrags.add(fromJson);
-    // 6. toJson
-    String toJson = buildToJson();
-    classFrags.add(toJson);
-    classFrags.add('}');
-
-    List<String> classes = [];
-    var self = classFrags.where((str)=>hasValue(str)).join('\n');
-    classes.add(self);
-
-    for (var child in childs) {
-      classes.add(child.toString());
-    }
-
-    return classes.join('\n\n');
-  }
+  String get parentName => parent?.name;
 
   String buildClassDeclare() {
     if (hasValue(parentName)) {
@@ -142,21 +140,12 @@ class Clazz {
     var pre = '$_name.fromJson(Map < String, dynamic > json)';
     var pairs = '';
     if (hasValue(fields)) {
-      pairs = fields.entries.toList().map((kv){return '${kv.key}=json[\'${kv.key}\']';}).join(',');
+      pairs = fields.entries.toList().map((kv) {
+        return '${kv.key}=json[\'${kv.key}\']';
+      }).join(',');
       return '$pre:\n$pairs;';
     }
     return '$pre;';
-  }
-
-  String buildToJson() {
-    var pre = 'Map <String, dynamic> toJson() => {';
-    var post = '};';
-    var pairs = '';
-    if (hasValue(fields)) {
-      pairs = fields.entries.toList().map((kv){return '\'${kv.key}\':${kv.key}';}).join(',');
-      return '$pre\n$pairs\n$post';
-    }
-    return '$pre$post';
   }
 
   String buildSuperConstructor() {
@@ -164,42 +153,115 @@ class Clazz {
     var pre = 'super(';
     frags.add(pre);
     if (hasValue(fields)) {
-      var pairs = fields.entries.map((kv)=>kv.key).join(',');
+      var pairs = fields.entries.map((kv) => kv.key).join(',');
       frags.join(pairs);
     }
     var post = ')';
     frags.add(post);
     return frags.join();
   }
+
+  String buildToJson() {
+    var pre = 'Map <String, dynamic> toJson() => {';
+    var post = '};';
+    var pairs = '';
+    if (hasValue(fields)) {
+      pairs = fields.entries.toList().map((kv) {
+        return '\'${kv.key}\':${kv.key}';
+      }).join(',');
+      return '$pre\n$pairs\n$post';
+    }
+    return '$pre$post';
+  }
+
+  @override
+  String toString() {
+    // 类组成元素
+    List<String> classFrags = <String>[];
+    String decor = '';
+    // 1. decorators
+    if (hasValue(decorators)) {
+      decor = decorators.join('\n');
+      classFrags.add(decor);
+    }
+    // 2. class declare
+    String classDeclare = buildClassDeclare();
+    classFrags.add(classDeclare);
+    // 3. fields declare
+    if (hasValue(fields)) {
+      var fieldPairs = fields.entries.toList().map((kv) {
+        return '${kv.value} ${kv.key}';
+      }).join(';\n');
+      classFrags.add('$fieldPairs;');
+    }
+    // 4. constructor
+    String constructor = buildConstructor();
+    classFrags.add(constructor);
+    // 5. fromJson
+    String fromJson = buildFromJson();
+    classFrags.add(fromJson);
+    // 6. toJson
+    String toJson = buildToJson();
+    classFrags.add(toJson);
+    classFrags.add('}');
+
+    List<String> classes = [];
+    var self = classFrags.where((str) => hasValue(str)).join('\n');
+    classes.add(self);
+
+    for (var child in childs) {
+      classes.add(child.toString());
+    }
+
+    return classes.join('\n\n');
+  }
 }
 
-hasValue(dynamic value) {
-  return value ?.isNotEmpty ?? false;
-}
+class JsonSerializableClazz extends Clazz {
 
-main(List < String > args) {
+  static const String JS_DECOR = '@JsonSerializable()';
 
-  // test_hasValue();
+  JsonSerializableClazz(
+      String name, Map<String, String> fields, List<String> decorators)
+      : super(name, fields, decorators);
 
-  // test ClassMaker
-  // var base = Clazz('Base',{'result':'int'} ,['@JsonSerializable()']);
-  // print(base.toString());
-  // var cm = Clazz('MyModel',{'age':'String'} ,['@JsonSerializable()'], base);
-  // print(cm.toString());
+  factory JsonSerializableClazz.fromJson(String jsonStr, {String key}) =>
+      JsonSerializableClazz.fromMap(jsonDecode(jsonStr), key: key);
 
-  // var cz = Clazz.fromJson('{"result":1,"msg":"ok","data":{"age":18,"friends":[1,2]}}');
-  var cz = Clazz.fromJson('{"result":1,"msg":"ok","data":{"forceType":1,"title":"update found","message":"please update","url":"www.baidu.com","inner":{"sth":"good"}}}');
-  print(cz.toString());
-}
+  factory JsonSerializableClazz.fromMap(Map<String, dynamic> jsonMap,
+      {String key}) {
+    assert(jsonMap != null);
+    var entry =
+        new MapEntry<String, Map<String, dynamic>>(key ?? 'AutoModel', jsonMap);
+    return JsonSerializableClazz.fromMapEntry(entry);
+  }
 
-void test_hasValue() {
-  print(hasValue(null));
-  print(hasValue(''));
-  print(hasValue('abc'));
-  print(hasValue([]));
-  print(hasValue([1]));
-  print(hasValue({}));
-  print(hasValue({
-    "result": 1
-  }));
+  JsonSerializableClazz.fromMapEntry(
+      MapEntry<String, Map<String, dynamic>> entry)
+      : super.fromMapEntry(entry) {
+        addDecorator(JS_DECOR);
+      }
+
+  @override
+    String toString() {
+      for (Clazz item in childs) {
+        item.addDecorator(JS_DECOR);
+      }
+      return super.toString();
+    }
+
+  @override
+    Clazz buildChildClazz(Map curr, {String key}) {
+      return JsonSerializableClazz.fromMap(curr, key: key);
+    }
+
+    @override
+      String buildFromJson() {
+        return 'factory ${name}.fromJson(Map<String, dynamic> json) => _\$${name}FromJson(json);';
+      }
+
+  @override
+    String buildToJson() {
+      return 'Map<String, dynamic> toJson() => _\$${name}ToJson(this);';
+    }
 }
