@@ -8,7 +8,7 @@
 ## v2
 新版本
 
-[README-v2](https://github.com/laxian/flutter-gsonformat/blob/master/v1/README-v2.md)
+[README-v2](https://github.com/laxian/flutter-gsonformat/blob/master/v2/README-v2.md)
 
 ## CLI
 两个版本公用一套cli，通过--v1参数控制是否使用v1。默认使用v2
