@@ -40,3 +40,6 @@
     -V, --v2
           use new version convertor
 ```
+
+## More Sample
+[test_cli.sh](https://github.com/laxian/flutter-gsonformat/blob/master/test_cli.sh)
