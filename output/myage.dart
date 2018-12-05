@@ -12,8 +12,8 @@ Myage({this.result,this.msg,this.data,});
   num result;
   String msg;
   DataModel data;
-  factory myage.fromJson(Map<String, dynamic> json) => _$myageFromJson(json);
-  Map<String, dynamic> toJson() => _$myageToJson(this);
+  factory Myage.fromJson(Map<String, dynamic> json) => _$MyageFromJson(json);
+  Map<String, dynamic> toJson() => _$MyageToJson(this);
 }
 
 @JsonSerializable()

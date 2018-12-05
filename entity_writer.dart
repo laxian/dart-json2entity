@@ -194,7 +194,7 @@ class EntityWriter {
   String getInsertBody(String name, curr) {
     var Name = capitalize(name);
     if (supportJsonSerializable) {
-      return inserts.replaceAll('{Name}', name);
+      return inserts.replaceAll('{Name}', Name);
     }
     String result = '';
     result += getFromJsonPart(Name, curr);
