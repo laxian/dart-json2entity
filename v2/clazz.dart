@@ -34,14 +34,31 @@ class Clazz {
 
   Clazz.fromClass(String path, String name);
 
-  factory Clazz.fromJson(String jsonStr, {String key}) =>
-      Clazz.fromMap(jsonDecode(jsonStr), key: key);
+  factory Clazz.fromJson(String jsonStr, {String key}) {
+    var jobj = jsonDecode(jsonStr);
+    if (jobj is Map) {
+      return Clazz.fromMap(jobj, key: key);
+    }
+      return Clazz.fromList(jobj, key: key);
+  }
 
-  factory Clazz.fromMap(Map<String, dynamic> jsonMap, {String key}) {
+  factory Clazz.fromMap(Map<String, dynamic> jsonMap,
+      {String key}) {
     assert(jsonMap != null);
     var entry =
         new MapEntry<String, Map<String, dynamic>>(key ?? 'AutoModel', jsonMap);
     return Clazz.fromMapEntry(entry);
+  }
+
+  factory Clazz.fromList(List<dynamic> jsonList,{String key}) {
+    assert(jsonList != null);
+    assert(jsonList.length > 0);
+
+    String default_key = 'datas';
+    var newMap = <String, dynamic>{};
+    newMap[default_key] = jsonList;
+
+    return Clazz.fromMap(newMap, key: key);
   }
 
   Clazz.fromMapEntry(MapEntry<String, Map<String, dynamic>> entry)
@@ -66,13 +83,14 @@ class Clazz {
         if (currList.length > 0) {
           var curr = currList.elementAt(0);
           if (curr is Map) {
-            var child = buildChildClazz(Map(), key: currName);
+            var child = buildChildClazz(curr, key: currKey);
             childs.add(child);
             fields[currName] = 'List<$currKey>';
           } else if (curr is List) {
             // [[],[]]
           } else {
-            fields[currName] = getType(curr);
+            var type = getType(curr);
+            fields[currName] = 'List<$type>';
           }
         } else {
           // key:[]
@@ -89,7 +107,7 @@ class Clazz {
 
   String buildClassName(String currName) => '${capitalize(currName)}Entity';
 
-  Clazz buildChildClazz(Map curr, {String key}) =>
+  Clazz buildChildClazz(Map<String, dynamic> curr, {String key}) =>
       Clazz.fromMap(curr, key: capitalize(key));
 
   get name => _name;
@@ -107,11 +125,11 @@ class Clazz {
 
   String buildConstructor() {
     if (hasValue(fields)) {
-      String pre = '$_name({';
+      String pre = '\t$_name({';
       var pairs = fields.entries.toList().map((kv) {
-        return 'this.${kv.key}';
-      }).join(',');
-      String suffix = '})';
+        return '\t\tthis.${kv.key}';
+      }).join(',\n');
+      String suffix = '\t})';
       var superConstructor = buildSuperConstructor();
       if (parent != null) {
         return '$pre\n$pairs\n$suffix:$superConstructor;\n';
@@ -122,12 +140,12 @@ class Clazz {
   }
 
   String buildFromJson() {
-    var pre = '$_name.fromJson(Map < String, dynamic > json)';
+    var pre = '\t$_name.fromJson(Map < String, dynamic > json)';
     var pairs = '';
     if (hasValue(fields)) {
       pairs = fields.entries.toList().map((kv) {
-        return '${kv.key}=json[\'${kv.key}\']';
-      }).join(',');
+        return '\t\t${kv.key}=json[\'${kv.key}\']';
+      }).join(',\n');
       return '$pre:\n$pairs;';
     }
     return '$pre;';
@@ -147,13 +165,13 @@ class Clazz {
   }
 
   String buildToJson() {
-    var pre = 'Map <String, dynamic> toJson() => {';
+    var pre = '\tMap <String, dynamic> toJson() => {';
     var post = '};';
     var pairs = '';
     if (hasValue(fields)) {
       pairs = fields.entries.toList().map((kv) {
-        return '\'${kv.key}\':${kv.key}';
-      }).join(',');
+        return '\t\t\'${kv.key}\':${kv.key}';
+      }).join(',\n');
       return '$pre\n$pairs\n$post';
     }
     return '$pre$post';
@@ -181,7 +199,7 @@ class Clazz {
     // 3. fields declare
     if (hasValue(fields)) {
       var fieldPairs = fields.entries.toList().map((kv) {
-        return '${kv.value} ${kv.key}';
+        return '\t${kv.value} ${kv.key}';
       }).join(';\n');
       classFrags.add('$fieldPairs;');
     }

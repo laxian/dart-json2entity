@@ -24,12 +24,12 @@ class Director {
     this.show_verbose
     ) {
       if (support_json_serializable) {
-        clazz = JsonSerializableClazz.fromJson(json);
+        clazz = JsonSerializableClazz.fromJson(json, key: name);
         var part = buildPartName();
         clazz.addHeader('import \'package:json_annotation/json_annotation.dart\';');
         clazz.addHeader('part \'$part\';\n');
       } else {
-        clazz = Clazz.fromJson(json);
+        clazz = Clazz.fromJson(json, key: name);
       }
       output = clazz.toString();
   }

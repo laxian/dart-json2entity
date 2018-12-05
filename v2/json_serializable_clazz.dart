@@ -10,8 +10,13 @@ class JsonSerializableClazz extends Clazz {
       String name, Map<String, String> fields, List<String> decorators)
       : super(name, fields, decorators);
 
-  factory JsonSerializableClazz.fromJson(String jsonStr, {String key}) =>
-      JsonSerializableClazz.fromMap(jsonDecode(jsonStr), key: key);
+  factory JsonSerializableClazz.fromJson(String jsonStr, {String key}) {
+    var jobj = jsonDecode(jsonStr);
+    if (jobj is Map) {
+      return JsonSerializableClazz.fromMap(jobj, key: key);
+    }
+    return JsonSerializableClazz.fromList(jobj, key: key);
+  }
 
   factory JsonSerializableClazz.fromMap(Map<String, dynamic> jsonMap,
       {String key}) {
@@ -19,6 +24,17 @@ class JsonSerializableClazz extends Clazz {
     var entry =
         new MapEntry<String, Map<String, dynamic>>(key ?? 'AutoModel', jsonMap);
     return JsonSerializableClazz.fromMapEntry(entry);
+  }
+
+  factory JsonSerializableClazz.fromList(List<dynamic> jsonList,{String key}) {
+    assert(jsonList != null);
+    assert(jsonList.length > 0);
+
+    String default_key = 'datas';
+    var newMap = <String, dynamic>{};
+    newMap[default_key] = jsonList;
+
+    return JsonSerializableClazz.fromMap(newMap, key: key);
   }
 
   JsonSerializableClazz.fromMapEntry(
@@ -37,7 +53,7 @@ class JsonSerializableClazz extends Clazz {
   }
 
   @override
-  Clazz buildChildClazz(Map curr, {String key}) {
+  Clazz buildChildClazz(Map<String, dynamic> curr, {String key}) {
     return JsonSerializableClazz.fromMap(curr, key: capitalize(key));
   }
 

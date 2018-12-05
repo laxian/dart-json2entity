@@ -6,11 +6,7 @@
 [README-v1](https://github.com/laxian/flutter-gsonformat/blob/master/v1/README.md)
 
 ## v2
-新版本，基本功能实现，边缘功能未完善
-
-比如:
-- -v，并没有详细信息输出
-- 输出代码没有缩进
+新版本
 
 [README-v2](https://github.com/laxian/flutter-gsonformat/blob/master/v1/README-v2.md)
 
