@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import '../utils.dart';
 import 'clazz.dart';
 
 class JsonSerializableClazz extends Clazz {
@@ -23,6 +24,7 @@ class JsonSerializableClazz extends Clazz {
   JsonSerializableClazz.fromMapEntry(
       MapEntry<String, Map<String, dynamic>> entry)
       : super.fromMapEntry(entry) {
+    // addHeader('import \'package:json_annotation/json_annotation.dart\';');
     addDecorator(JS_DECOR);
   }
 
@@ -36,7 +38,7 @@ class JsonSerializableClazz extends Clazz {
 
   @override
   Clazz buildChildClazz(Map curr, {String key}) {
-    return JsonSerializableClazz.fromMap(curr, key: key);
+    return JsonSerializableClazz.fromMap(curr, key: capitalize(key));
   }
 
   @override

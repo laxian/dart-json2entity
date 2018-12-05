@@ -1,8 +1,8 @@
 import 'dart:async' show Future;
 import 'dart:io';
 
-import 'cli.dart';
-import 'utils.dart';
+import '../cli.dart';
+import '../utils.dart';
 
 /// dart sample2.dart
 Future < void > main() async {

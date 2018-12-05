@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import '../utils.dart';
 import 'utils.dart';
 
 class Clazz {
   var defaultName = 'AutoModel';
   List childs = [];
 
+  List<String> headers;
   List<String> decorators;
 
   String _name;
@@ -13,6 +15,13 @@ class Clazz {
   Clazz parent;
 
   Map<String, String> fields = {};
+
+  addHeader(String header) {
+    if (headers == null) {
+      headers = [];
+    }
+    headers.add(header);
+  }
 
   addDecorator(String decor) {
     if (decorators == null) {
@@ -78,10 +87,10 @@ class Clazz {
     }
   }
 
-  String buildClassName(String currName) => '${currName}Entity';
+  String buildClassName(String currName) => '${capitalize(currName)}Entity';
 
   Clazz buildChildClazz(Map curr, {String key}) =>
-      Clazz.fromMap(curr, key: key);
+      Clazz.fromMap(curr, key: capitalize(key));
 
   get name => _name;
 
@@ -154,6 +163,12 @@ class Clazz {
   String toString() {
     // 类组成元素
     List<String> classFrags = <String>[];
+    // 0. headers
+    String headerStr;
+    if (hasValue(headers)) {
+      headerStr = headers.join('\n');
+      classFrags.add(headerStr);
+    }
     String decor = '';
     // 1. decorators
     if (hasValue(decorators)) {

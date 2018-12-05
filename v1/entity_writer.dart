@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'utils.dart';
+import '../utils.dart';
 
 /// convert json to dart PO
 /// 思路：

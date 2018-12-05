@@ -1,26 +1,26 @@
-/**
- * auto generate by json2bean
- * Author zhuoweixian
- */
 import 'package:json_annotation/json_annotation.dart';
-
 part 'myage.g.dart';
 
 @JsonSerializable()
-class Myage {
-Myage({this.result,this.msg,this.data,});
-  num result;
-  String msg;
-  DataModel data;
-  factory Myage.fromJson(Map<String, dynamic> json) => _$MyageFromJson(json);
-  Map<String, dynamic> toJson() => _$MyageToJson(this);
+class AutoModel {
+num result;
+String msg;
+DataEntity data;
+AutoModel({
+this.result,this.msg,this.data
+});
+
+factory AutoModel.fromJson(Map<String, dynamic> json) => _$AutoModelFromJson(json);
+Map<String, dynamic> toJson() => _$AutoModelToJson(this);
 }
 
 @JsonSerializable()
-class DataModel {
-DataModel({this.age,});
-  num age;
-  factory DataModel.fromJson(Map<String, dynamic> json) => _$DataModelFromJson(json);
-  Map<String, dynamic> toJson() => _$DataModelToJson(this);
-}
+class DataEntity {
+num age;
+DataEntity({
+this.age
+});
 
+factory DataEntity.fromJson(Map<String, dynamic> json) => _$DataEntityFromJson(json);
+Map<String, dynamic> toJson() => _$DataEntityToJson(this);
+}

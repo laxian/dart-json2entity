@@ -1,8 +1,9 @@
 import 'dart:io';
 
-import 'cli.dart';
+import '../cli.dart';
+import '../utils.dart';
 import 'ew_builder.dart';
-import 'utils.dart';
+
 
 main(List < String > args) {
 
