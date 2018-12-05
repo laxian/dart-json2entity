@@ -2,35 +2,6 @@ import 'dart:convert';
 
 import 'utils.dart';
 
-main(List<String> args) {
-  // test_hasValue();
-
-  // test ClassMaker
-  // var base = Clazz('Base',{'result':'int'} ,['@JsonSerializable()']);
-  // print(base.toString());
-  // var cm = Clazz('MyModel',{'age':'String'} ,['@JsonSerializable()'], base);
-  // print(cm.toString());
-
-  // var cz = Clazz.fromJson('{"result":1,"msg":"ok","data":{"age":18,"friends":[1,2]}}');
-  var cz = JsonSerializableClazz.fromJson(
-      '{"result":1,"msg":"ok","data":{"forceType":1,"title":"update found","message":"please update","url":"www.baidu.com","inner":{"sth":"good"}}}');
-  print(cz.toString());
-}
-
-hasValue(dynamic value) {
-  return value?.isNotEmpty ?? false;
-}
-
-void test_hasValue() {
-  print(hasValue(null));
-  print(hasValue(''));
-  print(hasValue('abc'));
-  print(hasValue([]));
-  print(hasValue([1]));
-  print(hasValue({}));
-  print(hasValue({"result": 1}));
-}
-
 class Clazz {
   var defaultName = 'AutoModel';
   List childs = [];
@@ -53,6 +24,7 @@ class Clazz {
   Clazz(this._name, this.fields, this.decorators, [this.parent]);
 
   Clazz.fromClass(String path, String name);
+
   factory Clazz.fromJson(String jsonStr, {String key}) =>
       Clazz.fromMap(jsonDecode(jsonStr), key: key);
 
@@ -62,6 +34,7 @@ class Clazz {
         new MapEntry<String, Map<String, dynamic>>(key ?? 'AutoModel', jsonMap);
     return Clazz.fromMapEntry(entry);
   }
+
   Clazz.fromMapEntry(MapEntry<String, Map<String, dynamic>> entry)
       : _name = entry.key {
     var pending = entry.value;
@@ -71,7 +44,7 @@ class Clazz {
 
     while (pending.entries.length > 0) {
       var currName = pending.entries.elementAt(0).key;
-      var currKey = '${currName}Entity';
+      var currKey = buildClassName(currName);
       var curr = pending.remove(currName);
 
       if (curr is Map) {
@@ -105,7 +78,10 @@ class Clazz {
     }
   }
 
-  Clazz buildChildClazz(Map curr, {String key}) => Clazz.fromMap(curr, key: key);
+  String buildClassName(String currName) => '${currName}Entity';
+
+  Clazz buildChildClazz(Map curr, {String key}) =>
+      Clazz.fromMap(curr, key: key);
 
   get name => _name;
 
@@ -205,63 +181,17 @@ class Clazz {
     classFrags.add(toJson);
     classFrags.add('}');
 
-    List<String> classes = [];
+    // 7. build class
     var self = classFrags.where((str) => hasValue(str)).join('\n');
+    List<String> classes = [];
     classes.add(self);
 
+    // 8. build child classes
     for (var child in childs) {
       classes.add(child.toString());
     }
 
+    // 9. success
     return classes.join('\n\n');
   }
-}
-
-class JsonSerializableClazz extends Clazz {
-
-  static const String JS_DECOR = '@JsonSerializable()';
-
-  JsonSerializableClazz(
-      String name, Map<String, String> fields, List<String> decorators)
-      : super(name, fields, decorators);
-
-  factory JsonSerializableClazz.fromJson(String jsonStr, {String key}) =>
-      JsonSerializableClazz.fromMap(jsonDecode(jsonStr), key: key);
-
-  factory JsonSerializableClazz.fromMap(Map<String, dynamic> jsonMap,
-      {String key}) {
-    assert(jsonMap != null);
-    var entry =
-        new MapEntry<String, Map<String, dynamic>>(key ?? 'AutoModel', jsonMap);
-    return JsonSerializableClazz.fromMapEntry(entry);
-  }
-
-  JsonSerializableClazz.fromMapEntry(
-      MapEntry<String, Map<String, dynamic>> entry)
-      : super.fromMapEntry(entry) {
-        addDecorator(JS_DECOR);
-      }
-
-  @override
-    String toString() {
-      for (Clazz item in childs) {
-        item.addDecorator(JS_DECOR);
-      }
-      return super.toString();
-    }
-
-  @override
-    Clazz buildChildClazz(Map curr, {String key}) {
-      return JsonSerializableClazz.fromMap(curr, key: key);
-    }
-
-    @override
-      String buildFromJson() {
-        return 'factory ${name}.fromJson(Map<String, dynamic> json) => _\$${name}FromJson(json);';
-      }
-
-  @override
-    String buildToJson() {
-      return 'Map<String, dynamic> toJson() => _\$${name}ToJson(this);';
-    }
 }
