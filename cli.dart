@@ -27,7 +27,7 @@ ERROR PARAMETERS!!!
     -s, --json-serializable-support
           support json_serializable or not. default disable
     -V, --v1
-          use new version convertor
+          use v1 convertor.[DEPRECATED]
 
 ''';
 

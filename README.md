@@ -1,14 +1,13 @@
 # 用Dart语言实现的json转Dart实体类工具
 
 不管用什么语言开发，总离不开数据的序列化和反序列化。
-在java中，我习惯了用gson、fastjson之类的工具，将json字符串反序列化为对象，
-或者将对象序列换成json字符串。
 
-反序列化为实体类需要先编写好实体类，在java中根据json自动生成实体类的工具很多，比如我常用的GsonFormat插件。
+在java中，我习惯了用gson、fastjson之类的工具，将json字符串反序列化为对象，或者将对象序列换成json字符串。
 
-在Flutter中，我也需要一个类似的工具，帮我根据json字符串自动生成对应的实体类。这个项目就是做这个事情的，所以叫**flutter-gsonformat**
+反序列化为实体类需要先编写好实体类，在java中根据json自动生成实体类的工具很多，比如我常用的GsonFormat插件。
 
-v1 已废弃，当前v2
+在Flutter中，我也需要一个类似的工具，帮我根据json字符串自动生成对应的实体类。这个项目就是做这个事情的，所以叫**flutter-gsonformat**
+
 
 ## 使用
 
@@ -19,28 +18,49 @@ v1 已废弃，当前v2
 #### 命令行方式
 `./json2entity -j '{"result":1,"msg":"ok"}' -o output/BaseEntity`
 
+参数说明：
+```shell
+  SYNOPSIS
+    dart cli.dart -j <json_string> -o <output_path> [-v] [-s]
+    -o, --output
+          output path
+    -j, --json: 
+          input json string
+    -f, --file: 
+          input json list from file. See \$PROJECT_ROOT/input/input.json
+    -v, --verbose: 
+          print verbose info
+    -s, --json-serializable-support
+          support json_serializable or not. default disable
+    -V, --v1
+          use v1 convertor.[DEPRECATED]
+```
+
 ## 实现
 #### Clazz
-  基本转换。
-  转换分解成以下步骤：
-
-    0. file header      文件头部，import、part、part of等语句，可选
-    1. decorator        注解、装饰器，可选
-    2. class declare    类声明，class xxx {
-    3. fields           类成员变量
-    4. constructor      构造函数
-    5. fromJson method  fromJson方法
-    6. toJson method    toJson方法
-    7. 拼接1-6步，合成class
-    8. 递归1-7，合成children
-    9. 输出
+  转换json为实体类。不依赖外部工具。
+  转换步骤：
+1. 解析json结构
+      - json -> map
+      - 遍历map树，建立实体类依赖图
+2. 组合实体类
+      1. file header      文件头部，import、part、part of等语句，可选
+      2. decorator        注解、装饰器，可选
+      3. class declare    类声明，class xxx {
+      4. fields           类成员变量
+      5. constructor      构造函数
+      6. fromJson method  fromJson方法
+      7. toJson method    toJson方法
+      8. 拼接1-6步，合成class
+      9. 递归1-7，合成children
+      10. 输出
 
 
 #### JsonSerializableClazz
  继承Clazz，增加对[json_serializable](https://pub.dartlang.org/packages/json_serializable)的支持。
 
- 支持json_serializable和不使用json_serializable的实体类的差异：
-  1. 多了一个part `'xxx.dart'` 的头部header
+ 使用json_serializable和不使用json_serializable的实体类的差异：
+  1. 多了一个part `'xxx.dart'` 的头部header
   2. 多了一个注解`@JsonSerializable()`
   3. fromJson、toJson方法不一样
   4. 生成后，还需要通过命令生成另一部分
@@ -50,7 +70,7 @@ v1 已废弃，当前v2
 配置并输出实体类到文件
 
 ## Sample
-1. 输入简单json如下：
+#### 1. 输入简单json如下：
 ```json
 {
     "result":1,
@@ -77,7 +97,7 @@ class Json1 {
 	};
 }
 ```
-2. 输入嵌套json
+#### 2. 输入嵌套json
 ```json
 {
     "result":1,
@@ -125,7 +145,7 @@ class DataEntity {
 	};
 }
 ```
-3. 输入json，嵌套简单list
+#### 3. 输入json，嵌套简单list
 ```json
 {
   "city": "Mumbai",
@@ -155,7 +175,7 @@ class Json3 {
 	};
 }
 ```
-4. 输入json，嵌套对象list
+#### 4. 输入json，嵌套对象list
 ```json
 {
   "id":1,
@@ -213,7 +233,8 @@ class ImagesEntity {
 	};
 }
 ```
-5. 输入map列表。这个需要强调一下，我的方法是，将[...]转化成{"datas": [...]}，之后再转换
+#### 5. 输入map列表。
+这个需要强调一下，我的方法是，将[...]转化成{"datas": [...]}，之后再转换
 ```json
 [
   {
@@ -273,11 +294,9 @@ class DatasEntity {
 
 ## 测试
 
+#### 测试生成实体类
 ```shell
-# 生成实体类
 ./test_cli.sh
-# 测试实体类-json互转
-dart test_entity.dart
 ```
 
 ```bash
@@ -325,137 +344,15 @@ inputFile=./input/input.json
 json1.dart   json3.dart   json5.dart   json_f2.dart json_f4.dart json_s1.dart json_s3.dart json_s5.dart
 json2.dart   json4.dart   json_f1.dart json_f3.dart json_f5.dart json_s2.dart json_s4.dart
 ```
-接下来，测试这些生成的实体类，将字符串反序列化
-```dart
-import 'dart:convert';
-import 'output/json1.dart';
-import 'output/json2.dart';
-import 'output/json3.dart';
-import 'output/json4.dart';
-import 'output/json5.dart';
-import 'output/json_f1.dart';
-import 'output/json_f2.dart';
-import 'output/json_f3.dart';
-import 'output/json_f4.dart';
-import 'output/json_f5.dart';
-import 'output/json_s1.dart';
-import 'output/json_s2.dart';
-import 'output/json_s3.dart';
-import 'output/json_s4.dart';
-import 'output/json_s5.dart';
+好，正常产生实体类
 
 
-var json1 = '{"result":1,"msg":"ok"}';
-var json2 = '{"result":1,"msg":"ok","data":{"answer":"A"}}';
-var json3 = '{"city":"Mumbai","streets":["address1","address2"]}';
-var json4 = '{"id":1,"name":"ProductName","images":[{"id":11,"imageName":"xCh-rhy"},{"id":31,"imageName":"fjs-eun"}]}';
-var json5 = '[{"albumId":1,"id":1,"title":"accusamus beatae ad facilis cum similique qui sunt","url":"http://placehold.it/600/92c952","thumbnailUrl":"http://placehold.it/150/92c952"}]';
+#### 测试实体类序列化反序列化
 
-main(List < String > args) {
-
-  print('测试命令行转换的普通实体类');
-  testEntityConvertedByCli();
-  print('\n测试文件批量转换的普通实体类');
-  testEntityConvertedFromFile();
-  print('\n测试支持json_serializable的实体类');
-  testEntityConvertedSupportJsonSerializable();
-
-  print('\n\nWELL DONE! ALL OUTPUT ENTITY TEST SUCCESSFUL!!\n\n');
-}
-
-void testEntityConvertedByCli() {
-  
-  var j1 = Json1.fromJson(jsonDecode(json1));
-  assertTrue(j1.msg == 'ok');
-  assertTrue(j1.result == 1);
-  print(jsonEncode(j1.toJson()));
-  
-  var j2 = Json2.fromJson(jsonDecode(json2));
-  assertTrue(j2.data.answer == 'A');
-  print(jsonEncode(j2.toJson()));
-  
-  var j3 = Json3.fromJson(jsonDecode(json3));
-  assertTrue(j3.streets is List);
-  assertTrue(j3.streets.length == 2);
-  assertTrue(j3.streets[0] == 'address1');
-  print(jsonEncode(j3.toJson()));
-  
-  var j4 = Json4.fromJson(jsonDecode(json4));
-  assertTrue(j4.images[0].id == 11);
-  print(jsonEncode(j4.toJson()));
-  
-  // map list 比较特殊，转换时，list：[...]会被转换成map：{"datas": [...]}
-  var list = jsonDecode(json5);
-  var j5 = Json5.fromJson({'datas': list});
-  assertTrue(j5.datas.length == 1);
-  print(jsonEncode(j5.toJson()));
-}
-
-void testEntityConvertedSupportJsonSerializable() {
-  
-  var j1 = JsonS1.fromJson(jsonDecode(json1));
-  assertTrue(j1.msg == 'ok');
-  assertTrue(j1.result == 1);
-  print(jsonEncode(j1.toJson()));
-  
-  var j2 = JsonS2.fromJson(jsonDecode(json2));
-  assertTrue(j2.data.answer == 'A');
-  print(jsonEncode(j2.toJson()));
-  
-  var j3 = JsonS3.fromJson(jsonDecode(json3));
-  assertTrue(j3.streets is List);
-  assertTrue(j3.streets.length == 2);
-  assertTrue(j3.streets[0] == 'address1');
-  print(jsonEncode(j3.toJson()));
-  
-  var j4 = JsonS4.fromJson(jsonDecode(json4));
-  assertTrue(j4.images[0].id == 11);
-  print(jsonEncode(j4.toJson()));
-  
-  // map list 比较特殊，转换时，list：[...]会被转换成map：{"datas": [...]}
-  var list = jsonDecode(json5);
-  var j5 = JsonS5.fromJson({'datas': list});
-  assertTrue(j5.datas.length == 1);
-  print(jsonEncode(j5.toJson()));
-}
-
-
-void testEntityConvertedFromFile() {
-  
-  var j1 = JsonF1.fromJson(jsonDecode(json1));
-  assertTrue(j1.msg == 'ok');
-  assertTrue(j1.result == 1);
-  print(jsonEncode(j1.toJson()));
-  
-  var j2 = JsonF2.fromJson(jsonDecode(json2));
-  assertTrue(j2.data.answer == 'A');
-  print(jsonEncode(j2.toJson()));
-  
-  var j3 = JsonF3.fromJson(jsonDecode(json3));
-  assertTrue(j3.streets is List);
-  assertTrue(j3.streets.length == 2);
-  assertTrue(j3.streets[0] == 'address1');
-  print(jsonEncode(j3.toJson()));
-  
-  var j4 = JsonF4.fromJson(jsonDecode(json4));
-  assertTrue(j4.images[0].id == 11);
-  print(jsonEncode(j4.toJson()));
-  
-  // map list 比较特殊，转换时，list：[...]会被转换成map：{"datas": [...]}
-  var list = jsonDecode(json5);
-  var j5 = JsonF5.fromJson({'datas': list});
-  assertTrue(j5.datas.length == 1);
-  print(jsonEncode(j5.toJson()));
-}
-
-
-void assertTrue(bool b, {String err}) {
-  if (!b) {
-    throw Exception(err ?? 'assert err!!!');
-  }
-}
-```
 执行`dart test_entity.dart`
+
+[test_entity.dart](https://github.com/laxian/flutter-gsonformat/blob/master/README.md)
+
 ```shell
 [Running] dart "/Users/etiantian/Work/aixue40/flutter-gsonformat/test_entity.dart"
 测试命令行转换的普通实体类

@@ -2,7 +2,7 @@
 
 > 新入坑flutter，没有找到json转实体类的工具，就手动写了个简陋的。能用，慢慢改善。
 
-~~DEPRECATED~~  [使用v2](https://github.com/laxian/flutter-gsonformat/blob/master/v2/README-v2.md)
+~~DEPRECATED~~  [使用v2](https://github.com/laxian/flutter-gsonformat/blob/master/README.md)
 
 ## 功能
 
