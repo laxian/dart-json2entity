@@ -194,7 +194,7 @@ class Clazz {
 
   String buildToJson() {
     var pre = '\tMap <String, dynamic> toJson() => {';
-    var post = '};';
+    var post = '\t};';
     var pairs = '';
     if (hasValue(fields)) {
 
@@ -212,7 +212,7 @@ class Clazz {
 
       Iterable<String> objectListField = fields.entries
       .where((f) => isObjectList(f.value))
-      .map((kv) => "\t\t\'${kv.key}':${kv.key}.map((it)=>it.toJson())");
+      .map((kv) => "\t\t\'${kv.key}':${kv.key}.map((it)=>it.toJson()).toList()");
 
       var pairs = simpleField
       .followedBy(objectField)

@@ -1,3 +1,7 @@
 {
-  "AppUpdateCheck": "{\"result\":1,\"msg\":\"ok\",\"data\":{\"forceType\":1,\"title\":\"update found\",\"message\":\"please update\",\"url\":\"www.baidu.com\"}}"
+  "JsonF1": "{\"result\":1,\"msg\":\"ok\"}",
+  "JsonF2": "{\"result\":1,\"msg\":\"ok\",\"data\":{\"answer\":\"A\"}}",
+  "JsonF3": "{\"city\":\"Mumbai\",\"streets\":[\"address1\",\"address2\"]}",
+  "JsonF4": "{\"id\":1,\"name\":\"ProductName\",\"images\":[{\"id\":11,\"imageName\":\"xCh-rhy\"},{\"id\":31,\"imageName\":\"fjs-eun\"}]}",
+  "JsonF5": "[{\"albumId\":1,\"id\":1,\"title\":\"accusamus beatae ad facilis cum similique qui sunt\",\"url\":\"http://placehold.it/600/92c952\",\"thumbnailUrl\":\"http://placehold.it/150/92c952\"}]"
 }
