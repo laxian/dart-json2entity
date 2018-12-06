@@ -15,7 +15,7 @@ class JsonF2 {
 	Map <String, dynamic> toJson() => {
 		'result':result,
 		'msg':msg,
-		'data':data.toJson()
+		'data':data?.toJson()
 	};
 }
 

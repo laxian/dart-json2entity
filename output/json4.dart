@@ -11,11 +11,11 @@ class Json4 {
 	Json4.fromJson(Map < String, dynamic > json):
 		id=json['id'],
 		name=json['name'],
-		images=(json['images'] as List).map((l)=>ImagesEntity.fromJson(l)).toList();
+		images=(json['images'] as List)?.map((l)=>ImagesEntity.fromJson(l))?.toList();
 	Map <String, dynamic> toJson() => {
 		'id':id,
 		'name':name,
-		'images':images.map((it)=>it.toJson()).toList()
+		'images':images?.map((it)=>it.toJson())?.toList()
 	};
 }
 

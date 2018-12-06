@@ -113,7 +113,7 @@ void converFromFile(String input, String outPath, {bool show_verbose: false, boo
   
   var file = new File(input);
   var jstr = file.readAsStringSync();
-  Map < String, dynamic > jobj = jsonDecode(jstr);
+  Map <String, dynamic> jobj = jsonDecode(jstr);
 
   printWhen('input: $input', show_verbose);
   printWhen('output: $outPath', show_verbose);

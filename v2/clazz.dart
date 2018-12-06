@@ -166,7 +166,7 @@ class Clazz {
       Iterable<String> objectListField = fields.entries
       .where((f) => isObjectList(f.value))
       .map((kv){
-        return "\t\t${kv.key}=(json['${kv.key}'] as List).map((l)=>${getItemType(kv.value)}.fromJson(l)).toList()";
+        return "\t\t${kv.key}=(json['${kv.key}'] as List)?.map((l)=>${getItemType(kv.value)}.fromJson(l))?.toList()";
       });
 
       pairs = simpleField
@@ -204,7 +204,7 @@ class Clazz {
 
       Iterable<String> objectField = fields.entries
       .where((f) => isObject(f.value))
-      .map((kv) => '\t\t\'${kv.key}\':${kv.key}.toJson()');
+      .map((kv) => '\t\t\'${kv.key}\':${kv.key}?.toJson()');
 
       Iterable<String> simpleListField = fields.entries
       .where((f) => isSimpleList(f.value))
@@ -212,7 +212,7 @@ class Clazz {
 
       Iterable<String> objectListField = fields.entries
       .where((f) => isObjectList(f.value))
-      .map((kv) => "\t\t\'${kv.key}':${kv.key}.map((it)=>it.toJson()).toList()");
+      .map((kv) => "\t\t\'${kv.key}':${kv.key}?.map((it)=>it.toJson())?.toList()");
 
       var pairs = simpleField
       .followedBy(objectField)

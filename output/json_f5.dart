@@ -5,9 +5,9 @@ class JsonF5 {
 	});
 
 	JsonF5.fromJson(Map < String, dynamic > json):
-		datas=(json['datas'] as List).map((l)=>DatasEntity.fromJson(l)).toList();
+		datas=(json['datas'] as List)?.map((l)=>DatasEntity.fromJson(l))?.toList();
 	Map <String, dynamic> toJson() => {
-		'datas':datas.map((it)=>it.toJson()).toList()
+		'datas':datas?.map((it)=>it.toJson())?.toList()
 	};
 }
 
