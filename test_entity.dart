@@ -66,7 +66,7 @@ void testEntityConvertedByCli() {
   assertTrue(j5.datas.length == 1);
   print(jsonEncode(j5.toJson()));
   
-  var j6 = JsonF6.fromJson(jsonDecode(json6));
+  var j6 = Json6.fromJson(jsonDecode(json6));
   assertTrue(j6.data.length == 8, err: 'data.length is ${j6.data.length}');
   assertTrue(j6.data[0].image_list.length == 3);
   print(jsonEncode(j6.toJson()));
@@ -99,7 +99,7 @@ void testEntityConvertedSupportJsonSerializable() {
   assertTrue(j5.datas.length == 1);
   print(jsonEncode(j5.toJson()));
   
-  var j6 = JsonF6.fromJson(jsonDecode(json6));
+  var j6 = JsonS6.fromJson(jsonDecode(json6));
   assertTrue(j6.data.length == 8, err: 'data.length is ${j6.data.length}');
   assertTrue(j6.data[0].image_list.length == 3);
   print(jsonEncode(j6.toJson()));

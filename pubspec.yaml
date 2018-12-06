@@ -1,0 +1,16 @@
+name: json2entity
+description: Convert json to Entity class
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+
+dependencies:
+  test: ^1.5.1+1
+  test_api: ^0.2.1
+
+
+
+dev_dependencies:
+

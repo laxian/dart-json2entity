@@ -32,8 +32,6 @@
           print verbose info
     -s, --json-serializable-support
           support json_serializable or not. default disable
-    -V, --v1
-          use v1 convertor.[DEPRECATED]
 ```
 
 ## 实现

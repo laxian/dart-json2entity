@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'v1/ew_builder.dart';
 import 'path_parser.dart';
 import 'utils.dart';
-import 'v2/director.dart';
+import 'bin/director.dart';
 
 
 const String err = '''
@@ -26,16 +25,12 @@ ERROR PARAMETERS!!!
           print verbose info
     -s, --json-serializable-support
           support json_serializable or not. default disable
-    -V, --v1
-          use v1 convertor.[DEPRECATED]
-
 ''';
-
-void main(List<String> arguments) {
+void main(List < String > arguments) {
   checkArgs(arguments);
   var outName;
   var pwd = getDir(Platform.script.path);
-  var outPath = pwd + 'output/';  // default path
+  var outPath = pwd + 'output/'; // default path
   var jstr;
   var inputFile;
   var support_json_serializable = false;
@@ -61,7 +56,7 @@ void main(List<String> arguments) {
         var exits = new Directory(outPath).existsSync();
         if (!exits) {
           printWhen('The path $outPath does not exists. AUTO CREATED', isVerbose(arguments));
-          new Directory(outPath).createSync(recursive: true); 
+          new Directory(outPath).createSync(recursive: true);
         }
       }
     } else if (['-s', '--support-json-serializable'].contains(option)) {
@@ -74,16 +69,12 @@ void main(List<String> arguments) {
   } else {
     if (jstr != null) {
       printWhen('input from stdin mode', isVerbose(arguments));
-      doConvert(support_json_serializable, outName, jstr, outPath, isVerbose(arguments), v1: useV1(arguments));
-          } else if (inputFile != null) {
-            printWhen('input from file mode', isVerbose(arguments));
-            converFromFile(inputFile, outPath, show_verbose: isVerbose(arguments), support_json_serializable: support_json_serializable, v1: useV1(arguments));
-          }
-        }
-      }
-      
-useV1(List<String> arguments) {
-  return arguments.contains('-V') || arguments.contains('--v1');
+      doConvert(support_json_serializable, outName, jstr, outPath, isVerbose(arguments));
+    } else if (inputFile != null) {
+      printWhen('input from file mode', isVerbose(arguments));
+      converFromFile(inputFile, outPath, show_verbose: isVerbose(arguments), support_json_serializable: support_json_serializable);
+    }
+  }
 }
 
 error([String s]) {
@@ -109,7 +100,7 @@ bool checkArgs(List args) {
   }
 }
 
-void converFromFile(String input, String outPath, {bool show_verbose: false, bool support_json_serializable: false, bool v1: false}) {
+void converFromFile(String input, String outPath, {bool show_verbose: false, bool support_json_serializable: false}) {
   
   var file = new File(input);
   var jstr = file.readAsStringSync();
@@ -119,22 +110,11 @@ void converFromFile(String input, String outPath, {bool show_verbose: false, boo
   printWhen('output: $outPath', show_verbose);
   
   jobj.forEach((k, v) {
-    doConvert(support_json_serializable, k, v, outPath, show_verbose, v1: v1);
+    doConvert(support_json_serializable, k, v, outPath, show_verbose);
   });
 }
 
-void doConvert(bool support_json_serializable, String name, json, String outPath, bool show_verbose, {v1: bool}) {
-  if(v1) {
-    EntityWriterBuilder()
-    .supportJsonSerializable(support_json_serializable)
-    .name(name)
-    .jsonStr(json)
-    .outpath(outPath)
-    .verbose(show_verbose)
-    .build()
-    .convert();
-  } else {
-    var director = Director(name, json, outPath, support_json_serializable, show_verbose);
-    director.action();
-  }
+void doConvert(bool support_json_serializable, String name, json, String outPath, bool show_verbose) {
+  var director = Director(name, json, outPath, support_json_serializable, show_verbose);
+  director.action();
 }
