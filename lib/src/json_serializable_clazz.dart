@@ -1,6 +1,5 @@
 import 'dart:convert';
-
-import '../utils.dart';
+import 'utils.dart';
 import 'clazz.dart';
 
 class JsonSerializableClazz extends Clazz {

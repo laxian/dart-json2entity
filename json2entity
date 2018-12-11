@@ -34,7 +34,7 @@ FLUTTER="$(follow_links $(which flutter))"
 export FLUTTER_ROOT="${FLUTTER%bin*}"
 DART_SDK_PATH="$FLUTTER_ROOT/bin/cache/dart-sdk"
 SNAPSHOT_PATH=$BIN_DIR/json2bean.dart
-CLI_PATH=$BIN_DIR/cli.dart
+CLI_PATH=$BIN_DIR/bin/cli.dart
 
 DART="$DART_SDK_PATH/bin/dart"
 PUB="$DART_SDK_PATH/bin/pub"
