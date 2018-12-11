@@ -13,4 +13,4 @@ dependencies:
 
 
 dev_dependencies:
-
+  json_serializable: ^2.0.0

@@ -1,6 +1,6 @@
 import 'dart:io';
-
-import '../utils.dart';
+import 'package:path/path.dart' as p;
+import 'utils.dart';
 import 'clazz.dart';
 import 'json_serializable_clazz.dart';
 
@@ -44,8 +44,9 @@ class Director {
     var sink = fullPath.openWrite();
     sink.write(output);
     sink.close();
+    printWhen('convert successful!', show_verbose);
   }
 
-  String buildOutputFullPath() => path + camel2dash(name) + '.dart';
+  String buildOutputFullPath() => p.join(path, camel2dash(name) + '.dart');
   String buildPartName() => camel2dash(name) + '.g.dart';
 }

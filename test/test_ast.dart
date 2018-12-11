@@ -1,13 +1,19 @@
-import 'clazz.dart';
-import '../utils.dart';
-import 'json_serializable_clazz.dart';
+import 'package:json2entity/json2entity.dart';
+import 'package:test/test.dart';
+import 'package:analyzer/analyzer.dart';
 
-// 5种不同类型json测试用例，分别是
+
+/// 对生成的实体类源文件进行语法检查
+/// 利用ast抽象语法树，解析，错误的语法无法通过测试
+
+
+// 6种不同类型json测试用例，分别是
 // 简单无嵌套json
 // 嵌套json
 // 嵌套简单列表json
 // 嵌套对象列表json
 // 对象列表json
+// 复杂嵌套json
 var json1 = '{"result":1,"msg":"ok"}';
 var json2 = '{"result":1,"msg":"ok","data":{"answer":"A"}}';
 var json3 = '{"city":"Mumbai","streets":["address1","address2"]}';
@@ -17,38 +23,50 @@ var json6 = '{"message":"success","data":[{"title":"父亲车祸母亲失踪女�
 
 main(List < String > args) {
   // testHasValue();
-  testConvert();
+  // testConvert();
   testConvertJsonSerializableSupport();
 }
 
 void testConvertJsonSerializableSupport() {
   var clazz1 = JsonSerializableClazz.fromJson(json1);
-  print(clazz1.toString());
+  astNotNull(clazz1);
   var clazz2 = JsonSerializableClazz.fromJson(json2);
-  print(clazz2.toString());
+  astNotNull(clazz2);
   var clazz3 = JsonSerializableClazz.fromJson(json3);
-  print(clazz3.toString());
+  astNotNull(clazz3);
   var clazz4 = JsonSerializableClazz.fromJson(json4);
-  print(clazz4.toString());
+  astNotNull(clazz4);
   var clazz5 = JsonSerializableClazz.fromJson(json5);
-  print(clazz5.toString());
+  astNotNull(clazz5);
   var clazz6 = JsonSerializableClazz.fromJson(json6);
-  print(clazz6.toString());
+  astNotNull(clazz6);
+}
+
+/// 对生成的实体类进行语法检查，确保ast抽象语法树解析成功
+void astNotNull(JsonSerializableClazz clazz1) {
+  var ast = null;
+  try {
+    ast = parseCompilationUnit(clazz1.toString());
+  } on Exception catch (e) {
+  }
+  test('jsc test', (){
+    expect(ast, isNot(equals(null)));
+  });
 }
 
 void testConvert() {
   var clazz1 = Clazz.fromJson(json1);
-  print(clazz1.toString());
+  astNotNull(clazz1);
   var clazz2 = Clazz.fromJson(json2);
-  print(clazz2.toString());
+  astNotNull(clazz2);
   var clazz3 = Clazz.fromJson(json3);
-  print(clazz3.toString());
+  astNotNull(clazz3);
   var clazz4 = Clazz.fromJson(json4);
-  print(clazz4.toString());
+  astNotNull(clazz4);
   var clazz5 = Clazz.fromJson(json5);
-  print(clazz5.toString());
+  astNotNull(clazz5);
   var clazz6 = JsonSerializableClazz.fromJson(json6);
-  print(clazz6.toString());
+  astNotNull(clazz6);
 }
 
 void testHasValue() {

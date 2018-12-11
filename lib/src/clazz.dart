@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import '../utils.dart';
+import 'utils.dart';
+
 
 class Clazz {
   var defaultName = 'AutoModel';
@@ -195,7 +196,6 @@ class Clazz {
   String buildToJson() {
     var pre = '\tMap <String, dynamic> toJson() => {';
     var post = '\t};';
-    var pairs = '';
     if (hasValue(fields)) {
 
       Iterable<String> simpleField = fields.entries
@@ -276,42 +276,40 @@ class Clazz {
   }
 }
 
+isSimple(String key) {
+  return ['bool','String','num'].contains(key);
+}
 
+isList(String key) {
+  return key.startsWith('List<');
+}
 
-    isSimple(String key) {
-      return ['bool','String','num'].contains(key);
-    }
+getItemType(String key) {
+  if (!isList(key)) {
+    return key;
+  }
+  key = key.replaceAll('List<', '');
+  var lastIndex = key.lastIndexOf('>');
+  var type = key.substring(0, lastIndex);
+  return type;
+}
 
-    isList(String key) {
-      return key.startsWith('List<');
-    }
+isSimpleList(String key) {
+  if (!isList(key)) {
+    return false;
+  }
+  var second = key.endsWith('>');
+  key = key.replaceAll('List<', '');
+  var lastIndex = key.lastIndexOf('>');
+  var type = key.substring(0, lastIndex);
+  var third = ['bool','String','num'].contains(type);
+  return second && third;
+}
 
-    getItemType(String key) {
-      if (!isList(key)) {
-        return key;
-      }
-      key = key.replaceAll('List<', '');
-      var lastIndex = key.lastIndexOf('>');
-      var type = key.substring(0, lastIndex);
-      return type;
-    }
+isObjectList(String key) {
+  return isList(key) && !isSimpleList(key);
+}
 
-    isSimpleList(String key) {
-      if (!isList(key)) {
-        return false;
-      }
-      var second = key.endsWith('>');
-      key = key.replaceAll('List<', '');
-      var lastIndex = key.lastIndexOf('>');
-      var type = key.substring(0, lastIndex);
-      var third = ['bool','String','num'].contains(type);
-      return second && third;
-    }
-
-    isObjectList(String key) {
-      return isList(key) && !isSimpleList(key);
-    }
-
-    isObject(String key) {
-      return !isSimple(key) && !isList(key);
-    }
+isObject(String key) {
+  return !isSimple(key) && !isList(key);
+}
