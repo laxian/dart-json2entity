@@ -34,7 +34,7 @@ void run(List<String> args) {
   if (jsonStr != null) {
     doConvert(name, jsonStr, outPath, verbose, support_json_serializable);
   } else {
-    converFromFile(jsonsFile, outPath, show_verbose: verbose);
+    converFromFile(jsonsFile, output, show_verbose: verbose);
   }
 }
 
