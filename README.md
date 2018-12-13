@@ -2,7 +2,7 @@
 
 适用于Dart语言的，根据json字符串自动生成对应实体类文件的工具。
 
-这个工具同样支持生成使用[json_serializable](https://pub.dartlang.org/packages/json_serializable)的实体类。
+这个工具同样支持生成使用[json_serializable](https://pub.dartlang.org/packages/json_serializable)的实体类。
 
 ## 使用
 
