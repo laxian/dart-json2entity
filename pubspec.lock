@@ -2,14 +2,14 @@
 # See https://www.dartlang.org/tools/pub/glossary#lockfile
 packages:
   analyzer:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: analyzer
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.34.0"
   args:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: args
       url: "https://pub.flutter-io.cn"
@@ -226,7 +226,7 @@ packages:
     source: hosted
     version: "1.0.6"
   path:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path
       url: "https://pub.flutter-io.cn"
@@ -345,14 +345,14 @@ packages:
     source: hosted
     version: "1.0.1"
   test:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: test
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.5.1+1"
   test_api:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: test_api
       url: "https://pub.flutter-io.cn"

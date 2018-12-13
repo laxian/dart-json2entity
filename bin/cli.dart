@@ -21,7 +21,12 @@ void run(List<String> args) {
   var jsonsFile = result['file'];
   var verbose = result['verbose'];
   var support_json_serializable = result['json-serializable-support'];
+  var help = result['help'];
 
+  if (help) {
+    stdout.write('Usage:\n\t${parser.usage.replaceAll('\n', '\n\t')}');
+    return;
+  }
   if (jsonStr == null && jsonsFile == null) {
     _handleArgError(parser, 'No input args found');
   }
@@ -42,17 +47,18 @@ void _handleArgError(ArgParser parser, [String msg]) {
   if(msg != null) {
     stderr.write(msg);
   }
-  stderr.write('Usage:\n\t${parser.usage.replaceAll('\n', '\n\t')}');
+  stdout.write('Usage:\n\t${parser.usage.replaceAll('\n', '\n\t')}');
   exit(1);
 }
 
 ArgParser initArgParser() {
   return ArgParser()
-  ..addOption('json', abbr: 'j', help: 'input json string')
-  ..addOption('file', abbr: 'f', help: 'input json from file')
-  ..addOption('output', abbr: 'o', help: 'input output file path and name')
-  ..addFlag('verbose', abbr: 'v', help: 'show verbose')
-  ..addFlag('json-serializable-support', abbr: 's', help: 'indicates whether json-serializable is supported');
+  ..addOption('json', abbr: 'j', help: 'Input json string')
+  ..addOption('file', abbr: 'f', help: 'Input json from file')
+  ..addOption('output', abbr: 'o', help: 'Input output file path and name')
+  ..addFlag('verbose', abbr: 'v', help: 'Show verbose')
+  ..addFlag('json-serializable-support', abbr: 's', help: 'Indicates whether json-serializable is supported')
+  ..addFlag('help', abbr: 'h', help: 'Help');
 }
 
 
