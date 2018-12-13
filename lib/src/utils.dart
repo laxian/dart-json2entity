@@ -1,13 +1,3 @@
-
-/// 文件全路径，计算目录
-String getDir(String fullPath) {
-  var lastIndexOf = fullPath.lastIndexOf('/');
-  if (lastIndexOf != -1) {
-    return fullPath.substring(0, lastIndexOf + 1);
-  }
-  return fullPath;
-}
-
 /// 获取类型v的类型，对应于json的六种类型
 getType(dynamic v) {
   if (v is String) {
