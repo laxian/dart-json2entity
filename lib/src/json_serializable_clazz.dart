@@ -10,7 +10,12 @@ class JsonSerializableClazz extends Clazz {
       : super(name, fields, decorators);
 
   factory JsonSerializableClazz.fromJson(String jsonStr, {String key}) {
-    var jobj = jsonDecode(jsonStr);
+    var jobj;
+    try {
+      jobj = jsonDecode(jsonStr);
+    } on Exception catch (e) {
+      throw FormatException('Input Json Format Error!');
+    }
     if (jobj is Map) {
       return JsonSerializableClazz.fromMap(jobj, key: key);
     }
@@ -25,7 +30,7 @@ class JsonSerializableClazz extends Clazz {
     return JsonSerializableClazz.fromMapEntry(entry);
   }
 
-  factory JsonSerializableClazz.fromList(List<dynamic> jsonList,{String key}) {
+  factory JsonSerializableClazz.fromList(List<dynamic> jsonList, {String key}) {
     assert(jsonList != null);
     assert(jsonList.length > 0);
 

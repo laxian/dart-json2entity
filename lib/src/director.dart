@@ -4,9 +4,7 @@ import 'utils.dart';
 import 'clazz.dart';
 import 'json_serializable_clazz.dart';
 
-
 class Director {
-
   bool support_json_serializable = false;
   // bool filename_camel_to_underline = true;
   bool show_verbose = false;
@@ -16,26 +14,21 @@ class Director {
   Clazz clazz;
   String output;
 
-  Director(
-    this.name,
-    this.json,
-    this.path,
-    this.support_json_serializable, 
-    this.show_verbose
-    ) {
-      if (support_json_serializable) {
-        clazz = JsonSerializableClazz.fromJson(json, key: name);
-        var part = buildPartName();
-        clazz.addHeader('import \'package:json_annotation/json_annotation.dart\';');
-        clazz.addHeader('part \'$part\';\n');
-      } else {
-        clazz = Clazz.fromJson(json, key: name);
-      }
-      output = clazz.toString();
+  Director(this.name, this.json, this.path, this.support_json_serializable,
+      this.show_verbose) {
+    if (support_json_serializable) {
+      clazz = JsonSerializableClazz.fromJson(json, key: name);
+      var part = buildPartName();
+      clazz.addHeader(
+          'import \'package:json_annotation/json_annotation.dart\';');
+      clazz.addHeader('part \'$part\';\n');
+    } else {
+      clazz = Clazz.fromJson(json, key: name);
+    }
+    output = clazz.toString();
   }
 
   action() {
-
     // 确保路径存在
     var directory = new Directory(path);
     directory.createSync(recursive: true);

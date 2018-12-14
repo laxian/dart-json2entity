@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'utils.dart';
 
-
 class Clazz {
   var defaultName = 'AutoModel';
   List children = [];
@@ -35,22 +34,26 @@ class Clazz {
   Clazz.fromClass(String path, String name);
 
   factory Clazz.fromJson(String jsonStr, {String key}) {
-    var jobj = jsonDecode(jsonStr);
+    var jobj;
+    try {
+      jobj = jsonDecode(jsonStr);
+    } on Exception catch (e) {
+      throw FormatException('Input Json Format Error!');
+    }
     if (jobj is Map) {
       return Clazz.fromMap(jobj, key: key);
     }
-      return Clazz.fromList(jobj, key: key);
+    return Clazz.fromList(jobj, key: key);
   }
 
-  factory Clazz.fromMap(Map<String, dynamic> jsonMap,
-      {String key}) {
+  factory Clazz.fromMap(Map<String, dynamic> jsonMap, {String key}) {
     assert(jsonMap != null);
     var entry =
         new MapEntry<String, Map<String, dynamic>>(key ?? 'AutoModel', jsonMap);
     return Clazz.fromMapEntry(entry);
   }
 
-  factory Clazz.fromList(List<dynamic> jsonList,{String key}) {
+  factory Clazz.fromList(List<dynamic> jsonList, {String key}) {
     assert(jsonList != null);
     assert(jsonList.length > 0);
 
@@ -140,41 +143,37 @@ class Clazz {
   }
 
   String buildFromJson() {
-
     var pre = '\t$_name.fromJson(Map < String, dynamic > json)';
     var pairs = '';
     if (hasValue(fields)) {
       // 基础类型
       Iterable<String> simpleField = fields.entries
-      .where((f) => isSimple(f.value))
-      .map((kv) => '\t\t${kv.key}=json[\'${kv.key}\']');
+          .where((f) => isSimple(f.value))
+          .map((kv) => '\t\t${kv.key}=json[\'${kv.key}\']');
 
       // 对象类型需要调用自己类的fromJson，完成自身的序列化
-      Iterable<String> objectField = fields.entries
-      .where((f) => isObject(f.value))
-      .map((kv){
+      Iterable<String> objectField =
+          fields.entries.where((f) => isObject(f.value)).map((kv) {
         return '\t\t${kv.key}=${kv.value}.fromJson(json[\'${kv.key}\'])';
       });
 
       // 简单列表类型需要调用自己类的fromJson，完成自身的序列化
-      Iterable<String> simpleListField = fields.entries
-      .where((f) => isSimpleList(f.value))
-      .map((kv){
+      Iterable<String> simpleListField =
+          fields.entries.where((f) => isSimpleList(f.value)).map((kv) {
         return '\t\t${kv.key}=${kv.value}.from(json[\'${kv.key}\'])';
       });
 
       // 对象列表类型需要调用自己类的fromJson，完成自身的序列化
-      Iterable<String> objectListField = fields.entries
-      .where((f) => isObjectList(f.value))
-      .map((kv){
+      Iterable<String> objectListField =
+          fields.entries.where((f) => isObjectList(f.value)).map((kv) {
         return "\t\t${kv.key}=(json['${kv.key}'] as List)?.map((l)=>${getItemType(kv.value)}.fromJson(l))?.toList()";
       });
 
       pairs = simpleField
-      .followedBy(objectField)
-      .followedBy(simpleListField)
-      .followedBy(objectListField)
-      .join(',\n');
+          .followedBy(objectField)
+          .followedBy(simpleListField)
+          .followedBy(objectListField)
+          .join(',\n');
       return '$pre:\n$pairs;';
     }
     return '$pre;';
@@ -197,28 +196,28 @@ class Clazz {
     var pre = '\tMap <String, dynamic> toJson() => {';
     var post = '\t};';
     if (hasValue(fields)) {
-
       Iterable<String> simpleField = fields.entries
-      .where((f) => isSimple(f.value))
-      .map((kv) => '\t\t\'${kv.key}\':${kv.key}');
+          .where((f) => isSimple(f.value))
+          .map((kv) => '\t\t\'${kv.key}\':${kv.key}');
 
       Iterable<String> objectField = fields.entries
-      .where((f) => isObject(f.value))
-      .map((kv) => '\t\t\'${kv.key}\':${kv.key}?.toJson()');
+          .where((f) => isObject(f.value))
+          .map((kv) => '\t\t\'${kv.key}\':${kv.key}?.toJson()');
 
       Iterable<String> simpleListField = fields.entries
-      .where((f) => isSimpleList(f.value))
-      .map((kv) => '\t\t\'${kv.key}\':${kv.key}');
+          .where((f) => isSimpleList(f.value))
+          .map((kv) => '\t\t\'${kv.key}\':${kv.key}');
 
       Iterable<String> objectListField = fields.entries
-      .where((f) => isObjectList(f.value))
-      .map((kv) => "\t\t\'${kv.key}':${kv.key}?.map((it)=>it.toJson())?.toList()");
+          .where((f) => isObjectList(f.value))
+          .map((kv) =>
+              "\t\t\'${kv.key}':${kv.key}?.map((it)=>it.toJson())?.toList()");
 
       var pairs = simpleField
-      .followedBy(objectField)
-      .followedBy(simpleListField)
-      .followedBy(objectListField)
-      .join(',\n');
+          .followedBy(objectField)
+          .followedBy(simpleListField)
+          .followedBy(objectListField)
+          .join(',\n');
       return '$pre\n$pairs\n$post';
     }
     return '$pre$post';
@@ -277,7 +276,7 @@ class Clazz {
 }
 
 isSimple(String key) {
-  return ['bool','String','num'].contains(key);
+  return ['bool', 'String', 'num'].contains(key);
 }
 
 isList(String key) {
@@ -302,7 +301,7 @@ isSimpleList(String key) {
   key = key.replaceAll('List<', '');
   var lastIndex = key.lastIndexOf('>');
   var type = key.substring(0, lastIndex);
-  var third = ['bool','String','num'].contains(type);
+  var third = ['bool', 'String', 'num'].contains(type);
   return second && third;
 }
 

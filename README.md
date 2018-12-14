@@ -360,4 +360,5 @@ class Image_listEntity {
 ```
 
 ## 测试
-`pub run test test/*`
+`./test_all.sh`
+`pub run test`
