@@ -5,22 +5,25 @@ import 'clazz.dart';
 import 'json_serializable_clazz.dart';
 
 class Director {
-
   /// Flag indicates whether supprt json_serializable.
   bool support_json_serializable = false;
+
   /// Print verbose infomation if true.
   bool show_verbose = false;
+
   /// Entity file name.
   String name;
+
   /// Entity file path.
-  String path;
+  String outputPath;
+
   /// Input JSON string.
   String json;
   Clazz _clazz;
   String _output;
 
-  Director(this.name, this.json, this.path, this.support_json_serializable,
-      this.show_verbose) {
+  Director(this.name, this.json, this.outputPath,
+      this.support_json_serializable, this.show_verbose) {
     if (support_json_serializable) {
       _clazz = JsonSerializableClazz.fromJson(json, key: name);
       var part = buildPartName();
@@ -35,17 +38,22 @@ class Director {
 
   /// Execute convert.
   action() {
-    // 确保路径存在
-    var directory = new Directory(path);
-    directory.createSync(recursive: true);
+    if (outputPath != null) {
+      // 确保路径存在
+      var directory = new Directory(outputPath);
+      directory.createSync(recursive: true);
 
-    var fullPath = new File(buildOutputFullPath());
-    var sink = fullPath.openWrite();
-    sink.write(_output);
-    sink.close();
-    printWhen('convert successful!', show_verbose);
+      var fullPath = new File(buildOutputFullPath());
+      var sink = fullPath.openWrite();
+      sink.write(_output);
+      sink.close();
+      printWhen('convert successful!', show_verbose);
+    } else {
+      stdout.add(_output.codeUnits);
+    }
   }
 
-  String buildOutputFullPath() => p.join(path, camel2dash(name) + '.dart');
+  String buildOutputFullPath() =>
+      p.join(outputPath, camel2dash(name) + '.dart');
   String buildPartName() => camel2dash(name) + '.g.dart';
 }

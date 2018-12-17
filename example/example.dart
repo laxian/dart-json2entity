@@ -20,38 +20,38 @@ var json6 =
 
 main(List<String> args) {
   var jsonStr = json1;
-  print(Clazz.fromJson(jsonStr).toString()); 
+  print(Clazz.fromJson(jsonStr).toString());
   /*
   class AutoModel {
-	num result;
-	String msg;
-	AutoModel({
-		this.result,
-		this.msg
-	});
+    num result;
+    String msg;
+    AutoModel({
+      this.result,
+      this.msg
+    });
 
-	AutoModel.fromJson(Map < String, dynamic > json):
-		result=json['result'],
-		msg=json['msg'];
-	Map <String, dynamic> toJson() => {
-		'result':result,
-		'msg':msg
-	};
-}
+    AutoModel.fromJson(Map < String, dynamic > json):
+      result=json['result'],
+      msg=json['msg'];
+    Map <String, dynamic> toJson() => {
+      'result':result,
+      'msg':msg
+    };
+  }
   */
   print(JsonSerializableClazz.fromJson(jsonStr).toString());
   /*
   @JsonSerializable()
-class AutoModel {
-	num result;
-	String msg;
-	AutoModel({
-		this.result,
-		this.msg
-	});
+  class AutoModel {
+    num result;
+    String msg;
+    AutoModel({
+      this.result,
+      this.msg
+    });
 
-factory AutoModel.fromJson(Map<String, dynamic> json) => _$AutoModelFromJson(json);
-Map<String, dynamic> toJson() => _$AutoModelToJson(this);
-}
+    factory AutoModel.fromJson(Map<String, dynamic> json) => _$AutoModelFromJson(json);
+    Map<String, dynamic> toJson() => _$AutoModelToJson(this);
+  }
   */
 }

@@ -17,37 +17,37 @@ main(List<String> args) {
   var jsonStr = '{"result":1,"msg":"ok"}';
   print(Clazz.fromJson(jsonStr).toString()); // ==>
   /*
-	class AutoModel {
-	  num result;
-	  String msg;
-	  AutoModel({
-		this.result,
-		this.msg
-	  });
+  class AutoModel {
+    num result;
+    String msg;
+    AutoModel({
+    this.result,
+    this.msg
+    });
 
-	  AutoModel.fromJson(Map < String, dynamic > json):
-		result=json['result'],
-		msg=json['msg'];
+    AutoModel.fromJson(Map < String, dynamic > json):
+      result=json['result'],
+      msg=json['msg'];
       Map <String, dynamic> toJson() => {
-		'result':result,
-		'msg':msg
-	  };
-	}
+      'result':result,
+      'msg':msg
+    };
+  }
   */
   print(JsonSerializableClazz.fromJson(jsonStr).toString()); // ==>
   /*
-	@JsonSerializable()
-	class AutoModel {
-	  num result;
-	  String msg;
-	  AutoModel({
-		this.result,
-		this.msg
-	  });
+  @JsonSerializable()
+  class AutoModel {
+    num result;
+      String msg;
+      AutoModel({
+      this.result,
+      this.msg
+    });
 
-	  factory AutoModel.fromJson(Map<String, dynamic> json) => _$AutoModelFromJson(json);
-	  Map<String, dynamic> toJson() => _$AutoModelToJson(this);
-	}
+    factory AutoModel.fromJson(Map<String, dynamic> json) => _$AutoModelFromJson(json);
+      Map<String, dynamic> toJson() => _$AutoModelToJson(this);
+    }
   */
 }
 
@@ -99,20 +99,20 @@ run `./json2entity -j '{"result":1,"msg":"ok"}' -o output/Json1`
 output:
 ```dart
 class Json1 {
-	num result;
-	String msg;
-	Json1({
-		this.result,
-		this.msg
-	});
+  num result;
+  String msg;
+  Json1({
+    this.result,
+    this.msg
+  });
 
-	Json1.fromJson(Map < String, dynamic > json):
-		result=json['result'],
-		msg=json['msg'];
-	Map <String, dynamic> toJson() => {
-		'result':result,
-		'msg':msg
-	};
+  Json1.fromJson(Map < String, dynamic > json):
+    result=json['result'],
+    msg=json['msg'];
+  Map <String, dynamic> toJson() => {
+    'result':result,
+    'msg':msg
+  };
 }
 ```
 #### 2. Input a nested JSON
@@ -131,37 +131,37 @@ run `./json2entity -j '{"result":1,"msg":"ok","data":{"answer":"A"}}' -o output/
 output:
 ```dart
 class Json2 {
-	num result;
-	String msg;
-	DataEntity data;
-	Json2({
-		this.result,
-		this.msg,
-		this.data
-	});
+  num result;
+  String msg;
+  DataEntity data;
+  Json2({
+    this.result,
+    this.msg,
+    this.data
+  });
 
-	Json2.fromJson(Map < String, dynamic > json):
-		result=json['result'],
-		msg=json['msg'],
-		data=DataEntity.fromJson(json['data']);
-	Map <String, dynamic> toJson() => {
-		'result':result,
-		'msg':msg,
-		'data':data?.toJson()
-	};
+  Json2.fromJson(Map < String, dynamic > json):
+    result=json['result'],
+    msg=json['msg'],
+    data=DataEntity.fromJson(json['data']);
+  Map <String, dynamic> toJson() => {
+    'result':result,
+    'msg':msg,
+    'data':data?.toJson()
+  };
 }
 
 class DataEntity {
-	String answer;
-	DataEntity({
-		this.answer
-	});
+  String answer;
+  DataEntity({
+    this.answer
+  });
 
-	DataEntity.fromJson(Map < String, dynamic > json):
-		answer=json['answer'];
-	Map <String, dynamic> toJson() => {
-		'answer':answer
-	};
+  DataEntity.fromJson(Map < String, dynamic > json):
+    answer=json['answer'];
+  Map <String, dynamic> toJson() => {
+    'answer':answer
+  };
 }
 ```
 #### 3. Enter JSON for nested LIST
@@ -180,20 +180,20 @@ run `./json2entity -j '{"city":"Mumbai","streets":["address1","address2"]}' -o o
 output:
 ```dart
 class Json3 {
-	String city;
-	List<String> streets;
-	Json3({
-		this.city,
-		this.streets
-	});
+  String city;
+  List<String> streets;
+  Json3({
+    this.city,
+    this.streets
+  });
 
-	Json3.fromJson(Map < String, dynamic > json):
-		city=json['city'],
-		streets=List<String>.from(json['streets']);
-	Map <String, dynamic> toJson() => {
-		'city':city,
-		'streets':streets
-	};
+  Json3.fromJson(Map < String, dynamic > json):
+    city=json['city'],
+    streets=List<String>.from(json['streets']);
+  Map <String, dynamic> toJson() => {
+    'city':city,
+    'streets':streets
+  };
 }
 ```
 #### 4. Input JSON with nested object list
@@ -219,41 +219,41 @@ run `./json2entity -j '{"id":1,"name":"ProductName","images":[{"id":11,"imageNam
 output:
 ```dart
 class Json4 {
-	num id;
-	String name;
-	List<ImagesEntity> images;
-	Json4({
-		this.id,
-		this.name,
-		this.images
-	});
+  num id;
+  String name;
+  List<ImagesEntity> images;
+  Json4({
+    this.id,
+    this.name,
+    this.images
+  });
 
-	Json4.fromJson(Map < String, dynamic > json):
-		id=json['id'],
-		name=json['name'],
-		images=(json['images'] as List)?.map((l)=>ImagesEntity.fromJson(l))?.toList();
-	Map <String, dynamic> toJson() => {
-		'id':id,
-		'name':name,
-		'images':images?.map((it)=>it.toJson())?.toList()
-	};
+  Json4.fromJson(Map < String, dynamic > json):
+    id=json['id'],
+    name=json['name'],
+    images=(json['images'] as List)?.map((l)=>ImagesEntity.fromJson(l))?.toList();
+  Map <String, dynamic> toJson() => {
+    'id':id,
+    'name':name,
+    'images':images?.map((it)=>it.toJson())?.toList()
+  };
 }
 
 class ImagesEntity {
-	num id;
-	String imageName;
-	ImagesEntity({
-		this.id,
-		this.imageName
-	});
+  num id;
+  String imageName;
+  ImagesEntity({
+    this.id,
+    this.imageName
+  });
 
-	ImagesEntity.fromJson(Map < String, dynamic > json):
-		id=json['id'],
-		imageName=json['imageName'];
-	Map <String, dynamic> toJson() => {
-		'id':id,
-		'imageName':imageName
-	};
+  ImagesEntity.fromJson(Map < String, dynamic > json):
+    id=json['id'],
+    imageName=json['imageName'];
+  Map <String, dynamic> toJson() => {
+    'id':id,
+    'imageName':imageName
+  };
 }
 ```
 #### 5. Input JSON of map list type
@@ -274,45 +274,45 @@ run `./json2entity -j '[{"albumId":1,"id":1,"title":"accusamus","url":"http://pl
 output:
 ```dart
 class Json5 {
-	List<DatasEntity> datas;
-	Json5({
-		this.datas
-	});
+  List<DatasEntity> datas;
+  Json5({
+    this.datas
+  });
 
-	Json5.fromJson(Map < String, dynamic > json):
-		datas=(json['datas'] as List)?.map((l)=>DatasEntity.fromJson(l))?.toList();
-	Map <String, dynamic> toJson() => {
-		'datas':datas?.map((it)=>it.toJson())?.toList()
-	};
+  Json5.fromJson(Map < String, dynamic > json):
+    datas=(json['datas'] as List)?.map((l)=>DatasEntity.fromJson(l))?.toList();
+  Map <String, dynamic> toJson() => {
+    'datas':datas?.map((it)=>it.toJson())?.toList()
+  };
 }
 
 class DatasEntity {
-	num albumId;
-	num id;
-	String title;
-	String url;
-	String thumbnailUrl;
-	DatasEntity({
-		this.albumId,
-		this.id,
-		this.title,
-		this.url,
-		this.thumbnailUrl
-	});
+  num albumId;
+  num id;
+  String title;
+  String url;
+  String thumbnailUrl;
+  DatasEntity({
+    this.albumId,
+    this.id,
+    this.title,
+    this.url,
+    this.thumbnailUrl
+  });
 
-	DatasEntity.fromJson(Map < String, dynamic > json):
-		albumId=json['albumId'],
-		id=json['id'],
-		title=json['title'],
-		url=json['url'],
-		thumbnailUrl=json['thumbnailUrl'];
-	Map <String, dynamic> toJson() => {
-		'albumId':albumId,
-		'id':id,
-		'title':title,
-		'url':url,
-		'thumbnailUrl':thumbnailUrl
-	};
+  DatasEntity.fromJson(Map < String, dynamic > json):
+    albumId=json['albumId'],
+    id=json['id'],
+    title=json['title'],
+    url=json['url'],
+    thumbnailUrl=json['thumbnailUrl'];
+  Map <String, dynamic> toJson() => {
+    'albumId':albumId,
+    'id':id,
+    'title':title,
+    'url':url,
+    'thumbnailUrl':thumbnailUrl
+  };
 }
 ```
 #### 6. Input a hybrid JSON
@@ -324,66 +324,66 @@ class DatasEntity {
 output:
 ```dart
 class Json6 {
-	String message;
-	List<DataEntity> data;
-	Json6({
-		this.message,
-		this.data
-	});
+  String message;
+  List<DataEntity> data;
+  Json6({
+    this.message,
+    this.data
+  });
 
-	Json6.fromJson(Map < String, dynamic > json):
-		message=json['message'],
-		data=(json['data'] as List)?.map((l)=>DataEntity.fromJson(l))?.toList();
-	Map <String, dynamic> toJson() => {
-		'message':message,
-		'data':data?.map((it)=>it.toJson())?.toList()
-	};
+  Json6.fromJson(Map < String, dynamic > json):
+    message=json['message'],
+    data=(json['data'] as List)?.map((l)=>DataEntity.fromJson(l))?.toList();
+  Map <String, dynamic> toJson() => {
+    'message':message,
+    'data':data?.map((it)=>it.toJson())?.toList()
+  };
 }
 
 class DataEntity {
-	String title;
-	num gallary_flag;
-	List<Image_listEntity> image_list;
-	String article_url;
-	String cover_image_url;
-	num gallery_image_count;
-	DataEntity({
-		this.title,
-		this.gallary_flag,
-		this.image_list,
-		this.article_url,
-		this.cover_image_url,
-		this.gallery_image_count
-	});
+  String title;
+  num gallary_flag;
+  List<Image_listEntity> image_list;
+  String article_url;
+  String cover_image_url;
+  num gallery_image_count;
+  DataEntity({
+    this.title,
+    this.gallary_flag,
+    this.image_list,
+    this.article_url,
+    this.cover_image_url,
+    this.gallery_image_count
+  });
 
-	DataEntity.fromJson(Map < String, dynamic > json):
-		title=json['title'],
-		gallary_flag=json['gallary_flag'],
-		article_url=json['article_url'],
-		cover_image_url=json['cover_image_url'],
-		gallery_image_count=json['gallery_image_count'],
-		image_list=(json['image_list'] as List)?.map((l)=>Image_listEntity.fromJson(l))?.toList();
-	Map <String, dynamic> toJson() => {
-		'title':title,
-		'gallary_flag':gallary_flag,
-		'article_url':article_url,
-		'cover_image_url':cover_image_url,
-		'gallery_image_count':gallery_image_count,
-		'image_list':image_list?.map((it)=>it.toJson())?.toList()
-	};
+  DataEntity.fromJson(Map < String, dynamic > json):
+    title=json['title'],
+    gallary_flag=json['gallary_flag'],
+    article_url=json['article_url'],
+    cover_image_url=json['cover_image_url'],
+    gallery_image_count=json['gallery_image_count'],
+    image_list=(json['image_list'] as List)?.map((l)=>Image_listEntity.fromJson(l))?.toList();
+  Map <String, dynamic> toJson() => {
+    'title':title,
+    'gallary_flag':gallary_flag,
+    'article_url':article_url,
+    'cover_image_url':cover_image_url,
+    'gallery_image_count':gallery_image_count,
+    'image_list':image_list?.map((it)=>it.toJson())?.toList()
+  };
 }
 
 class Image_listEntity {
-	String url;
-	Image_listEntity({
-		this.url
-	});
+  String url;
+  Image_listEntity({
+    this.url
+  });
 
-	Image_listEntity.fromJson(Map < String, dynamic > json):
-		url=json['url'];
-	Map <String, dynamic> toJson() => {
-		'url':url
-	};
+  Image_listEntity.fromJson(Map < String, dynamic > json):
+    url=json['url'];
+  Map <String, dynamic> toJson() => {
+    'url':url
+  };
 }
 ```
 

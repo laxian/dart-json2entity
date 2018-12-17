@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'utils.dart';
 
-
 /// A helper class that parse json strings to classes.
 /// Clazz represents an entity class
 class Clazz {
-
+  String _INDENT = ' '; // _INDENT == ONE SPACE
+  String INDENT2 = '  '; // _INDENT2 == TWO SAPCE
   /// Default name of current entity class
   var defaultName = 'AutoModel';
 
@@ -54,7 +54,8 @@ class Clazz {
     try {
       jobj = jsonDecode(jsonStr);
     } on Exception catch (e) {
-      throw FormatException('Input Json Format Error! ${(e as FormatException).message}');
+      throw FormatException(
+          'Input Json Format Error! ${(e as FormatException).message}');
     }
     if (jobj is Map) {
       return Clazz.fromMap(jobj, key: key);
@@ -151,11 +152,11 @@ class Clazz {
   /// Build constructor of entity class
   String buildConstructor() {
     if (hasValue(fields)) {
-      String pre = '\t$_name({';
+      String pre = '${_INDENT}$_name({';
       var pairs = fields.entries.toList().map((kv) {
-        return '\t\tthis.${kv.key}';
+        return '${INDENT2}this.${kv.key}';
       }).join(',\n');
-      String suffix = '\t})';
+      String suffix = '${_INDENT}})';
       var superConstructor = buildSuperConstructor();
       if (parent != null) {
         return '$pre\n$pairs\n$suffix:$superConstructor;\n';
@@ -167,30 +168,30 @@ class Clazz {
 
   /// Build fromJson method
   String buildFromJson() {
-    var pre = '\t$_name.fromJson(Map < String, dynamic > json)';
+    var pre = '${_INDENT}$_name.fromJson(Map < String, dynamic > json)';
     var pairs = '';
     if (hasValue(fields)) {
       // 基础类型
       Iterable<String> simpleField = fields.entries
           .where((f) => _isSimple(f.value))
-          .map((kv) => '\t\t${kv.key}=json[\'${kv.key}\']');
+          .map((kv) => '${INDENT2}${kv.key}=json[\'${kv.key}\']');
 
       // 对象类型需要调用自己类的fromJson，完成自身的序列化
       Iterable<String> objectField =
           fields.entries.where((f) => _isObject(f.value)).map((kv) {
-        return '\t\t${kv.key}=${kv.value}.fromJson(json[\'${kv.key}\'])';
+        return '${INDENT2}${kv.key}=${kv.value}.fromJson(json[\'${kv.key}\'])';
       });
 
       // 简单列表类型需要调用自己类的fromJson，完成自身的序列化
       Iterable<String> simpleListField =
           fields.entries.where((f) => _isSimpleList(f.value)).map((kv) {
-        return '\t\t${kv.key}=${kv.value}.from(json[\'${kv.key}\'])';
+        return '${INDENT2}${kv.key}=${kv.value}.from(json[\'${kv.key}\'])';
       });
 
       // 对象列表类型需要调用自己类的fromJson，完成自身的序列化
       Iterable<String> objectListField =
           fields.entries.where((f) => _isObjectList(f.value)).map((kv) {
-        return "\t\t${kv.key}=(json['${kv.key}'] as List)?.map((l)=>${_getItemType(kv.value)}.fromJson(l))?.toList()";
+        return "${INDENT2}${kv.key}=(json['${kv.key}'] as List)?.map((l)=>${_getItemType(kv.value)}.fromJson(l))?.toList()";
       });
 
       pairs = simpleField
@@ -219,25 +220,25 @@ class Clazz {
 
   /// Build toJson method of entity class
   String buildToJson() {
-    var pre = '\tMap <String, dynamic> toJson() => {';
-    var post = '\t};';
+    var pre = '${_INDENT}Map <String, dynamic> toJson() => {';
+    var post = '${_INDENT}};';
     if (hasValue(fields)) {
       Iterable<String> simpleField = fields.entries
           .where((f) => _isSimple(f.value))
-          .map((kv) => '\t\t\'${kv.key}\':${kv.key}');
+          .map((kv) => '${INDENT2}\'${kv.key}\':${kv.key}');
 
       Iterable<String> objectField = fields.entries
           .where((f) => _isObject(f.value))
-          .map((kv) => '\t\t\'${kv.key}\':${kv.key}?.toJson()');
+          .map((kv) => '${INDENT2}\'${kv.key}\':${kv.key}?.toJson()');
 
       Iterable<String> simpleListField = fields.entries
           .where((f) => _isSimpleList(f.value))
-          .map((kv) => '\t\t\'${kv.key}\':${kv.key}');
+          .map((kv) => '${INDENT2}\'${kv.key}\':${kv.key}');
 
       Iterable<String> objectListField = fields.entries
           .where((f) => _isObjectList(f.value))
           .map((kv) =>
-              "\t\t\'${kv.key}':${kv.key}?.map((it)=>it.toJson())?.toList()");
+              "${INDENT2}\'${kv.key}':${kv.key}?.map((it)=>it.toJson())?.toList()");
 
       var pairs = simpleField
           .followedBy(objectField)
@@ -272,7 +273,7 @@ class Clazz {
     // 3. fields declare
     if (hasValue(fields)) {
       var fieldPairs = fields.entries.toList().map((kv) {
-        return '\t${kv.value} ${kv.key}';
+        return '${_INDENT}${kv.value} ${kv.key}';
       }).join(';\n');
       classFrags.add('$fieldPairs;');
     }

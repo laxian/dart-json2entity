@@ -3,3 +3,6 @@
 
 ## 1.0.5
 * Add doc.
+
+## 1.0.6
+* Cancel the necessary parameter: --output, default output to stdout 

@@ -20,7 +20,7 @@ void run(List<String> args) {
   var output = result['output'];
   var jsonsFile = result['file'];
   var verbose = result['verbose'];
-  var support_json_serializable = result['json-serializable-support'];
+  var supportJsonSerializable = result['json-serializable-support'];
   var help = result['help'];
 
   if (help) {
@@ -31,15 +31,15 @@ void run(List<String> args) {
     _handleArgError(parser, 'No input args found\n');
   }
   if (output == null) {
-    _handleArgError(parser, 'No output args found\n');
-  }
-
-  var name = p.basename(output);
-  var outPath = p.dirname(output);
-  if (jsonStr != null) {
-    doConvert(name, jsonStr, outPath, verbose, support_json_serializable);
+    doConvert('Model', jsonStr, null, verbose, supportJsonSerializable);
   } else {
-    converFromFile(jsonsFile, output, show_verbose: verbose);
+    var name = p.basename(output);
+    var outPath = p.dirname(output);
+    if (jsonStr != null) {
+      doConvert(name, jsonStr, outPath, verbose, supportJsonSerializable);
+    } else {
+      converFromFile(jsonsFile, output, show_verbose: verbose);
+    }
   }
 }
 

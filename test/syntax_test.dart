@@ -32,7 +32,7 @@ void astNotNull(Clazz clazz1) {
   var ast = null;
   try {
     ast = parseCompilationUnit(clazz1.toString());
-  } on Exception catch (e) {}
+  } on Exception {}
   test('jsc test', () {
     expect(ast, isNot(equals(null)));
   });

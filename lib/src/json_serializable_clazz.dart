@@ -3,7 +3,6 @@ import 'utils.dart';
 import 'clazz.dart';
 
 class JsonSerializableClazz extends Clazz {
-
   /// json_serializable annotation.
   static const String JS_DECOR = '@JsonSerializable()';
 
@@ -16,7 +15,8 @@ class JsonSerializableClazz extends Clazz {
     try {
       jobj = jsonDecode(jsonStr);
     } on Exception catch (e) {
-      throw FormatException('Input Json Format Error! ${(e as FormatException).message}');
+      throw FormatException(
+          'Input Json Format Error! ${(e as FormatException).message}');
     }
     if (jobj is Map) {
       return JsonSerializableClazz.fromMap(jobj, key: key);
@@ -67,12 +67,12 @@ class JsonSerializableClazz extends Clazz {
   /// Override from super. Build json_serializable style fromJson method.
   @override
   String buildFromJson() {
-    return 'factory ${name}.fromJson(Map<String, dynamic> json) => _\$${name}FromJson(json);';
+    return '${INDENT2}factory ${name}.fromJson(Map<String, dynamic> json) => _\$${name}FromJson(json);';
   }
 
   /// Override from super. Build json_serializable style toJson method.
   @override
   String buildToJson() {
-    return 'Map<String, dynamic> toJson() => _\$${name}ToJson(this);';
+    return '${INDENT2}Map<String, dynamic> toJson() => _\$${name}ToJson(this);';
   }
 }
