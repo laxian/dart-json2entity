@@ -5,29 +5,35 @@ import 'clazz.dart';
 import 'json_serializable_clazz.dart';
 
 class Director {
+
+  /// Flag indicates whether supprt json_serializable.
   bool support_json_serializable = false;
-  // bool filename_camel_to_underline = true;
+  /// Print verbose infomation if true.
   bool show_verbose = false;
+  /// Entity file name.
   String name;
+  /// Entity file path.
   String path;
+  /// Input JSON string.
   String json;
-  Clazz clazz;
-  String output;
+  Clazz _clazz;
+  String _output;
 
   Director(this.name, this.json, this.path, this.support_json_serializable,
       this.show_verbose) {
     if (support_json_serializable) {
-      clazz = JsonSerializableClazz.fromJson(json, key: name);
+      _clazz = JsonSerializableClazz.fromJson(json, key: name);
       var part = buildPartName();
-      clazz.addHeader(
+      _clazz.addHeader(
           'import \'package:json_annotation/json_annotation.dart\';');
-      clazz.addHeader('part \'$part\';\n');
+      _clazz.addHeader('part \'$part\';\n');
     } else {
-      clazz = Clazz.fromJson(json, key: name);
+      _clazz = Clazz.fromJson(json, key: name);
     }
-    output = clazz.toString();
+    _output = _clazz.toString();
   }
 
+  /// Execute convert.
   action() {
     // 确保路径存在
     var directory = new Directory(path);
@@ -35,7 +41,7 @@ class Director {
 
     var fullPath = new File(buildOutputFullPath());
     var sink = fullPath.openWrite();
-    sink.write(output);
+    sink.write(_output);
     sink.close();
     printWhen('convert successful!', show_verbose);
   }

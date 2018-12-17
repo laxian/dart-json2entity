@@ -1,10 +1,14 @@
 # json2entity
 
-A tool that convert json to entity class file for Dart and Flutter.
+A tool for converting JSON strings into dart entity classes
 
 support [json_serializable](https://pub.dartlang.org/packages/json_serializable).
 
+[中文](https://github.com/laxian/dart-json2entity/blob/master/README-cn.md)
+
 ## Usage
+
+#### Custom
 
 `import 'package:json2entity/json2entity.dart';`
 
@@ -49,11 +53,19 @@ main(List<String> args) {
 
 ```
 
-Command Line
+#### by pub 
 
-1. `pub run cli.dart -j '{"result":1,"msg":"ok"}' -o output/BaseEntity`
+First, activate json2entity global.
 
-2. `./json2entity -j '{"result":1,"msg":"ok"}' -o output/BaseEntity`
+`pub global activate json2entity`
+
+Then, run anywhere:
+
+`json2entity -j '{"result":1,"msg":"ok"}' -o output/BaseEntity`
+
+Or
+
+`j2e -j '{"result":1,"msg":"ok"}' -o output/BaseEntity`
 
 
 SYNOPSIS:

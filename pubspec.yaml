@@ -1,6 +1,6 @@
 name: json2entity
-description: Convert json to Entity class
-version: 1.0.3
+description: A tool for converting JSON strings into dart entity classes. Support json_serializable.
+version: 1.0.5
 author: zhouweixian <laxian2010@gmail.com>
 homepage: https://github.com/laxian/dart-json2entity
 
@@ -19,6 +19,10 @@ dev_dependencies:
   json_serializable: ^2.0.1
   json_annotation: ^2.0.0
   build_runner: ^1.1.2
+
+executables:
+  json2entity: cli
+  j2e: cli
 
 publish_to: 
   https://pub.dartlang.org

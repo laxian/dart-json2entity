@@ -4,7 +4,11 @@
 
 这个工具同样支持生成使用[json_serializable](https://pub.dartlang.org/packages/json_serializable)的实体类。
 
+[English](https://github.com/laxian/dart-json2entity/blob/master/README.md)
+
 ## Usage
+
+#### 代码方式
 
 `import 'package:json2entity/json2entity.dart';`
 
@@ -49,11 +53,19 @@ main(List<String> args) {
 
 ```
 
-Command Line
+#### pub方式
 
-1. `pub run cli.dart -j '{"result":1,"msg":"ok"}' -o output/BaseEntity`
+首先，激活命令
 
-2. `./json2entity -j '{"result":1,"msg":"ok"}' -o output/BaseEntity`
+`pub global activate json2entity`
+
+然后，在任意目录执行命令：
+
+`json2entity -j '{"result":1,"msg":"ok"}' -o output/BaseEntity`
+
+或者
+
+`j2e -j '{"result":1,"msg":"ok"}' -o output/BaseEntity`
 
 
 SYNOPSIS:

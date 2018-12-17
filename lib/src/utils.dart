@@ -27,7 +27,6 @@ String capitalize(String k) {
 String camel2dash(String k) {
   var codeUnits = k.codeUnits;
   Set<int> upper = new Set();
-  List<String> parts = [];
   String ret = '';
   int start = 0;
 
@@ -46,16 +45,19 @@ String camel2dash(String k) {
   return ret.toLowerCase();
 }
 
+/// Determine whether ASCII corresponding to an integer value is a capital letter?
 bool isUpperAZ(int c) {
   return c >= 64 && c <= 90;
 }
 
+/// Print [info] when [b] is true.
 printWhen(info, b) {
   if (b) {
     print(info);
   }
 }
 
+/// True if value == null or value has no data.
 hasValue(dynamic value) {
   return value?.isNotEmpty ?? false;
 }
