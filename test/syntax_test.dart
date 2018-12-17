@@ -2,7 +2,7 @@ import 'package:json2entity/json2entity.dart';
 import 'package:test/test.dart';
 import 'package:analyzer/analyzer.dart';
 
-import '../sample/input.dart';
+import '../example/example.dart';
 
 /// 对生成的实体类源文件进行语法检查
 /// 利用ast抽象语法树，解析，错误的语法无法通过测试

@@ -1,7 +1,7 @@
 name: json2entity
 description: Convert json to Entity class
-version: 1.0.2
-author: zhouweixian <laxian2010@qq.com>
+version: 1.0.3
+author: zhouweixian <laxian2010@gmail.com>
 homepage: https://github.com/laxian/dart-json2entity
 
 
@@ -11,6 +11,7 @@ environment:
 dependencies:
   args: ^1.5.1
   path: ^1.6.2
+  dart_style: ^1.2.2
 
 dev_dependencies:
   analyzer: ^0.34.0
@@ -18,3 +19,6 @@ dev_dependencies:
   json_serializable: ^2.0.1
   json_annotation: ^2.0.0
   build_runner: ^1.1.2
+
+publish_to: 
+  https://pub.dartlang.org

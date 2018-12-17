@@ -1,25 +1,25 @@
 import 'dart:convert';
 import 'package:test/test.dart';
 
-import '../sample/output/json1.dart';
-import '../sample/output/json2.dart';
-import '../sample/output/json3.dart';
-import '../sample/output/json4.dart';
-import '../sample/output/json5.dart';
-import '../sample/output/json6.dart';
-import '../sample/output/json_f1.dart';
-import '../sample/output/json_f2.dart';
-import '../sample/output/json_f3.dart';
-import '../sample/output/json_f4.dart';
-import '../sample/output/json_f5.dart';
-import '../sample/output/json_f6.dart';
-import '../sample/output/json_s1.dart';
-import '../sample/output/json_s2.dart';
-import '../sample/output/json_s3.dart';
-import '../sample/output/json_s4.dart';
-import '../sample/output/json_s5.dart';
-import '../sample/output/json_s6.dart';
-import '../sample/input.dart';
+import '../example/output/json1.dart';
+import '../example/output/json2.dart';
+import '../example/output/json3.dart';
+import '../example/output/json4.dart';
+import '../example/output/json5.dart';
+import '../example/output/json6.dart';
+import '../example/output/json_f1.dart';
+import '../example/output/json_f2.dart';
+import '../example/output/json_f3.dart';
+import '../example/output/json_f4.dart';
+import '../example/output/json_f5.dart';
+import '../example/output/json_f6.dart';
+import '../example/output/json_s1.dart';
+import '../example/output/json_s2.dart';
+import '../example/output/json_s3.dart';
+import '../example/output/json_s4.dart';
+import '../example/output/json_s5.dart';
+import '../example/output/json_s6.dart';
+import '../example/example.dart';
 
 // NOTE: to test outputs above, U need generate outputs first by run test_all.sh
 main() {

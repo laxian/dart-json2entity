@@ -26,14 +26,14 @@ PROG_NAME="$(path_uri "$(follow_links "$BASH_SOURCE")")"
 BIN_DIR="$(cd "${PROG_NAME%/*}" ; pwd -P)"
 cd $BIN_DIR
 
+pub get
+
 # FIRST. generate output
 ./test_cli.sh
-mv sample/output lib/
 
 # SECOND. generate part file
 flutter packages pub run build_runner build --delete-conflicting-outputs
 dartfmt -w .
-mv lib/output sample/
 
 # test
 pub run test
