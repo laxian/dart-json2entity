@@ -1,5 +1,9 @@
 # json2entity
 
+<p align="left">
+  <a href="https://pub.dartlang.org/packages/dart2entity"><img alt="pub version" src="https://img.shields.io/pub/v/json2entity.svg"></a>
+</p>
+
 A tool for converting JSON strings into dart entity classes
 
 support [json_serializable](https://pub.dartlang.org/packages/json_serializable).
