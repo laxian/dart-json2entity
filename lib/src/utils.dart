@@ -17,7 +17,7 @@ getType(dynamic v) {
 
 /// 将首字母大写
 String capitalize(String k) {
-  if (k != null && k.length > 0) {
+  if (k != null && k.isNotEmpty) {
     return k[0].toUpperCase() + k.substring(1);
   }
   return k;

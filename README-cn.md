@@ -1,5 +1,9 @@
 # json2entity
 
+<p align="left">
+  <a href="https://pub.dartlang.org/packages/json2entity"><img alt="pub version" src="https://img.shields.io/pub/v/json2entity.svg"></a>
+</p>
+
 适用于Dart语言的，根据json字符串自动生成对应实体类文件的工具。
 
 这个工具同样支持生成使用[json_serializable](https://pub.dartlang.org/packages/json_serializable)的实体类。
@@ -7,6 +11,32 @@
 [English](https://github.com/laxian/dart-json2entity/blob/master/README.md)
 
 ## Usage
+
+#### pub方式
+
+首先，激活命令
+
+`pub global activate json2entity`
+
+然后，在任意目录执行命令：
+
+`json2entity -j '{"result":1,"msg":"ok"}' -o output/BaseEntity`
+
+或者
+
+`j2e -j '{"result":1,"msg":"ok"}' -o output/BaseEntity`
+
+
+SYNOPSIS:
+```shell
+Usage:
+        -j, --json                              Input json string
+        -f, --file                              Input json from file
+        -o, --output                            Input output file path and name
+        -v, --[no-]verbose                      Show verbose
+        -s, --[no-]json-serializable-support    Indicates whether json-serializable is supported
+        -h, --[no-]help                         Help
+```
 
 #### 代码方式
 
@@ -51,32 +81,6 @@ main(List<String> args) {
   */
 }
 
-```
-
-#### pub方式
-
-首先，激活命令
-
-`pub global activate json2entity`
-
-然后，在任意目录执行命令：
-
-`json2entity -j '{"result":1,"msg":"ok"}' -o output/BaseEntity`
-
-或者
-
-`j2e -j '{"result":1,"msg":"ok"}' -o output/BaseEntity`
-
-
-SYNOPSIS:
-```shell
-Usage:
-        -j, --json                              Input json string
-        -f, --file                              Input json from file
-        -o, --output                            Input output file path and name
-        -v, --[no-]verbose                      Show verbose
-        -s, --[no-]json-serializable-support    Indicates whether json-serializable is supported
-        -h, --[no-]help                         Help
 ```
 
 ## Main classes

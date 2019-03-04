@@ -1,7 +1,7 @@
 # json2entity
 
 <p align="left">
-  <a href="https://pub.dartlang.org/packages/dart2entity"><img alt="pub version" src="https://img.shields.io/pub/v/json2entity.svg"></a>
+  <a href="https://pub.dartlang.org/packages/json2entity"><img alt="pub version" src="https://img.shields.io/pub/v/json2entity.svg"></a>
 </p>
 
 A tool for converting JSON strings into dart entity classes
@@ -12,52 +12,7 @@ support [json_serializable](https://pub.dartlang.org/packages/json_serializable)
 
 ## Usage
 
-#### Custom
-
-`import 'package:json2entity/json2entity.dart';`
-
-```dart
-main(List<String> args) {
-  var jsonStr = '{"result":1,"msg":"ok"}';
-  print(Clazz.fromJson(jsonStr).toString()); // ==>
-  /*
-  class AutoModel {
-    num result;
-    String msg;
-    AutoModel({
-    this.result,
-    this.msg
-    });
-
-    AutoModel.fromJson(Map < String, dynamic > json):
-      result=json['result'],
-      msg=json['msg'];
-      Map <String, dynamic> toJson() => {
-      'result':result,
-      'msg':msg
-    };
-  }
-  */
-  print(JsonSerializableClazz.fromJson(jsonStr).toString()); // ==>
-  /*
-  @JsonSerializable()
-  class AutoModel {
-    num result;
-      String msg;
-      AutoModel({
-      this.result,
-      this.msg
-    });
-
-    factory AutoModel.fromJson(Map<String, dynamic> json) => _$AutoModelFromJson(json);
-      Map<String, dynamic> toJson() => _$AutoModelToJson(this);
-    }
-  */
-}
-
-```
-
-#### by pub 
+#### By pub 
 
 First, activate json2entity global.
 
@@ -81,6 +36,53 @@ Usage:
         -v, --[no-]verbose                      Show verbose
         -s, --[no-]json-serializable-support    Indicates whether json-serializable is supported
         -h, --[no-]help                         Help
+```
+
+
+#### Custom
+
+
+```dart
+import 'package:json2entity/json2entity.dart';
+
+main(List<String> args) {
+  var jsonStr = '{"result":1,"msg":"ok"}';
+  print(Clazz.fromJson(jsonStr).toString()); 
+  print(JsonSerializableClazz.fromJson(jsonStr).toString()); 
+}
+```
+
+Output:
+```
+  class AutoModel {
+    num result;
+    String msg;
+    AutoModel({
+    this.result,
+    this.msg
+    });
+
+    AutoModel.fromJson(Map < String, dynamic > json):
+      result=json['result'],
+      msg=json['msg'];
+      Map <String, dynamic> toJson() => {
+      'result':result,
+      'msg':msg
+    };
+  }
+
+  @JsonSerializable()
+  class AutoModel {
+    num result;
+      String msg;
+      AutoModel({
+      this.result,
+      this.msg
+    });
+
+    factory AutoModel.fromJson(Map<String, dynamic> json) => _$AutoModelFromJson(json);
+      Map<String, dynamic> toJson() => _$AutoModelToJson(this);
+    }
 ```
 
 ## Main classes

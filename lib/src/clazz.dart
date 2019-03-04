@@ -75,7 +75,7 @@ class Clazz {
   /// Firstly, convert to Map. Then invoke [fromMap] method
   factory Clazz.fromList(List<dynamic> jsonList, {String key}) {
     assert(jsonList != null);
-    assert(jsonList.length > 0);
+    assert(jsonList.isNotEmpty);
 
     String default_key = 'datas';
     var newMap = <String, dynamic>{};
@@ -88,11 +88,11 @@ class Clazz {
   Clazz.fromMapEntry(MapEntry<String, Map<String, dynamic>> entry)
       : _name = entry.key {
     var pending = entry.value;
-    if (pending.entries.length == 0) {
+    if (pending.entries.isEmpty) {
       return;
     }
 
-    while (pending.entries.length > 0) {
+    while (pending.entries.isNotEmpty) {
       var currName = pending.entries.elementAt(0).key;
       var currKey = buildClassName(currName);
       var curr = pending.remove(currName);
@@ -104,7 +104,7 @@ class Clazz {
       } else if (curr is List) {
         // 对于json里的list，我们认为每一项都一样的类型
         var currList = curr;
-        if (currList.length > 0) {
+        if (currList.isNotEmpty) {
           var curr = currList.elementAt(0);
           if (curr is Map) {
             var child = buildChildClazz(curr, key: currKey);

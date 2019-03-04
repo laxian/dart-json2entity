@@ -63,7 +63,7 @@ ArgParser initArgParser() {
 }
 
 void converFromFile(String input, String outPath,
-    {bool show_verbose: false, bool support_json_serializable: false}) {
+    {bool show_verbose = false, bool support_json_serializable = false}) {
   var file = new File(input);
   var jstr = file.readAsStringSync();
   Map<String, dynamic> jobj = jsonDecode(jstr);

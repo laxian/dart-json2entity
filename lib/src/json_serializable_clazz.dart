@@ -34,7 +34,7 @@ class JsonSerializableClazz extends Clazz {
 
   factory JsonSerializableClazz.fromList(List<dynamic> jsonList, {String key}) {
     assert(jsonList != null);
-    assert(jsonList.length > 0);
+    assert(jsonList.isNotEmpty);
 
     String default_key = 'datas';
     var newMap = <String, dynamic>{};
