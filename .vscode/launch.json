@@ -5,6 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "zip",
+            "type": "dart",
+            "request": "launch",
+            "program": "bin/zip_json.dart",
+            "args": [
+                ""
+            ]
+        },
+        {
             "name": "test convert",
             "type": "dart",
             "request": "launch",

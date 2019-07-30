@@ -23,6 +23,7 @@ dev_dependencies:
 executables:
   json2entity: cli
   j2e: cli
+  zip_json: zip_json
 
 publish_to: 
   https://pub.dartlang.org
