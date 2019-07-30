@@ -44,6 +44,15 @@ class Director {
       directory.createSync(recursive: true);
 
       var fullPath = new File(buildOutputFullPath());
+      if (fullPath.existsSync()) {
+        stdout.writeln('File: $fullPath is aready exists, overwrite? Y/n');
+        var prompt = stdin.readLineSync();
+        if (!['y', 'yes'].contains(prompt.toLowerCase())) {
+          stdout.writeln('Skipped generate file $fullPath');
+          return;
+        }
+        stdout.writeln('file $fullPath will be overwrite');
+      }
       var sink = fullPath.openWrite();
       sink.write(_output);
       sink.close();
