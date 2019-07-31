@@ -3,3 +3,4 @@
 .history/
 .idea/
 */output/
+pubspec.lock

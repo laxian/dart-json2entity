@@ -9,7 +9,7 @@ getType(dynamic v) {
   } else if (v is List) {
     return 'List';
   } else if (v == null) {
-    return 'String';
+    return 'dynamic';
   } else {
     return 'Object';
   }

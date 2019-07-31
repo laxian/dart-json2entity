@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:json2entity/src/zip_map.dart';
 import 'package:test/test.dart';
 
 import '../example/output/json1.dart';
@@ -49,8 +50,8 @@ void testEntityConvertedByCli() {
 
   // map list 比较特殊，转换时，list：[...]会被转换成map：{"datas":[...]}
   var list = jsonDecode(json5);
-  var j5 = Json5.fromJson({'datas': list});
-  assertTrue(j5.datas.length == 1);
+  var j5 = Json5.fromJson(zipList(list)[0]);
+  assertTrue(j5.albumId == 1);
 
   var j6 = Json6.fromJson(jsonDecode(json6));
   assertTrue(j6.data.length == 8, tag: 'data.length is ${j6.data.length}');
@@ -101,8 +102,8 @@ void testEntityConvertedFromFile() {
 
   // map list 比较特殊，转换时，list：[...]会被转换成map：{"datas":[...]}
   var list = jsonDecode(json5);
-  var j5 = JsonF5.fromJson({'datas': list});
-  assertTrue(j5.datas.length == 1);
+  var j5 = JsonF5.fromJson(zipList(list)[0]);
+  assertTrue(j5.albumId == 1);
 
   var j6 = JsonF6.fromJson(jsonDecode(json6));
   assertTrue(j6.data.length == 8, tag: 'data.length is ${j6.data.length}');

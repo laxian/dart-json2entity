@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:args/args.dart';
 import 'package:json2entity/json2entity.dart';
+import 'package:json2entity/src/config.dart';
 import 'package:path/path.dart' as p;
 
 main(List<String> args) {
@@ -16,29 +17,23 @@ void run(List<String> args) {
   } on Exception catch (e) {
     _handleArgError(parser, e.toString());
   }
-  var jsonStr = result['json'];
-  var output = result['output'];
-  var jsonsFile = result['file'];
-  var verbose = result['verbose'];
-  var supportJsonSerializable = result['json-serializable-support'];
-  var help = result['help'];
 
-  if (help) {
+  if (result['help']) {
     stdout.write('Usage:\n\t${parser.usage.replaceAll('\n', '\n\t')}');
     return;
   }
-  if (jsonStr == null && jsonsFile == null) {
+
+  var config = Config.from(result);
+  if (config.noInput) {
     _handleArgError(parser, 'No input args found\n');
   }
-  if (output == null) {
-    doConvert('Model', jsonStr, null, verbose, supportJsonSerializable);
+  if (config.output == null) {
+    doConvert(config);
   } else {
-    var name = p.basename(output);
-    var outPath = p.dirname(output);
-    if (jsonStr != null) {
-      doConvert(name, jsonStr, outPath, verbose, supportJsonSerializable);
+    if (config.input != null) {
+      doConvert(config);
     } else {
-      converFromFile(jsonsFile, output, show_verbose: verbose);
+      converFromFile(config);
     }
   }
 }
@@ -62,25 +57,25 @@ ArgParser initArgParser() {
     ..addFlag('help', abbr: 'h', help: 'Help');
 }
 
-void converFromFile(String input, String outPath,
-    {bool show_verbose = false, bool support_json_serializable = false}) {
-  var file = new File(input);
+void converFromFile(Config config) {
+  var file = new File(config.file);
   var jstr = file.readAsStringSync();
   Map<String, dynamic> jobj = jsonDecode(jstr);
 
-  printWhen('input: $input', show_verbose);
-  printWhen('output: $outPath', show_verbose);
+  printWhen('input: ${config.file}', config.verbose);
+  printWhen('output: ${config.output}', config.verbose);
 
   jobj.forEach((k, v) {
-    doConvert(k, v, outPath, show_verbose, support_json_serializable);
+    var c = Config.copy(config);
+    c.input = v;
+    c.output = p.join(c.output, k);
+    doConvert(c);
   });
 }
 
-void doConvert(String name, json, String outPath, bool show_verbose,
-    bool support_json_serializable) {
+void doConvert(Config config) {
   try {
-    var director =
-        Director(name, json, outPath, support_json_serializable, show_verbose);
+    var director = Director(config);
     director.action();
   } on FormatException catch (e) {
     print(e.message);

@@ -1,59 +1,55 @@
 import 'dart:io';
+
 import 'package:path/path.dart' as p;
-import 'utils.dart';
+
 import 'clazz.dart';
+import 'config.dart';
 import 'json_serializable_clazz.dart';
+import 'utils.dart';
 
 class Director {
-  /// Flag indicates whether supprt json_serializable.
-  bool support_json_serializable = false;
-
-  /// Print verbose infomation if true.
-  bool show_verbose = false;
-
-  /// Entity file name.
-  String name;
-
-  /// Entity file path.
-  String outputPath;
-
-  /// Input JSON string.
-  String json;
   Clazz _clazz;
-  String _output;
+  Config config;
 
-  Director(this.name, this.json, this.outputPath,
-      this.support_json_serializable, this.show_verbose) {
-    if (support_json_serializable) {
-      _clazz = JsonSerializableClazz.fromJson(json, key: name);
+  Director(this.config) {
+    if (config.json_serializable) {
+      _clazz = JsonSerializableClazz.fromJson(config.input, key: config.name);
       var part = buildPartName();
       _clazz.addHeader(
           'import \'package:json_annotation/json_annotation.dart\';');
       _clazz.addHeader('part \'$part\';\n');
     } else {
-      _clazz = Clazz.fromJson(json, key: name);
+      _clazz = Clazz.fromJson(config.input, key: config.name);
     }
-    _output = _clazz.toString();
   }
 
   /// Execute convert.
   action() {
-    if (outputPath != null) {
-      // 确保路径存在
-      var directory = new Directory(outputPath);
-      directory.createSync(recursive: true);
-
+    var output = _clazz.toString();
+    if (config.output != null) {
       var fullPath = new File(buildOutputFullPath());
+      // 确保路径存在
+      fullPath.parent.createSync(recursive: true);
+      if (fullPath.existsSync()) {
+        stdout.writeln('File: $fullPath is aready exists, overwrite? Y/n');
+        var prompt = stdin.readLineSync();
+        if (!['y', 'yes'].contains(prompt.toLowerCase())) {
+          stdout.writeln('Skipped generate file $fullPath');
+          return;
+        }
+        stdout.writeln('file $fullPath will be overwrite');
+      }
       var sink = fullPath.openWrite();
-      sink.write(_output);
+      sink.write(output);
       sink.close();
-      printWhen('convert successful!', show_verbose);
+      printWhen('convert successful!', config.verbose);
     } else {
-      stdout.add(_output.codeUnits);
+      stdout.add(output.codeUnits);
     }
   }
 
   String buildOutputFullPath() =>
-      p.join(outputPath, camel2dash(name) + '.dart');
-  String buildPartName() => camel2dash(name) + '.g.dart';
+      p.join(config.path, camel2dash(config.name) + '.dart');
+
+  String buildPartName() => camel2dash(config.name) + '.g.dart';
 }

@@ -38,3 +38,6 @@ inputFile=./example/input.json
 # input from file
 ./json2entity -f $inputFile --output ./example/output/
 # ./json2entity -f $inputFile --output ./example/output/ -s
+
+# test zip_json
+zip_json "`cat example/juejin.json`"

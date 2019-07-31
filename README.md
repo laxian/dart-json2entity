@@ -100,7 +100,7 @@ Output:
     "msg":"ok"
 }
 ```
-run `./json2entity -j '{"result":1,"msg":"ok"}' -o output/Json1`
+run `j2e -j '{"result":1,"msg":"ok"}' -o output/Json1`
 
 output:
 ```dart
@@ -132,7 +132,7 @@ class Json1 {
     }
 }
 ```
-run `./json2entity -j '{"result":1,"msg":"ok","data":{"answer":"A"}}' -o output/Json2`
+run `j2e -j '{"result":1,"msg":"ok","data":{"answer":"A"}}' -o output/Json2`
 
 output:
 ```dart
@@ -181,7 +181,7 @@ class DataEntity {
   ]
 }
 ```
-run `./json2entity -j '{"city":"Mumbai","streets":["address1","address2"]}' -o output/Json3`
+run `j2e -j '{"city":"Mumbai","streets":["address1","address2"]}' -o output/Json3`
 
 output:
 ```dart
@@ -220,7 +220,7 @@ class Json3 {
   ]
 }
 ```
-run `./json2entity -j '{"id":1,"name":"ProductName","images":[{"id":11,"imageName":"xCh-rhy"},{"id":31,"imageName":"fjs-eun"}]}' -o output/Json4`
+run `j2e -j '{"id":1,"name":"ProductName","images":[{"id":11,"imageName":"xCh-rhy"},{"id":31,"imageName":"fjs-eun"}]}' -o output/Json4`
 
 output:
 ```dart
@@ -263,7 +263,6 @@ class ImagesEntity {
 }
 ```
 #### 5. Input JSON of map list type
-It needs to be emphasized that my approach is to convert [...] to {"datas": [...]} and then to convert
 ```json
 [
   {
@@ -275,23 +274,10 @@ It needs to be emphasized that my approach is to convert [...] to {"datas": [...
   }
 ]
 ```
-run `./json2entity -j '[{"albumId":1,"id":1,"title":"accusamus","url":"http://placehold.it/600/92c952","thumbnailUrl":"http://placehold.it/150/92c952"}]' -o output/Json5`
+run `j2e -j '[{"albumId":1,"id":1,"title":"accusamus","url":"http://placehold.it/600/92c952","thumbnailUrl":"http://placehold.it/150/92c952"}]' -o output/Json5`
 
 output:
 ```dart
-class Json5 {
-  List<DatasEntity> datas;
-  Json5({
-    this.datas
-  });
-
-  Json5.fromJson(Map < String, dynamic > json):
-    datas=(json['datas'] as List)?.map((l)=>DatasEntity.fromJson(l))?.toList();
-  Map <String, dynamic> toJson() => {
-    'datas':datas?.map((it)=>it.toJson())?.toList()
-  };
-}
-
 class DatasEntity {
   num albumId;
   num id;

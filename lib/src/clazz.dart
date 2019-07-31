@@ -1,17 +1,16 @@
 import 'dart:convert';
 
+import '../json2entity.dart';
 import 'utils.dart';
 
 /// A helper class that parse json strings to classes.
 /// Clazz represents an entity class
 class Clazz {
-  String _INDENT = ' '; // _INDENT == ONE SPACE
-  String INDENT2 = '  '; // _INDENT2 == TWO SAPCE
-  /// Default name of current entity class
-  var defaultName = 'AutoModel';
+  /// Corresponding to child. Parent is a class that refers to the current entity class as field
+  Clazz parent;
 
   /// a child is a class being used as field by current entity class
-  List children = [];
+  List<Clazz> children = [];
 
   /// Header is a message inserted into the header of a file
   List<String> headers;
@@ -21,8 +20,8 @@ class Clazz {
 
   String _name;
 
-  /// Corresponding to child. Parent is a class that refers to the current entity class as field
-  Clazz parent;
+  String _INDENT = '  ';
+  String _INDENT2 = '    ';
 
   /// Fields of current entity class
   Map<String, String> fields = {};
@@ -64,24 +63,32 @@ class Clazz {
   }
 
   /// Construct from Map.
-  factory Clazz.fromMap(Map<String, dynamic> jsonMap, {String key}) {
+  factory Clazz.fromMap(Map<String, dynamic> jsonMap,
+      {String key, bool noZip = false}) {
     assert(jsonMap != null);
-    var entry =
-        new MapEntry<String, Map<String, dynamic>>(key ?? 'AutoModel', jsonMap);
+    var entry = new MapEntry<String, Map<String, dynamic>>(
+        key ?? 'AutoModel', noZip ? jsonMap : zip(jsonMap));
     return Clazz.fromMapEntry(entry);
   }
 
   /// Construct from list.
-  /// Firstly, convert to Map. Then invoke [fromMap] method
-  factory Clazz.fromList(List<dynamic> jsonList, {String key}) {
+  /// [wrapKey] if not null, use [wrapKey] as KEY, [jsonList] as value
+  /// convert the json list to an json object
+  factory Clazz.fromList(List<dynamic> jsonList, {String key, String wrapKey}) {
     assert(jsonList != null);
     assert(jsonList.isNotEmpty);
 
-    String default_key = 'datas';
-    var newMap = <String, dynamic>{};
-    newMap[default_key] = jsonList;
+    var map;
+    var list = zipList(jsonList);
+    if (wrapKey != null) {
+      var wrapMap = <String, dynamic>{};
+      wrapMap[wrapKey] = list;
+      map = wrapMap;
+    } else {
+      map = list[0];
+    }
 
-    return Clazz.fromMap(newMap, key: key);
+    return Clazz.fromMap(map, key: key);
   }
 
   /// Construct from [MapEntry]
@@ -121,7 +128,7 @@ class Clazz {
         }
       } else if (curr == null) {
         // key:null, as String
-        fields[currName] = 'String';
+        fields[currName] = 'dynamic';
       } else {
         // int/float/bool/String
         fields[currName] = getType(curr);
@@ -154,7 +161,7 @@ class Clazz {
     if (hasValue(fields)) {
       String pre = '${_INDENT}$_name({';
       var pairs = fields.entries.toList().map((kv) {
-        return '${INDENT2}this.${kv.key}';
+        return '${_INDENT2}this.${kv.key}';
       }).join(',\n');
       String suffix = '${_INDENT}})';
       var superConstructor = buildSuperConstructor();
@@ -174,24 +181,24 @@ class Clazz {
       // 基础类型
       Iterable<String> simpleField = fields.entries
           .where((f) => _isSimple(f.value))
-          .map((kv) => '${INDENT2}${kv.key}=json[\'${kv.key}\']');
+          .map((kv) => '${_INDENT2}${kv.key}=json[\'${kv.key}\']');
 
       // 对象类型需要调用自己类的fromJson，完成自身的序列化
       Iterable<String> objectField =
           fields.entries.where((f) => _isObject(f.value)).map((kv) {
-        return '${INDENT2}${kv.key}=${kv.value}.fromJson(json[\'${kv.key}\'])';
+        return '${_INDENT2}${kv.key}=${kv.value}.fromJson(json[\'${kv.key}\'])';
       });
 
       // 简单列表类型需要调用自己类的fromJson，完成自身的序列化
       Iterable<String> simpleListField =
           fields.entries.where((f) => _isSimpleList(f.value)).map((kv) {
-        return '${INDENT2}${kv.key}=${kv.value}.from(json[\'${kv.key}\'])';
+        return '${_INDENT2}${kv.key}=${kv.value}.from(json[\'${kv.key}\'])';
       });
 
       // 对象列表类型需要调用自己类的fromJson，完成自身的序列化
       Iterable<String> objectListField =
           fields.entries.where((f) => _isObjectList(f.value)).map((kv) {
-        return "${INDENT2}${kv.key}=(json['${kv.key}'] as List)?.map((l)=>${_getItemType(kv.value)}.fromJson(l))?.toList()";
+        return "${_INDENT2}${kv.key}=(json['${kv.key}'] as List)?.map((l)=>${_getItemType(kv.value)}.fromJson(l))?.toList()";
       });
 
       pairs = simpleField
@@ -225,20 +232,20 @@ class Clazz {
     if (hasValue(fields)) {
       Iterable<String> simpleField = fields.entries
           .where((f) => _isSimple(f.value))
-          .map((kv) => '${INDENT2}\'${kv.key}\':${kv.key}');
+          .map((kv) => '${_INDENT2}\'${kv.key}\':${kv.key}');
 
       Iterable<String> objectField = fields.entries
           .where((f) => _isObject(f.value))
-          .map((kv) => '${INDENT2}\'${kv.key}\':${kv.key}?.toJson()');
+          .map((kv) => '${_INDENT2}\'${kv.key}\':${kv.key}?.toJson()');
 
       Iterable<String> simpleListField = fields.entries
           .where((f) => _isSimpleList(f.value))
-          .map((kv) => '${INDENT2}\'${kv.key}\':${kv.key}');
+          .map((kv) => '${_INDENT2}\'${kv.key}\':${kv.key}');
 
       Iterable<String> objectListField = fields.entries
           .where((f) => _isObjectList(f.value))
           .map((kv) =>
-              "${INDENT2}\'${kv.key}':${kv.key}?.map((it)=>it.toJson())?.toList()");
+              "${_INDENT2}\'${kv.key}':${kv.key}?.map((it)=>it.toJson())?.toList()");
 
       var pairs = simpleField
           .followedBy(objectField)
@@ -253,7 +260,7 @@ class Clazz {
   /// Output entity class source as string.
   @override
   String toString() {
-    // 类组成元素
+    // ��组成元素
     List<String> classFrags = <String>[];
     // 0. headers
     String headerStr;
