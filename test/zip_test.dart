@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:json2entity/json2entity.dart';
 import 'package:json2entity/src/zip_map.dart';
-import 'package:test_api/test_api.dart';
+import 'package:test/test.dart';
 
 var jsonList = '''[{"a":null,"b":1,"c":"OK","d":{"e":0},"g":[{"h":1},{"j":3}]},
                {"a":true,"b":1,"d":{"f":1},"g":[{"i":2},{"k":4}]}]''';

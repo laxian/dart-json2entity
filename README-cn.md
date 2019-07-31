@@ -124,7 +124,7 @@ main(List<String> args) {
     "msg":"ok"
 }
 ```
-执行`./json2entity -j '{"result":1,"msg":"ok"}' -o output/Json1`
+执行`j2e -j '{"result":1,"msg":"ok"}' -o output/Json1`
 输出如下：
 ```dart
 class Json1 {
@@ -155,7 +155,7 @@ class Json1 {
     }
 }
 ```
-执行`./json2entity -j '{"result":1,"msg":"ok","data":{"answer":"A"}}' -o output/Json2`
+执行`j2e -j '{"result":1,"msg":"ok","data":{"answer":"A"}}' -o output/Json2`
 输出如下：
 ```dart
 class Json2 {
@@ -202,7 +202,7 @@ class DataEntity {
   ]
 }
 ```
-执行`./json2entity -j '{"city":"Mumbai","streets":["address1","address2"]}' -o output/Json3`
+执行`j2e -j '{"city":"Mumbai","streets":["address1","address2"]}' -o output/Json3`
 输出如下：
 ```dart
 class Json3 {
@@ -239,7 +239,7 @@ class Json3 {
   ]
 }
 ```
-执行`./json2entity -j '{"id":1,"name":"ProductName","images":[{"id":11,"imageName":"xCh-rhy"},{"id":31,"imageName":"fjs-eun"}]}' -o output/Json4`
+执行`j2e -j '{"id":1,"name":"ProductName","images":[{"id":11,"imageName":"xCh-rhy"},{"id":31,"imageName":"fjs-eun"}]}' -o output/Json4`
 输出：
 ```dart
 class Json4 {
@@ -281,7 +281,6 @@ class ImagesEntity {
 }
 ```
 #### 5. 输入map列表。
-这个需要强调一下，我的方法是，将[...]转化成{"datas": [...]}，之后再转换
 ```json
 [
   {
@@ -293,22 +292,9 @@ class ImagesEntity {
   }
 ]
 ```
-执行`./json2entity -j '[{"albumId":1,"id":1,"title":"accusamus","url":"http://placehold.it/600/92c952","thumbnailUrl":"http://placehold.it/150/92c952"}]' -o output/Json5`
+执行`j2e -j '[{"albumId":1,"id":1,"title":"accusamus","url":"http://placehold.it/600/92c952","thumbnailUrl":"http://placehold.it/150/92c952"}]' -o output/Json5`
 输出：
 ```dart
-class Json5 {
-	List<DatasEntity> datas;
-	Json5({
-		this.datas
-	});
-
-	Json5.fromJson(Map < String, dynamic > json):
-		datas=(json['datas'] as List)?.map((l)=>DatasEntity.fromJson(l))?.toList();
-	Map <String, dynamic> toJson() => {
-		'datas':datas?.map((it)=>it.toJson())?.toList()
-	};
-}
-
 class DatasEntity {
 	num albumId;
 	num id;
