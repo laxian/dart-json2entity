@@ -4,31 +4,43 @@
   <a href="https://pub.dartlang.org/packages/json2entity"><img alt="pub version" src="https://img.shields.io/pub/v/json2entity.svg"></a>
 </p>
 
-适用于Dart语言的，根据json字符串自动生成对应实体类文件的工具。
-
-这个工具同样支持生成使用[json_serializable](https://pub.dartlang.org/packages/json_serializable)的实体类。
-
 [English](https://github.com/laxian/dart-json2entity/blob/master/README.md)
+
+Dart语言的，JSON转实体类源码工具。
+支持生成使用[json_serializable](https://pub.dartlang.org/packages/json_serializable)的实体类。
+
+[无需手写，自动生成Flutter/Dart实体类文件 -- 掘金](https://juejin.im/post/5c36251ce51d45524473f79f)
 
 ## Usage
 
-#### pub方式
+首先，添加依赖
+```yaml
+dependencies:
+  json2entity: ^1.0.8
+```
 
-首先，激活命令
+然后，激活命令
 
-`pub global activate json2entity`
+```shell
+pub global activate json2entity
+```
 
-然后，在任意目录执行命令：
+最后，在任意目录执行命令：
 
-`json2entity -j '{"result":1,"msg":"ok"}' -o output/BaseEntity`
+```shell
+json2entity -j '{"result":1,"msg":"ok"}' -o output/BaseEntity
+```
 
 或者
 
-`j2e -j '{"result":1,"msg":"ok"}' -o output/BaseEntity`
+```shell
+j2e -j '{"result":1,"msg":"ok"}' -o output/BaseEntity
+```
 
 
 SYNOPSIS:
 ```shell
+$ j2e -h
 Usage:
         -j, --json                              Input json string
         -f, --file                              Input json from file
@@ -90,6 +102,7 @@ main(List<String> args) {
   转换步骤：
 1. 解析json结构
       - json -> map
+	  - 对map进行压缩（新增，后文详述）
       - 遍历map树，建立实体类依赖图
 2. 组合实体类
       1. file header      文件头部，import、part、part of等语句，可选
@@ -101,6 +114,8 @@ main(List<String> args) {
       7. toJson method    toJson方法
       8. 拼接1-6步，合成class
       9. 递归1-7，合成children
+
+> 上面说到对map压缩，主要针对map中的List，将list中的所有项，合并成一个。如：'[{"k1":1, "k2":0},  {"k2": 0, "k3": true}]' 合并成：[{"k1":1, "k2":0, "k3":true}]
 
 
 #### JsonSerializableClazz
@@ -124,7 +139,8 @@ main(List<String> args) {
     "msg":"ok"
 }
 ```
-执行`j2e -j '{"result":1,"msg":"ok"}' -o output/Json1`
+
+`j2e -j '{"result":1,"msg":"ok"}' -o output/Json1`
 输出如下：
 ```dart
 class Json1 {
@@ -155,7 +171,8 @@ class Json1 {
     }
 }
 ```
-执行`j2e -j '{"result":1,"msg":"ok","data":{"answer":"A"}}' -o output/Json2`
+
+`j2e -j '{"result":1,"msg":"ok","data":{"answer":"A"}}' -o output/Json2`
 输出如下：
 ```dart
 class Json2 {
@@ -202,7 +219,8 @@ class DataEntity {
   ]
 }
 ```
-执行`j2e -j '{"city":"Mumbai","streets":["address1","address2"]}' -o output/Json3`
+
+`j2e -j '{"city":"Mumbai","streets":["address1","address2"]}' -o output/Json3`
 输出如下：
 ```dart
 class Json3 {
@@ -239,7 +257,8 @@ class Json3 {
   ]
 }
 ```
-执行`j2e -j '{"id":1,"name":"ProductName","images":[{"id":11,"imageName":"xCh-rhy"},{"id":31,"imageName":"fjs-eun"}]}' -o output/Json4`
+
+`j2e -j '{"id":1,"name":"ProductName","images":[{"id":11,"imageName":"xCh-rhy"},{"id":31,"imageName":"fjs-eun"}]}' -o output/Json4`
 输出：
 ```dart
 class Json4 {
@@ -292,7 +311,8 @@ class ImagesEntity {
   }
 ]
 ```
-执行`j2e -j '[{"albumId":1,"id":1,"title":"accusamus","url":"http://placehold.it/600/92c952","thumbnailUrl":"http://placehold.it/150/92c952"}]' -o output/Json5`
+
+`j2e -j '[{"albumId":1,"id":1,"title":"accusamus","url":"http://placehold.it/600/92c952","thumbnailUrl":"http://placehold.it/150/92c952"}]' -o output/Json5`
 输出：
 ```dart
 class DatasEntity {
@@ -397,4 +417,3 @@ class Image_listEntity {
 
 ## 测试
 `./test_all.sh`
-`pub run test`

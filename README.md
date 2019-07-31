@@ -4,25 +4,31 @@
   <a href="https://pub.dartlang.org/packages/json2entity"><img alt="pub version" src="https://img.shields.io/pub/v/json2entity.svg"></a>
 </p>
 
+[中文](https://github.com/laxian/dart-json2entity/blob/master/README-cn.md)
+
 A tool for converting JSON strings into dart entity classes
 
 support [json_serializable](https://pub.dartlang.org/packages/json_serializable).
 
-[中文](https://github.com/laxian/dart-json2entity/blob/master/README-cn.md)
+[无需手写，自动生成Flutter/Dart实体类文件 -- 掘金](https://juejin.im/post/5c36251ce51d45524473f79f)
 
 ## Usage
 
-#### By pub 
+Firstly:
+```yaml
+dependencies:
+  json2entity: ^1.0.8
+```
 
-First, activate json2entity global.
+Secondly: activate json2entity global.
 
 `pub global activate json2entity`
 
-Then, run anywhere:
+Finally, run anywhere:
 
 `json2entity -j '{"result":1,"msg":"ok"}' -o output/BaseEntity`
 
-Or
+or
 
 `j2e -j '{"result":1,"msg":"ok"}' -o output/BaseEntity`
 
