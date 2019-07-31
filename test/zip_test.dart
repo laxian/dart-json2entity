@@ -15,9 +15,7 @@ var jsonFromJuejin =
 var jsonFromJuejinZipped =
     '{"data":{"articleFeed":{"items":{"edges":[{"node":{"id":"5d3f84376fb9a06b2c326988","commentsCount":10,"hot":false,"hotIndex":161.2088,"original":true,"originalUrl":"https://juejin.im/post/5d3f8402f265da039e129574","rankIndex":23.480145447961,"screenshot":"","content":"为了保证的可读性，本文采用意译而非直译。 BigInt数据类型的目的是比Number数据类型支持的范围更大的整数值。在对大整数执行数学运算时，以任意精度表示整数的能力尤为重要。使用BigInt，整数溢出将不再是问题。 此外，可以安全地使用更加准确时间戳，大整数ID等，而无需使用…","summaryInfo":null,"category":{"name":"前端","id":"5562b415e4b00c57d9b94ac8"},"tags":[{"id":"55964d83e4b08a686cc6b353","title":"JavaScript"}],"title":"JS 即将到来的第八种基本类型:BigInt","type":"post","user":{"id":"59df61ec51882578ce26ee6e","role":"guest","avatarHd":null,"avatarLarge":"https://mirror-gold-cdn.xitu.io/168e08a02f4dda88289","username":"前端小智"},"lastCommentTime":"2019-07-30T10:24:11.927Z","likeCount":25,"eventInfo":null,"viewerHasLiked":false,"createdAt":"2019-07-29T23:41:43.557Z","updatedAt":"2019-07-30T02:30:00.069Z"}}],"pageInfo":{"hasNextPage":true,"endCursor":"5.1097955801374999"}}}}}';
 
-
 void main() {
-
   group('ZIP', () {
     testZipList();
     testZipMap();

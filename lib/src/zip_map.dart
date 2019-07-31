@@ -54,7 +54,7 @@ List zipList(List a) {
 
 /// 合并两个map，合成的元素，包含[a]和[b]中所有的key
 /// 若相同的key对应的value同样是Map，该key对应的map value，递归当前函数
-/// 
+///
 Map zip2(Map a, Map b) {
   var es = a.entries.toList()..addAll(b.entries.toList());
   var keys = es.map((e) => e.key).toSet();

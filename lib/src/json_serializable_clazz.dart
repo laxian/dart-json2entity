@@ -1,8 +1,11 @@
 import 'dart:convert';
+import '../json2entity.dart';
 import 'utils.dart';
 import 'clazz.dart';
 
 class JsonSerializableClazz extends Clazz {
+  String _INDENT2 = '  '; // _INDENT2 == TWO SAPCE
+
   /// json_serializable annotation.
   static const String JS_DECOR = '@JsonSerializable()';
 
@@ -13,7 +16,7 @@ class JsonSerializableClazz extends Clazz {
   factory JsonSerializableClazz.fromJson(String jsonStr, {String key}) {
     var jobj;
     try {
-      jobj = jsonDecode(jsonStr);
+      jobj = zip(jsonDecode(jsonStr));
     } on Exception catch (e) {
       throw FormatException(
           'Input Json Format Error! ${(e as FormatException).message}');
@@ -67,12 +70,12 @@ class JsonSerializableClazz extends Clazz {
   /// Override from super. Build json_serializable style fromJson method.
   @override
   String buildFromJson() {
-    return '${INDENT2}factory ${name}.fromJson(Map<String, dynamic> json) => _\$${name}FromJson(json);';
+    return '${_INDENT2}factory ${name}.fromJson(Map<String, dynamic> json) => _\$${name}FromJson(json);';
   }
 
   /// Override from super. Build json_serializable style toJson method.
   @override
   String buildToJson() {
-    return '${INDENT2}Map<String, dynamic> toJson() => _\$${name}ToJson(this);';
+    return '${_INDENT2}Map<String, dynamic> toJson() => _\$${name}ToJson(this);';
   }
 }

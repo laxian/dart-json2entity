@@ -5,6 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "CLI",
+            "type": "dart",
+            "request": "launch",
+            "program": "bin/cli.dart",
+            "args": [
+                "-j",
+                "{\\\"a\\\":1}",
+                "-o",
+                "model/abc"
+            ]
+        },
+        {
             "name": "zip",
             "type": "dart",
             "request": "launch",
