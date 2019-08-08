@@ -13,13 +13,13 @@ Dart语言的，JSON转实体类源码工具。
 
 ## Usage
 
-首先，添加依赖
+1. 添加依赖
 ```yaml
 dependencies:
   json2entity: ^1.0.8
 ```
 
-然后，激活命令
+2. 激活命令
 
 ```shell
 pub global activate json2entity

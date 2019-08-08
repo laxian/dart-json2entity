@@ -1,6 +1,6 @@
+import 'package:analyzer/analyzer.dart';
 import 'package:json2entity/json2entity.dart';
 import 'package:test/test.dart';
-import 'package:analyzer/analyzer.dart';
 
 import '../example/example.dart';
 

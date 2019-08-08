@@ -20,11 +20,11 @@ dependencies:
   json2entity: ^1.0.8
 ```
 
-Secondly: activate json2entity global.
+1. activate json2entity global.
 
 `pub global activate json2entity`
 
-Finally, run anywhere:
+2. run anywhere:
 
 `json2entity -j '{"result":1,"msg":"ok"}' -o output/BaseEntity`
 
