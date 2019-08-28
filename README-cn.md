@@ -13,30 +13,31 @@ Dart语言的，JSON转实体类源码工具。
 
 ## Usage
 
-1. 添加依赖
+- 1. 添加依赖
 ```yaml
 dependencies:
-  json2entity: ^1.0.8
+  json2entity: ^1.0.9
 ```
 
-2. 激活命令
+- 2. 激活命令
 
 ```shell
 pub global activate json2entity
 ```
 
-最后，在任意目录执行命令：
+- 3. 最后，在任意目录执行命令：
 
 ```shell
-json2entity -j '{"result":1,"msg":"ok"}' -o output/BaseEntity
-```
+# 输出到标准输出
+j2e -j '{"result":1,"msg":"ok"}'
 
-或者
-
-```shell
+# 输出到文件
 j2e -j '{"result":1,"msg":"ok"}' -o output/BaseEntity
 ```
+### **Windows** 用户
+对于**Windows**用户，如果你使用CMD或者powershell，你可能需要先转义JSON字符串：
 
+`j2e -j '{\"result\":1,\"msg\":\"ok\"}' -o output/BaseEntity`
 
 SYNOPSIS:
 ```shell
