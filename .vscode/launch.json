@@ -5,6 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Camel",
+            "type": "dart",
+            "request": "launch",
+            "program": "bin/lower_camel.dart",
+            "args": [
+                "/Users/admin/Github/dart-json2entity/example/output/json_s6.dart",
+            ]
+        },
+        {
             "name": "CLI",
             "type": "dart",
             "request": "launch",

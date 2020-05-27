@@ -23,6 +23,14 @@ String capitalize(String k) {
   return k;
 }
 
+/// 将下划线风格转驼峰
+String dash2Camel(String text) {
+  RegExp exp = RegExp(r'(?<=[a-z])(_[a-z])');
+  String result = text.replaceAllMapped(
+      exp, (Match m) => (capitalize(m.group(0).substring(1))));
+  return result;
+}
+
 /// 驼峰转dash
 String camel2dash(String k) {
   var codeUnits = k.codeUnits;
