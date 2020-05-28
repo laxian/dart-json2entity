@@ -5,6 +5,8 @@ import 'clazz.dart';
 
 class JsonSerializableClazz extends Clazz {
   String _INDENT2 = '  '; // _INDENT2 == TWO SAPCE
+  String JSONKEY_PREFIX = "@JsonKey(name: 'HOLDER')";
+  bool camelize = false;
 
   /// json_serializable annotation.
   static const String JS_DECOR = '@JsonSerializable()';
@@ -13,7 +15,8 @@ class JsonSerializableClazz extends Clazz {
       String name, Map<String, String> fields, List<String> decorators)
       : super(name, fields, decorators);
 
-  factory JsonSerializableClazz.fromJson(String jsonStr, {String key}) {
+  factory JsonSerializableClazz.fromJson(String jsonStr,
+      {String key, bool camelize}) {
     var jobj;
     try {
       jobj = zip(jsonDecode(jsonStr));
@@ -22,20 +25,21 @@ class JsonSerializableClazz extends Clazz {
           'Input Json Format Error! ${(e as FormatException).message}');
     }
     if (jobj is Map) {
-      return JsonSerializableClazz.fromMap(jobj, key: key);
+      return JsonSerializableClazz.fromMap(jobj, key: key, camelize: camelize);
     }
-    return JsonSerializableClazz.fromList(jobj, key: key);
+    return JsonSerializableClazz.fromList(jobj, key: key, camelize: camelize);
   }
 
   factory JsonSerializableClazz.fromMap(Map<String, dynamic> jsonMap,
-      {String key}) {
+      {String key, bool camelize}) {
     assert(jsonMap != null);
     var entry =
         new MapEntry<String, Map<String, dynamic>>(key ?? 'AutoModel', jsonMap);
-    return JsonSerializableClazz.fromMapEntry(entry);
+    return JsonSerializableClazz.fromMapEntry(entry, camelize: camelize);
   }
 
-  factory JsonSerializableClazz.fromList(List<dynamic> jsonList, {String key}) {
+  factory JsonSerializableClazz.fromList(List<dynamic> jsonList,
+      {String key, bool camelize}) {
     assert(jsonList != null);
     assert(jsonList.isNotEmpty);
 
@@ -43,12 +47,14 @@ class JsonSerializableClazz extends Clazz {
     var newMap = <String, dynamic>{};
     newMap[default_key] = jsonList;
 
-    return JsonSerializableClazz.fromMap(newMap, key: key);
+    return JsonSerializableClazz.fromMap(newMap, key: key, camelize: camelize);
   }
 
   JsonSerializableClazz.fromMapEntry(
-      MapEntry<String, Map<String, dynamic>> entry)
-      : super.fromMapEntry(entry) {
+      MapEntry<String, Map<String, dynamic>> entry,
+      {bool camelize})
+      : camelize = camelize ?? false,
+        super.fromMapEntry(entry) {
     // addHeader('import \'package:json_annotation/json_annotation.dart\';');
     addDecorator(JS_DECOR);
   }
@@ -77,5 +83,21 @@ class JsonSerializableClazz extends Clazz {
   @override
   String buildToJson() {
     return '${_INDENT2}Map<String, dynamic> toJson() => _\$${name}ToJson(this);';
+  }
+
+  /// Build field declaration
+  @override
+  String buildFieldDeclare({String type, String name}) {
+    if (!name.contains('_') || !camelize) {
+      return super.buildFieldDeclare(type: type, name: name);
+    }
+    var jsonKeyLine = JSONKEY_PREFIX.replaceFirst("HOLDER", name);
+    return '${_INDENT2}$jsonKeyLine\n${_INDENT2}${type} ${buildFieldInConstructor(name: name)}';
+  }
+
+  /// Build field declaration
+  String buildFieldInConstructor({String name}) {
+    if (!name.contains('_') || !camelize) return name;
+    return underscore2Camel(name.toLowerCase());
   }
 }

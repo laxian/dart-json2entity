@@ -156,12 +156,22 @@ class Clazz {
     return 'class $_name {';
   }
 
+  /// Build field declaration
+  String buildFieldDeclare({String type, String name}) {
+    return '${_INDENT}${type} ${buildFieldInConstructor(name: name)}';
+  }
+
+  /// Build field declaration
+  String buildFieldInConstructor({String name}) {
+    return name;
+  }
+
   /// Build constructor of entity class
   String buildConstructor() {
     if (hasValue(fields)) {
       String pre = '${_INDENT}$_name({';
       var pairs = fields.entries.toList().map((kv) {
-        return '${_INDENT2}this.${kv.key}';
+        return '${_INDENT2}this.${buildFieldInConstructor(name: kv.key)}';
       }).join(',\n');
       String suffix = '${_INDENT}})';
       var superConstructor = buildSuperConstructor();
@@ -280,7 +290,8 @@ class Clazz {
     // 3. fields declare
     if (hasValue(fields)) {
       var fieldPairs = fields.entries.toList().map((kv) {
-        return '${_INDENT}${kv.value} ${kv.key}';
+        //'${_INDENT}${kv.value} ${kv.key}';
+        return buildFieldDeclare(type: kv.value, name: kv.key);
       }).join(';\n');
       classFrags.add('$fieldPairs;');
     }

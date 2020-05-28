@@ -54,6 +54,7 @@ ArgParser initArgParser() {
     ..addFlag('verbose', abbr: 'v', help: 'Show verbose')
     ..addFlag('json-serializable-support',
         abbr: 's', help: 'Indicates whether json-serializable is supported')
+    ..addFlag('camelize', abbr: 'c', help: 'convert underscore to camel case')
     ..addFlag('help', abbr: 'h', help: 'Help');
 }
 

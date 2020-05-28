@@ -13,7 +13,8 @@ class Director {
 
   Director(this.config) {
     if (config.json_serializable) {
-      _clazz = JsonSerializableClazz.fromJson(config.input, key: config.name);
+      _clazz = JsonSerializableClazz.fromJson(config.input,
+          key: config.name, camelize: config.camelize);
       var part = buildPartName();
       _clazz.addHeader(
           'import \'package:json_annotation/json_annotation.dart\';');
@@ -49,7 +50,7 @@ class Director {
   }
 
   String buildOutputFullPath() =>
-      p.join(config.path, camel2dash(config.name) + '.dart');
+      p.join(config.path, camel2underscore(config.name) + '.dart');
 
-  String buildPartName() => camel2dash(config.name) + '.g.dart';
+  String buildPartName() => camel2underscore(config.name) + '.g.dart';
 }

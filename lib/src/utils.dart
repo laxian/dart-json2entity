@@ -24,7 +24,7 @@ String capitalize(String k) {
 }
 
 /// 将下划线风格转驼峰
-String dash2Camel(String text) {
+String underscore2Camel(String text) {
   RegExp exp = RegExp(r'(?<=[a-z])(_[a-z])');
   String result = text.replaceAllMapped(
       exp, (Match m) => (capitalize(m.group(0).substring(1))));
@@ -32,7 +32,7 @@ String dash2Camel(String text) {
 }
 
 /// 驼峰转dash
-String camel2dash(String k) {
+String camel2underscore(String k) {
   var codeUnits = k.codeUnits;
   Set<int> upper = new Set();
   String ret = '';

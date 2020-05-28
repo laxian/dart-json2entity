@@ -7,6 +7,7 @@ class Config {
   String output;
   bool verbose;
   bool json_serializable;
+  bool camelize;
 
   String get name => output != null ? basename(output) : 'Model';
   String get path => output != null ? dirname(output) : '.';
@@ -17,7 +18,8 @@ class Config {
       this.file,
       this.output,
       this.verbose = false,
-      this.json_serializable = false});
+      this.json_serializable = false,
+      this.camelize = false});
 
   factory Config.from(ArgResults result) {
     var jsonStr = result['json'];
@@ -25,13 +27,15 @@ class Config {
     var jsonsFile = result['file'];
     var verbose = result['verbose'];
     var supportJsonSerializable = result['json-serializable-support'];
+    var camelize = result['camelize'];
 
     return Config(
         input: jsonStr,
         file: jsonsFile,
         output: output,
         verbose: verbose,
-        json_serializable: supportJsonSerializable);
+        json_serializable: supportJsonSerializable,
+        camelize: camelize);
   }
 
   factory Config.copy(Config other) {
@@ -40,6 +44,7 @@ class Config {
         file: other.file,
         output: other.output,
         verbose: other.verbose,
-        json_serializable: other.json_serializable);
+        json_serializable: other.json_serializable,
+        camelize: other.camelize);
   }
 }

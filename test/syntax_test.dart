@@ -1,6 +1,6 @@
+import 'package:analyzer/dart/analysis/utilities.dart';
 import 'package:json2entity/json2entity.dart';
 import 'package:test/test.dart';
-import 'package:analyzer/analyzer.dart';
 
 import '../example/example.dart';
 
@@ -31,7 +31,7 @@ void testConvertJsonSerializableSupport() {
 void astNotNull(Clazz clazz1) {
   var ast = null;
   try {
-    ast = parseCompilationUnit(clazz1.toString());
+    ast = parseString(content: clazz1.toString()).unit;
   } on Exception {}
   test('jsc test', () {
     expect(ast, isNot(equals(null)));
