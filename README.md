@@ -14,24 +14,30 @@ support [json_serializable](https://pub.dartlang.org/packages/json_serializable)
 
 ## Usage
 
-Firstly:
+- 1. dependencies
 ```yaml
 dependencies:
-  json2entity: ^1.0.8
+  json2entity: ^1.0.9
 ```
 
-1. activate json2entity global.
+- 2. activate json2entity global.
 
 `pub global activate json2entity`
 
-2. run anywhere:
+- 3. run anywhere:
 
-`json2entity -j '{"result":1,"msg":"ok"}' -o output/BaseEntity`
+```shell
+# output to stdout
+j2e -j '{"result":1,"msg":"ok"}'
 
-or
+# output to file
+j2e -j '{"result":1,"msg":"ok"}' -o output/BaseEntity
+```
 
-`j2e -j '{"result":1,"msg":"ok"}' -o output/BaseEntity`
+### **Windows** users:
+If you are a Windows user, you need to escape the JSON string you entered
 
+`j2e -j '{\"result\":1,\"msg\":\"ok\"}'`
 
 SYNOPSIS:
 ```shell

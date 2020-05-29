@@ -1,3 +1,6 @@
+## 1.0.9
+* Fix bugs
+
 ## 1.0.8 
 * Fix the problem of losing the key under certain circumstances. Add file overwrite prompt. 
 
