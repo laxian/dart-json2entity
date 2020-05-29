@@ -48,6 +48,7 @@ Usage:
         -o, --output                            Input output file path and name
         -v, --[no-]verbose                      Show verbose
         -s, --[no-]json-serializable-support    Indicates whether json-serializable is supported
+        -c, --[no-]camelize                     convert underscore to camel case
         -h, --[no-]help                         Help
 ```
 

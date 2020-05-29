@@ -1,3 +1,6 @@
+## 1.1.0
+* Support automatic conversion of underline style to lowercase camel style
+
 ## 1.0.9
 * Fix bugs
 

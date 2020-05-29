@@ -70,7 +70,8 @@ class JsonSerializableClazz extends Clazz {
   /// Build child class Recursively.
   @override
   Clazz buildChildClazz(Map<String, dynamic> curr, {String key}) {
-    return JsonSerializableClazz.fromMap(curr, key: capitalize(key));
+    return JsonSerializableClazz.fromMap(curr,
+        key: capitalize(key), camelize: camelize);
   }
 
   /// Override from super. Build json_serializable style fromJson method.

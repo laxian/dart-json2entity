@@ -35,6 +35,9 @@ inputFile=./example/input.json
 ./json2entity -j $json5 --output ./example/output/JsonS5 -s
 ./json2entity -j $json6 --output ./example/output/JsonS6 -s
 
+# json_serializable support and output lower-camel style
+./json2entity -j $json6 --output ./example/output/JsonC6 -sc
+
 # input from file
 ./json2entity -f $inputFile --output ./example/output/
 # ./json2entity -f $inputFile --output ./example/output/ -s

@@ -32,7 +32,7 @@ pub get
 ./test_cli.sh
 
 # SECOND. generate part file
-flutter packages pub run build_runner build --delete-conflicting-outputs
+pub run build_runner build --delete-conflicting-outputs
 dartfmt -w .
 
 # test
