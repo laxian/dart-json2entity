@@ -64,12 +64,7 @@ Map zip2(Map a, Map b) {
     if (list == null || list.isEmpty) {
       out[k] = null;
     } else if (list.length == 1) {
-      var item = list.first;
-      if (item is List) {
-      } else if (item is Map) {
-      } else {
-        out[k] = list.first;
-      }
+      out[k] = list.first;
     } else if (list.first is List) {
       // only two: first last
       var listToZip = List();

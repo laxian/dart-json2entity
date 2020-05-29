@@ -1,4 +1,5 @@
-## 1.0.8 Fix the problem of losing the key under certain circumstances. Add file overwrite prompt. 
+## 1.0.8 
+* Fix the problem of losing the key under certain circumstances. Add file overwrite prompt. 
 
 ## 1.0.7
 * Fixed some 'Health suggestions'
