@@ -9,6 +9,10 @@ import 'package:json2entity/json2entity.dart';
 /// or:  `pub global activate --source path .` then run `camelize "<xxx>.dart"`
 /// or:  `pub global activate json2entity` then run `camelize "<xxx>.dart"`
 main(List<String> args) {
+  if (args.length == 0) {
+    print("Usage: camelize <filename>");
+    exit(1);
+  }
   var filePath = args[0];
   camelize(filePath);
 }
@@ -17,6 +21,10 @@ main(List<String> args) {
 /// 原文件，慎重使用
 void camelize(String filePath) {
   var file = new File(filePath);
+  if (!file.existsSync()) {
+    print('${filePath} not exists! exit');
+    exit(2);
+  }
   var fileContent = file.readAsStringSync();
   var prefix = "@JsonKey(name: 'HOLDER')";
 

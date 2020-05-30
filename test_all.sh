@@ -33,6 +33,7 @@ pub get
 
 # SECOND. generate part file
 pub run build_runner build --delete-conflicting-outputs
+# pub run build_runner watch
 dartfmt -w .
 
 # test
