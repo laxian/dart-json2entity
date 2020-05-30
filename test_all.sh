@@ -38,3 +38,6 @@ dartfmt -w .
 
 # test
 pub run test
+
+# lint
+dartanalyzer .

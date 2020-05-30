@@ -40,7 +40,7 @@ List zipList(List a) {
     return [];
   }
   if (a.first is Map) {
-    List<Map> a2 = a.map<Map>((i) => i).toList();
+    var a2 = a.map<Map>((i) => i).toList();
     // [Map, Map] zipSelf-> Map
     return [zipMap(a2.reduce(zip2))];
   } else if (a.first is List) {
@@ -58,7 +58,7 @@ List zipList(List a) {
 Map zip2(Map a, Map b) {
   var es = a.entries.toList()..addAll(b.entries.toList());
   var keys = es.map((e) => e.key).toSet();
-  var out = Map<String, dynamic>();
+  var out = <String, dynamic>{};
   keys.forEach((k) {
     var list = es.where((e) => e.key == k).map((e) => e.value).toList();
     if (list == null || list.isEmpty) {
@@ -67,14 +67,14 @@ Map zip2(Map a, Map b) {
       out[k] = list.first;
     } else if (list.first is List) {
       // only two: first last
-      var listToZip = List();
+      var listToZip = [];
       listToZip..addAll(list.first)..addAll(list.last);
       out[k] = zipList(listToZip);
     } else if (list.first is Map) {
-      List<Map> l = list.map<Map>((i) => i).toList();
+      var l = list.map<Map>((i) => i).toList();
       out[k] = l.reduce(zip2);
     } else {
-      out[k] = list.reduce((a, b) => a != null ? a : b);
+      out[k] = list.reduce((a, b) => a ?? b);
     }
   });
   return out;

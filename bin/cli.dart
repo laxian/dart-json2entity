@@ -5,12 +5,12 @@ import 'package:json2entity/json2entity.dart';
 import 'package:json2entity/src/config.dart';
 import 'package:path/path.dart' as p;
 
-main(List<String> args) {
+void main(List<String> args) {
   run(args);
 }
 
 void run(List<String> args) {
-  ArgParser parser = initArgParser();
+  var parser = initArgParser();
   var result;
   try {
     result = parser.parse(args);
@@ -59,7 +59,7 @@ ArgParser initArgParser() {
 }
 
 void converFromFile(Config config) {
-  var file = new File(config.file);
+  var file = File(config.file);
   var jstr = file.readAsStringSync();
   Map<String, dynamic> jobj = jsonDecode(jstr);
 

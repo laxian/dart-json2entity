@@ -20,22 +20,20 @@ class Clazz {
 
   String _name;
 
-  String _INDENT = '  ';
-  String _INDENT2 = '    ';
+  final String _INDENT = '  ';
+  final String _INDENT2 = '    ';
 
   /// Fields of current entity class
   Map<String, String> fields = {};
 
   /// Add a header
-  addHeader(String header) {
-    if (headers == null) {
-      headers = [];
-    }
+  void addHeader(String header) {
+    headers ??= [];
     headers.add(header);
   }
 
   /// Add a decorator
-  addDecorator(String decor) {
+  void addDecorator(String decor) {
     if (decorators == null) {
       decorators = [];
       decorators.add(decor);
@@ -66,7 +64,7 @@ class Clazz {
   factory Clazz.fromMap(Map<String, dynamic> jsonMap,
       {String key, bool noZip = false}) {
     assert(jsonMap != null);
-    var entry = new MapEntry<String, Map<String, dynamic>>(
+    var entry = MapEntry<String, Map<String, dynamic>>(
         key ?? 'AutoModel', noZip ? jsonMap : zip(jsonMap));
     return Clazz.fromMapEntry(entry);
   }
@@ -143,7 +141,7 @@ class Clazz {
   Clazz buildChildClazz(Map<String, dynamic> curr, {String key}) =>
       Clazz.fromMap(curr, key: capitalize(key));
 
-  get name => _name;
+  String get name => _name;
 
   String get parentName => parent?.name;
 
@@ -169,11 +167,11 @@ class Clazz {
   /// Build constructor of entity class
   String buildConstructor() {
     if (hasValue(fields)) {
-      String pre = '${_INDENT}$_name({';
+      var pre = '${_INDENT}$_name({';
       var pairs = fields.entries.toList().map((kv) {
         return '${_INDENT2}this.${buildFieldInConstructor(name: kv.key)}';
       }).join(',\n');
-      String suffix = '${_INDENT}})';
+      var suffix = '${_INDENT}})';
       var superConstructor = buildSuperConstructor();
       if (parent != null) {
         return '$pre\n$pairs\n$suffix:$superConstructor;\n';
@@ -189,24 +187,24 @@ class Clazz {
     var pairs = '';
     if (hasValue(fields)) {
       // 基础类型
-      Iterable<String> simpleField = fields.entries
+      var simpleField = fields.entries
           .where((f) => _isSimple(f.value))
           .map((kv) => '${_INDENT2}${kv.key}=json[\'${kv.key}\']');
 
       // 对象类型需要调用自己类的fromJson，完成自身的序列化
-      Iterable<String> objectField =
+      var objectField =
           fields.entries.where((f) => _isObject(f.value)).map((kv) {
         return '${_INDENT2}${kv.key}=${kv.value}.fromJson(json[\'${kv.key}\'])';
       });
 
       // 简单列表类型需要调用自己类的fromJson，完成自身的序列化
-      Iterable<String> simpleListField =
+      var simpleListField =
           fields.entries.where((f) => _isSimpleList(f.value)).map((kv) {
         return '${_INDENT2}${kv.key}=${kv.value}.from(json[\'${kv.key}\'])';
       });
 
       // 对象列表类型需要调用自己类的fromJson，完成自身的序列化
-      Iterable<String> objectListField =
+      var objectListField =
           fields.entries.where((f) => _isObjectList(f.value)).map((kv) {
         return "${_INDENT2}${kv.key}=(json['${kv.key}'] as List)?.map((l)=>${_getItemType(kv.value)}.fromJson(l))?.toList()";
       });
@@ -240,19 +238,19 @@ class Clazz {
     var pre = '${_INDENT}Map <String, dynamic> toJson() => {';
     var post = '${_INDENT}};';
     if (hasValue(fields)) {
-      Iterable<String> simpleField = fields.entries
+      var simpleField = fields.entries
           .where((f) => _isSimple(f.value))
           .map((kv) => '${_INDENT2}\'${kv.key}\':${kv.key}');
 
-      Iterable<String> objectField = fields.entries
+      var objectField = fields.entries
           .where((f) => _isObject(f.value))
           .map((kv) => '${_INDENT2}\'${kv.key}\':${kv.key}?.toJson()');
 
-      Iterable<String> simpleListField = fields.entries
+      var simpleListField = fields.entries
           .where((f) => _isSimpleList(f.value))
           .map((kv) => '${_INDENT2}\'${kv.key}\':${kv.key}');
 
-      Iterable<String> objectListField = fields.entries
+      var objectListField = fields.entries
           .where((f) => _isObjectList(f.value))
           .map((kv) =>
               "${_INDENT2}\'${kv.key}':${kv.key}?.map((it)=>it.toJson())?.toList()");
@@ -271,21 +269,21 @@ class Clazz {
   @override
   String toString() {
     // ��组成元素
-    List<String> classFrags = <String>[];
+    var classFrags = <String>[];
     // 0. headers
     String headerStr;
     if (hasValue(headers)) {
       headerStr = headers.join('\n');
       classFrags.add(headerStr);
     }
-    String decor = '';
+    var decor = '';
     // 1. decorators
     if (hasValue(decorators)) {
       decor = decorators.join('\n');
       classFrags.add(decor);
     }
     // 2. class declare
-    String classDeclare = buildClassDeclare();
+    var classDeclare = buildClassDeclare();
     classFrags.add(classDeclare);
     // 3. fields declare
     if (hasValue(fields)) {
@@ -296,19 +294,19 @@ class Clazz {
       classFrags.add('$fieldPairs;');
     }
     // 4. constructor
-    String constructor = buildConstructor();
+    var constructor = buildConstructor();
     classFrags.add(constructor);
     // 5. fromJson
-    String fromJson = buildFromJson();
+    var fromJson = buildFromJson();
     classFrags.add(fromJson);
     // 6. toJson
-    String toJson = buildToJson();
+    var toJson = buildToJson();
     classFrags.add(toJson);
     classFrags.add('}');
 
     // 7. build class
     var self = classFrags.where((str) => hasValue(str)).join('\n');
-    List<String> classes = [];
+    var classes = [];
     classes.add(self);
 
     // 8. build child classes
@@ -322,16 +320,16 @@ class Clazz {
 }
 
 /// Is the type of [key] primary type
-_isSimple(String key) {
+bool _isSimple(String key) {
   return ['bool', 'String', 'num'].contains(key);
 }
 
 /// Is the type of [key] list
-_isList(String key) {
+bool _isList(String key) {
   return key.startsWith('List<');
 }
 
-_getItemType(String key) {
+String _getItemType(String key) {
   if (!_isList(key)) {
     return key;
   }
@@ -341,7 +339,7 @@ _getItemType(String key) {
   return type;
 }
 
-_isSimpleList(String key) {
+bool _isSimpleList(String key) {
   if (!_isList(key)) {
     return false;
   }
@@ -353,10 +351,10 @@ _isSimpleList(String key) {
   return second && third;
 }
 
-_isObjectList(String key) {
+bool _isObjectList(String key) {
   return _isList(key) && !_isSimpleList(key);
 }
 
-_isObject(String key) {
+bool _isObject(String key) {
   return !_isSimple(key) && !_isList(key);
 }

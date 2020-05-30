@@ -25,10 +25,10 @@ class Director {
   }
 
   /// Execute convert.
-  action() {
+  void action() {
     var output = _clazz.toString();
     if (config.output != null) {
-      var fullPath = new File(buildOutputFullPath());
+      var fullPath = File(buildOutputFullPath());
       // 确保路径存在
       fullPath.parent.createSync(recursive: true);
       if (fullPath.existsSync()) {

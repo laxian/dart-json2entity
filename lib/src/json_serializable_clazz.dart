@@ -4,7 +4,7 @@ import 'utils.dart';
 import 'clazz.dart';
 
 class JsonSerializableClazz extends Clazz {
-  String _INDENT2 = '  '; // _INDENT2 == TWO SAPCE
+  final String _INDENT2 = '  '; // _INDENT2 == TWO SAPCE
   String JSONKEY_PREFIX = "@JsonKey(name: 'HOLDER')";
   bool camelize = false;
 
@@ -34,7 +34,7 @@ class JsonSerializableClazz extends Clazz {
       {String key, bool camelize}) {
     assert(jsonMap != null);
     var entry =
-        new MapEntry<String, Map<String, dynamic>>(key ?? 'AutoModel', jsonMap);
+        MapEntry<String, Map<String, dynamic>>(key ?? 'AutoModel', jsonMap);
     return JsonSerializableClazz.fromMapEntry(entry, camelize: camelize);
   }
 
@@ -43,7 +43,7 @@ class JsonSerializableClazz extends Clazz {
     assert(jsonList != null);
     assert(jsonList.isNotEmpty);
 
-    String default_key = 'datas';
+    var default_key = 'datas';
     var newMap = <String, dynamic>{};
     newMap[default_key] = jsonList;
 
@@ -61,7 +61,7 @@ class JsonSerializableClazz extends Clazz {
 
   @override
   String toString() {
-    for (Clazz item in children) {
+    for (var item in children) {
       item.addDecorator(JS_DECOR);
     }
     return super.toString();
@@ -92,11 +92,12 @@ class JsonSerializableClazz extends Clazz {
     if (!name.contains('_') || !camelize) {
       return super.buildFieldDeclare(type: type, name: name);
     }
-    var jsonKeyLine = JSONKEY_PREFIX.replaceFirst("HOLDER", name);
+    var jsonKeyLine = JSONKEY_PREFIX.replaceFirst('HOLDER', name);
     return '${_INDENT2}$jsonKeyLine\n${_INDENT2}${type} ${buildFieldInConstructor(name: name)}';
   }
 
   /// Build field declaration
+  @override
   String buildFieldInConstructor({String name}) {
     if (!name.contains('_') || !camelize) return name;
     return underscore2Camel(name.toLowerCase());
