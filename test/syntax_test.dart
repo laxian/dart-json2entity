@@ -6,8 +6,7 @@ import '../example/example.dart';
 
 /// 对生成的实体类源文件进行语法检查
 /// 利用ast抽象语法树，解析，错误的语法无法通过测试
-
-main() {
+void main() {
   testConvert();
   testConvertJsonSerializableSupport();
 }
@@ -25,14 +24,18 @@ void testConvertJsonSerializableSupport() {
   astNotNull(clazz5);
   var clazz6 = JsonSerializableClazz.fromJson(json6);
   astNotNull(clazz6);
+  var clazz61 = JsonSerializableClazz.fromJson(json6, camelize: true);
+  astNotNull(clazz61);
 }
 
 /// 对生成的实体类进行语法检查，确保ast抽象语法树解析成功
 void astNotNull(Clazz clazz1) {
-  var ast = null;
+  var ast;
   try {
     ast = parseString(content: clazz1.toString()).unit;
-  } on Exception {}
+  } on Exception catch (e) {
+    print(e);
+  }
   test('jsc test', () {
     expect(ast, isNot(equals(null)));
   });

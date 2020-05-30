@@ -8,6 +8,7 @@ import '../example/output/json3.dart';
 import '../example/output/json4.dart';
 import '../example/output/json5.dart';
 import '../example/output/json6.dart';
+import '../example/output/json_c6.dart';
 import '../example/output/json_f1.dart';
 import '../example/output/json_f2.dart';
 import '../example/output/json_f3.dart';
@@ -23,7 +24,7 @@ import '../example/output/json_s6.dart';
 import '../example/example.dart';
 
 // NOTE: to test outputs above, U need generate outputs first by run test_all.sh
-main() {
+void main() {
   print('测试命令行转换的普通实体类 ->');
   testEntityConvertedByCli();
   print('\n测试文件批量转换的普通实体类 ->');
@@ -82,6 +83,10 @@ void testEntityConvertedSupportJsonSerializable() {
   var j6 = JsonS6.fromJson(jsonDecode(json6));
   assertTrue(j6.data.length == 8, tag: 'data.length is ${j6.data.length}');
   assertTrue(j6.data[0].image_list.length == 3);
+
+  var c6 = JsonC6.fromJson(jsonDecode(json6));
+  assertTrue(c6.data[0].imageList.isNotEmpty, tag: 'data[0].imageList isNotEmpty');
+  assertTrue(c6.data[0].gallaryFlag == 2);
 }
 
 void testEntityConvertedFromFile() {
