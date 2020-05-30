@@ -319,12 +319,12 @@ class Clazz {
   }
 }
 
-/// Is the type of [key] primary type
+// Is the type of [key] primary type
 bool _isSimple(String key) {
   return ['bool', 'String', 'num'].contains(key);
 }
 
-/// Is the type of [key] list
+// Is the type of [key] list
 bool _isList(String key) {
   return key.startsWith('List<');
 }

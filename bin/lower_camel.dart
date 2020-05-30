@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:json2entity/json2entity.dart';
 
-/// in project root dir, run:
-/// pub run ./test_all.sh to generate example files
-/// then run:
-/// pub run lower_camel.dart example/output/json_s6.dart
-/// or:  `pub global activate --source path .` then run `camelize "<xxx>.dart"`
-/// or:  `pub global activate json2entity` then run `camelize "<xxx>.dart"`
+// in project root dir, run:
+// pub run ./test_all.sh to generate example files
+// then run:
+// pub run lower_camel.dart example/output/json_s6.dart
+// or:  `pub global activate --source path .` then run `camelize "<xxx>.dart"`
+// or:  `pub global activate json2entity` then run `camelize "<xxx>.dart"`
 void main(List<String> args) {
   if (args.isEmpty) {
     print('Usage: camelize <filename>');
@@ -17,8 +17,8 @@ void main(List<String> args) {
   camelize(filePath);
 }
 
-/// 输入dart文件路径，将其字段中带有下划线'_'的，转换成驼峰风格
-/// 原文件，慎重使用
+// 输入dart文件路径，将其字段中带有下划线'_'的，转换成驼峰风格
+// 原文件，慎重使用
 void camelize(String filePath) {
   var file = File(filePath);
   if (!file.existsSync()) {

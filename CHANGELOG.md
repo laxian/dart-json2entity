@@ -1,3 +1,9 @@
+## 1.1.2
+fix error
+
+## 1.1.1
+fix error
+
 ## 1.1.0
 * Support automatic conversion of underline style to lowercase camel style
 
